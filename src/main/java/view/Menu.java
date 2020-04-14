@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Menu {
+public abstract class Menu {
 
     private String name;
     private Menu parentMenu = null;
@@ -46,9 +46,10 @@ public class Menu {
 
         System.out.println(this.name + " :");
 
-        for (Integer menuNum : submenus.keySet()) {
-            System.out.println(menuNum + ". " + submenus.get(menuNum).getName());
-        }
+       for(int i = 1 ; i <= this.submenus.size() ; i++){
+           System.out.println(i + ". " + this.submenus.get(i));
+       }
+
         if (this.parentMenu != null)
             System.out.println((submenus.size() + 1) + ". Back");
         else
