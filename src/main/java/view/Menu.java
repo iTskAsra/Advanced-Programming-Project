@@ -7,13 +7,13 @@ import java.util.Scanner;
 public abstract class Menu {
 
     private String name;
-    private Menu parentMenu = null;
+    private Menu parentMenu;
     private HashMap<Integer , Menu> submenus;
     public static Scanner scanner;
     public static ArrayList<Menu> allMenus;
 
-    public void setScanner(Scanner scanner){
-        this.scanner = scanner;
+    public static void setScanner(Scanner scanner) {
+        Menu.scanner = scanner;
     }
 
     public void setParentMenu(Menu parentMenu){
@@ -74,7 +74,7 @@ public abstract class Menu {
         }
         else
             nextMenu = this.submenus.get(chosenNum);
-        nextMenu.show();;
+        nextMenu.show();
         nextMenu.run();
     }
 
