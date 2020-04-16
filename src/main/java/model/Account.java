@@ -3,10 +3,11 @@ package model;
 
 import java.util.ArrayList;
 
-public abstract class Account {
+public class Account {
     public static ArrayList<Account> allAccounts;
     private String username;
     private String password;
+    private String role;
     private String firstName;
     private String lastName;
     private String email;
@@ -14,16 +15,25 @@ public abstract class Account {
     private ArrayList<Sale> saleCodes;
     private double credit;
 
-    public Account(String username, String password, String firstName, String lastName, String email, String phoneNumber, double credit) {
+    public Account(String username, String password, String role, String firstName, String lastName, String email, String phoneNumber, ArrayList<Sale> saleCodes, double credit) {
         this.username = username;
         this.password = password;
+        this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.saleCodes = saleCodes;
         this.credit = credit;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getUsername() {
         return username;

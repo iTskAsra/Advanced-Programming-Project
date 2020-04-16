@@ -10,8 +10,8 @@ public class Seller extends Account {
     private ArrayList<SellLog> sellerLogs;
     private ArrayList<Off> sellerOffs;
 
-    public Seller(String username, String password, String firstName, String lastName, String email, String phoneNumber, double credit, String companyName, ArrayList<Product> sellerProducts, ArrayList<SellLog> sellerLogs, ArrayList<Off> sellerOffs) {
-        super(username, password, firstName, lastName, email, phoneNumber, credit);
+    public Seller(String username, String password, String role, String firstName, String lastName, String email, String phoneNumber, ArrayList<Sale> saleCodes, double credit, String companyName, ArrayList<Product> sellerProducts, ArrayList<SellLog> sellerLogs, ArrayList<Off> sellerOffs) {
+        super(username, password, role, firstName, lastName, email, phoneNumber, saleCodes, credit);
         this.companyName = companyName;
         this.sellerProducts = sellerProducts;
         this.sellerLogs = sellerLogs;
