@@ -68,22 +68,29 @@ public class RegisterAndLogin {
         else return !new File(folder3, username + ".json").exists();
     }
 
-    public static void login(HashMap<String, String> dataToLogin) {
+    public static String login(HashMap<String, String> dataToLogin) {
         Account account = GetDataFromDatabase.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
                 MessagesLibrary.messagesLibrary(2);
                 if (account.getRole().equals("Customer")) {
                     CustomerController customerController = new CustomerController((Customer) account);
+                    return account.getRole();
                 } else if (account.getRole().equals("Seller")) {
                     SellerController sellerController = new SellerController((Seller) account);
+                    return account.getRole();
                 } else if (account.getRole().equals("Admin")) {
                     AdminController adminController = new AdminController((Admin) account);
+                    return account.getRole();
                 }
-            } else MessagesLibrary.errorLibrary(2);
+            } else {
+                MessagesLibrary.errorLibrary(2);
+                return null;
+            }
         } else {
-            MessagesLibrary.errorLibrary(1);//Show Error account not found!
+            MessagesLibrary.errorLibrary(1);
+            return null;
         }
-
+        return null;
     }
 }

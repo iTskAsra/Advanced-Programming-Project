@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Product {
     //public  static ArrayList<Product> allProducts;
@@ -9,7 +10,7 @@ public class Product {
     private String name;
     private String company;
     private double price;
-    private Seller seller;
+    private transient Seller seller;
     private int availability;
     private Category category;
     private ArrayList<Feature> categoryFetures;
@@ -18,8 +19,9 @@ public class Product {
     private ArrayList<Comment> productComments;
     private ArrayList<Customer> productBuyers;
 
-    public Product(int productId, ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFetures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, ArrayList<Customer> productBuyers) {
-        this.productId = productId;
+    public Product(ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFetures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, ArrayList<Customer> productBuyers) {
+        Random random = new Random();
+        this.productId = random.nextInt(10000);
         this.productCondition = productCondition;
         this.name = name;
         this.company = company;

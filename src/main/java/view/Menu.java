@@ -1,5 +1,7 @@
 package view;
 
+import controller.SellerController;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -43,9 +45,7 @@ public abstract class Menu {
     }
 
     public void show(){
-
         System.out.println(this.name + " :");
-
        for(int i = 1 ; i <= this.submenus.size() ; i++){
            System.out.println(i + ". " + this.submenus.get(i));
        }

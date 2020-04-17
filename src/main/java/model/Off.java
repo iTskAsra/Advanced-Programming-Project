@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Off {
     public static ArrayList<Off> allOffs;
@@ -11,8 +12,9 @@ public class Off {
     private String endDate;
     private double offAmount;
 
-    public Off(int offId, ArrayList<Product> offProducts, ProductOrOffCondition offCondition, String startDate, String endDate, double offAmount) {
-        this.offId = offId;
+    public Off(ArrayList<Product> offProducts, ProductOrOffCondition offCondition, String startDate, String endDate, double offAmount) {
+        Random random = new Random();
+        this.offId = random.nextInt(10000);
         this.offProducts = offProducts;
         this.offCondition = offCondition;
         this.startDate = startDate;

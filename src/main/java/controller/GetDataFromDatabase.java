@@ -88,4 +88,25 @@ public class GetDataFromDatabase {
     }
 
 
+    public static Off getOff(int offId) {
+        if (!Files.exists(Paths.get("src/main/resources/Offs"))) {
+            File folder = new File("src/main/resources/Offs");
+            folder.mkdir();
+        }
+        String offPath = "src/main/resources/Offs/" + (offId) + ".json";
+        File fileProduct = new File(offPath);
+        try {
+            Scanner scanner;
+            scanner = new Scanner(fileProduct);
+            scanner.useDelimiter("\\z");
+            String fileData = scanner.next();
+            Gson gson = new Gson();
+            Off off = gson.fromJson(fileData, Off.class);
+            scanner.close();
+            return off;
+        } catch (FileNotFoundException e) {
+            MessagesLibrary.errorLibrary(6);
+        }
+        return null;
+    }
 }

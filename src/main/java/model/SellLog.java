@@ -9,10 +9,10 @@ public class SellLog {
     private double value;
     private double discountApplied;
     private ArrayList<Product> logProducts;
-    private String buyerName;
+    private Customer buyerName;
     private boolean deliveryCondition;
 
-    public SellLog(int logId, String logDate, double value, double discountApplied, ArrayList<Product> logProducts, String buyerName, boolean deliveryCondition) {
+    public SellLog(int logId, String logDate, double value, double discountApplied, ArrayList<Product> logProducts, Customer buyerName, boolean deliveryCondition) {
         this.logId = logId;
         this.logDate = logDate;
         this.value = value;
@@ -62,11 +62,11 @@ public class SellLog {
         this.logProducts = logProducts;
     }
 
-    public String getBuyerName() {
+    public Customer getBuyerName() {
         return buyerName;
     }
 
-    public void setBuyerName(String buyerName) {
+    public void setBuyerName(Customer buyerName) {
         this.buyerName = buyerName;
     }
 

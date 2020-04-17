@@ -1,17 +1,28 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Request {
-    public static ArrayList<Request> allRequests;
+    private int requestId;
     private String requestDescription;
-    private String requestType;
+    private RequestType requestType;
     private RequestOrCommentCondition requestCondition;
 
-    public Request(String requestDescription, String requestType, RequestOrCommentCondition requestCondition) {
+    public Request(String requestDescription, RequestType requestType, RequestOrCommentCondition requestCondition) {
         this.requestDescription = requestDescription;
         this.requestType = requestType;
         this.requestCondition = requestCondition;
+        Random random = new Random();
+        requestId = random.nextInt(10000);
+    }
+
+    public int getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
     }
 
     public String getRequestDescription() {
@@ -22,11 +33,11 @@ public class Request {
         this.requestDescription = requestDescription;
     }
 
-    public String getRequestType() {
+    public RequestType getRequestType() {
         return requestType;
     }
 
-    public void setRequestType(String requestType) {
+    public void setRequestType(RequestType requestType) {
         this.requestType = requestType;
     }
 

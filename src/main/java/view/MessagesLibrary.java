@@ -20,6 +20,9 @@ public class MessagesLibrary {
         else if (errorCode == 6){
             System.out.println("Don't have a product with this ID!");
         }
+        else if (errorCode == 7){
+            System.out.println("Don't have an off with this ID!");
+        }
 
     }
 
@@ -29,6 +32,9 @@ public class MessagesLibrary {
         }
         if (messageCode == 2){
             System.out.println("Logged in!");
+        }
+        if (messageCode == 3){
+            System.out.println("Product removed!");
         }
     }
 }
