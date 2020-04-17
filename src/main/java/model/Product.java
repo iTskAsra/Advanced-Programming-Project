@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Product {
-    public static ArrayList<Product> allProducts;
+    //public  static ArrayList<Product> allProducts;
     private int productId;
     private ProductOrOffCondition productCondition;
     private String name;

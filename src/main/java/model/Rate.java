@@ -5,12 +5,10 @@ import java.util.ArrayList;
 public class Rate {
     public static ArrayList<Rate> allRates;
     private Account rateAccount;
-    private Product rateProduct;
     private double rateScore;
 
     public Rate(Account rateAccount, Product rateProduct, double rateScore) {
         this.rateAccount = rateAccount;
-        this.rateProduct = rateProduct;
         this.rateScore = rateScore;
     }
 
@@ -20,14 +18,6 @@ public class Rate {
 
     public void setRateAccount(Account rateAccount) {
         this.rateAccount = rateAccount;
-    }
-
-    public Product getRateProduct() {
-        return rateProduct;
-    }
-
-    public void setRateProduct(Product rateProduct) {
-        this.rateProduct = rateProduct;
     }
 
     public double getRateScore() {
