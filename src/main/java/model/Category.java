@@ -6,7 +6,7 @@ public class Category {
     public static ArrayList<Category> allCategories;
     private String name;
     private ArrayList<Feature> features;
-    private ArrayList<Product> categoryProducts;
+    private transient ArrayList<Product> categoryProducts;
 
     public Category(String name, ArrayList<Feature> features, ArrayList<Product> categoryProducts) {
         this.name = name;

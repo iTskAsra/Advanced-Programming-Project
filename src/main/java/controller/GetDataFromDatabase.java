@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import model.*;
 import view.MessagesLibrary;
 
@@ -109,4 +110,71 @@ public class GetDataFromDatabase {
         }
         return null;
     }
+
+    public static Request getRequest(int requestId) {
+        if (!Files.exists(Paths.get("src/main/resources/Requests"))) {
+            File folder = new File("src/main/resources/Requests");
+            folder.mkdir();
+        }
+        String requestPath = "src/main/resources/Requests/" + (requestId) + ".json";
+        File fileProduct = new File(requestPath);
+        try {
+            Scanner scanner;
+            scanner = new Scanner(fileProduct);
+            scanner.useDelimiter("\\z");
+            String fileData = scanner.next();
+            Gson gson = new Gson();
+            Request request = gson.fromJson(fileData, Request.class);
+            scanner.close();
+            return request;
+        } catch (FileNotFoundException e) {
+            MessagesLibrary.errorLibrary(6);
+        }
+        return null;
+    }
+
+    public static Sale getSale(String saleCode) {
+        if (!Files.exists(Paths.get("src/main/resources/Sales"))) {
+            File folder = new File("src/main/resources/Sales");
+            folder.mkdir();
+        }
+        String salePath = "src/main/resources/Sale/" + (saleCode) + ".json";
+        File fileProduct = new File(salePath);
+        try {
+            Scanner scanner;
+            scanner = new Scanner(fileProduct);
+            scanner.useDelimiter("\\z");
+            String fileData = scanner.next();
+            Gson gson = new Gson();
+            Sale sale = gson.fromJson(fileData, Sale.class);
+            scanner.close();
+            return sale;
+        } catch (FileNotFoundException e) {
+            MessagesLibrary.errorLibrary(11);
+        }
+        return null;
+    }
+
+    public static Category getCategory(String categoryName) {
+        if (!Files.exists(Paths.get("src/main/resources/Category"))) {
+            File folder = new File("src/main/resources/Category");
+            folder.mkdir();
+        }
+        String categoryPath = "src/main/resources/Category/" + (categoryName) + ".json";
+        File fileProduct = new File(categoryPath);
+        try {
+            Scanner scanner;
+            scanner = new Scanner(fileProduct);
+            scanner.useDelimiter("\\z");
+            String fileData = scanner.next();
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            Category category = gson.fromJson(fileData, Category.class);
+            scanner.close();
+            return category;
+        } catch (FileNotFoundException e) {
+            MessagesLibrary.errorLibrary(13);//No category with this name
+        }
+        return null;
+    }
+
 }

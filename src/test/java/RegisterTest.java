@@ -1,8 +1,10 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import controller.CustomerController;
 import controller.GetDataFromDatabase;
 import controller.RegisterAndLogin;
 import model.Account;
+import model.Admin;
 import model.Customer;
 import model.Seller;
 import org.junit.Assert;
@@ -15,13 +17,10 @@ public class RegisterTest {
 
     @Test
     public void registerTest() {
-        Account account = new Customer("abc", "def", "Customer","s", "f", "r", "09", null, 34.5,null);
-        Gson gson = new Gson();
+        Account account = new Seller("ppp", "def", "Seller","s", "f", "r", "09",null,50,null,null,null,null);
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String data = gson.toJson(account);
         RegisterAndLogin.register(data);
-        Account account1 =GetDataFromDatabase.getAccount("abc");
-        String received = gson.toJson(account1);
-        Assert.assertEquals(received,data);
     }
 
     @Test

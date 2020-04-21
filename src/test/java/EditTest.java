@@ -37,7 +37,7 @@ public class EditTest {
         data.put("username","abc");
         data.put("password","ok");
         RegisterAndLogin.login(data);
-        Product product = new Product(1, ProductOrOffCondition.ACCEPTED,"a","b",2,null,2,null,null,"n",null,null,null);
+        //Product product = new Product(1, ProductOrOffCondition.ACCEPTED,"a","b",2,null,2,null,null,"n",null,null,null);
         CustomerController.rateProduct(3,5);
     }
 }

@@ -12,14 +12,24 @@ public class Sale {
     private int validTimes;
     private ArrayList<Customer> saleCustomer;
 
-    public Sale(String saleCode, String startDate, String endDate, double salePercent, double saleMaxAmount, int validTimes, ArrayList<Customer> saleCustomer) {
-        this.saleCode = saleCode;
+    public Sale(String startDate, String endDate, double salePercent, double saleMaxAmount, int validTimes, ArrayList<Customer> saleCustomer) {
+        this.saleCode = getRandomSaleCode();
         this.startDate = startDate;
         this.endDate = endDate;
         this.salePercent = salePercent;
         this.saleMaxAmount = saleMaxAmount;
         this.validTimes = validTimes;
         this.saleCustomer = saleCustomer;
+    }
+
+    public static String getRandomSaleCode() {
+        final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i =0 ; i<8; i++) {
+            int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
+            stringBuilder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        }
+        return stringBuilder.toString();
     }
 
     public String getSaleCode() {

@@ -8,13 +8,23 @@ public class Request {
     private String requestDescription;
     private RequestType requestType;
     private RequestOrCommentCondition requestCondition;
+    private Seller requestSeller;
 
-    public Request(String requestDescription, RequestType requestType, RequestOrCommentCondition requestCondition) {
+    public Request(String requestDescription, RequestType requestType, RequestOrCommentCondition requestCondition,Seller requestSeller) {
         this.requestDescription = requestDescription;
         this.requestType = requestType;
         this.requestCondition = requestCondition;
         Random random = new Random();
         requestId = random.nextInt(10000);
+        this.requestSeller = requestSeller;
+    }
+
+    public Seller getRequestSeller() {
+        return requestSeller;
+    }
+
+    public void setRequestSeller(Seller requestSeller) {
+        this.requestSeller = requestSeller;
     }
 
     public int getRequestId() {
