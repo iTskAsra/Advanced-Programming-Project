@@ -1,6 +1,6 @@
 package view;
 
-public class ExceptionsLibrary {
+public class  ExceptionLibrary {
     public static class WrongUsernameException extends Exception{
         String username;
 

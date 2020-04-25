@@ -1,7 +1,7 @@
 package view;
 
-public class MessagesLibrary {
-    public static void errorLibrary(int errorCode){
+public class ErrorLibrary {
+    public static void errorShow(int errorCode){
         if (errorCode == 1){
             System.out.println("No account with this username.");
         }
@@ -34,7 +34,7 @@ public class MessagesLibrary {
         }
     }
 
-    public static void messagesLibrary(int messageCode){
+    public static void messageShow(int messageCode){
         if (messageCode == 1){
             System.out.println("Registered!");
         }
