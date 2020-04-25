@@ -4,13 +4,14 @@ import controller.SellerController;
 import model.Product;
 import model.ProductOrOffCondition;
 import org.junit.Test;
+import view.ExceptionsLibrary;
 
 import java.util.HashMap;
 
 public class EditProductRequestTest {
 
     @Test
-    public void editProductRequestTest(){
+    public void editProductRequestTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","a");
         data.put("password","b");
@@ -23,7 +24,7 @@ public class EditProductRequestTest {
         SellerController.editProductRequest(1,dataToEdit);
     }
     @Test
-    public void removeProductRequestTest(){
+    public void removeProductRequestTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","a");
         data.put("password","b");
@@ -31,7 +32,7 @@ public class EditProductRequestTest {
         SellerController.removeProduct(1);
     }
     @Test
-    public void addProductRequestTest(){
+    public void addProductRequestTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","a");
         data.put("password","b");

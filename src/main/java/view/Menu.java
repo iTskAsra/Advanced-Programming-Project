@@ -13,14 +13,18 @@ public abstract class Menu {
     private HashMap<Integer , Menu> submenus;
     public static Scanner scanner;
     public static ArrayList<Menu> allMenus;
-
     public static void setScanner(Scanner scanner) {
         Menu.scanner = scanner;
     }
-
     public void setParentMenu(Menu parentMenu){
         this.parentMenu = parentMenu;
     }
+    //protected abstract void logout();
+    //protected abstract void help();
+    static {
+        allMenus = new ArrayList<>();
+    }
+
 
     public Menu(String name , Menu parentMenu){
         this.name = name;
@@ -47,7 +51,7 @@ public abstract class Menu {
     public void show(){
         System.out.println(this.name + " :");
        for(int i = 1 ; i <= this.submenus.size() ; i++){
-           System.out.println(i + ". " + this.submenus.get(i));
+           System.out.println(i + ". " + this.submenus.get(i).getName());
        }
 
         if (this.parentMenu != null)
@@ -61,7 +65,7 @@ public abstract class Menu {
         Menu nextMenu = null;
         int chosenNum = Integer.parseInt(scanner.nextLine());
         if(chosenNum > this.submenus.size() + 1 || chosenNum < 1){
-            System.out.println("Please choose a variable number");
+            System.out.println("Please choose a number");
             this.run();
         }
 

@@ -15,11 +15,11 @@ public class EditSellerTest {
         Account account = new Seller("a","b","Seller","m","n","l","7",null,50,"apple",null,null,null);
         Gson gson = new Gson();
         String registerData = gson.toJson(account);
-        RegisterAndLogin.register(registerData);
+        //RegisterAndLogin.register(registerData);
         HashMap<String,String> data = new HashMap<>();
         data.put("username","a");
         data.put("password","b");
-        RegisterAndLogin.login(data);
+        //RegisterAndLogin.login(data);
         System.out.println(SellerController.getSeller().getFirstName());
         HashMap<String,String> editedData = new HashMap<>();
         editedData.put("firstName","Yo");

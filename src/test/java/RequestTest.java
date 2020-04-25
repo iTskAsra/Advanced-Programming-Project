@@ -5,6 +5,7 @@ import controller.RegisterAndLogin;
 import controller.SellerController;
 import model.*;
 import org.junit.Test;
+import view.ExceptionsLibrary;
 import view.Main;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 public class RequestTest {
 
     @Test
-    public void showRequests(){
+    public void showRequests() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","ooo");
         data.put("password","def");
@@ -21,7 +22,7 @@ public class RequestTest {
     }
 
     @Test
-    public void processRequests(){
+    public void processRequests() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","ooo");
         data.put("password","def");

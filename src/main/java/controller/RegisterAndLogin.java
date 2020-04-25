@@ -3,6 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
+import view.ExceptionsLibrary;
 import view.MessagesLibrary;
 
 import java.io.File;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class RegisterAndLogin {
-    public static void register(String dataToRegister) {
+    public static void register(String dataToRegister) throws ExceptionsLibrary.UsernameExistException, ExceptionsLibrary.AdminExist {
         Gson gson = new Gson();
         Account account = gson.fromJson(dataToRegister, Account.class);
         String username = account.getUsername();
@@ -40,11 +41,11 @@ public class RegisterAndLogin {
         String accountPath = "src/main/resources/Accounts/" + role + "/" + username + ".json";
         File file = new File(accountPath);
         if (!checkUsername(username)) {
-            MessagesLibrary.errorLibrary(3);
+            throw new ExceptionsLibrary.UsernameExistException("Username already exist!",username);
         } else {
             if (role.equals("Admin")){
                 if (new File("src/main/resources/Accounts/Admin").listFiles().length!=0){
-                    MessagesLibrary.errorLibrary(10);
+                    throw new ExceptionsLibrary.AdminExist("You can not register as an amin!");
                 }
                 else {
                     String firstAdminPath = "src/main/resources/Accounts/Admin" + account.getUsername() + ".json";
@@ -104,7 +105,7 @@ public class RegisterAndLogin {
         else return !new File(folder3, username + ".json").exists();
     }
 
-    public static String login(HashMap<String, String> dataToLogin) {
+    public static String login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException {
         Account account = GetDataFromDatabase.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
@@ -120,12 +121,10 @@ public class RegisterAndLogin {
                     return account.getRole();
                 }
             } else {
-                MessagesLibrary.errorLibrary(2);
-                return null;
+                throw new ExceptionsLibrary.WrongPasswordException("Password not correct!");
             }
         } else {
-            MessagesLibrary.errorLibrary(1);
-            return null;
+            throw new ExceptionsLibrary.WrongUsernameException("Username not found!",dataToLogin.get("username"));
         }
         return null;
     }
