@@ -1,7 +1,7 @@
 package view;
 
 import controller.SellerController;
-
+//comment
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
