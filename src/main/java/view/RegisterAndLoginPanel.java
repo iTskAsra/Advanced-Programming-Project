@@ -2,6 +2,7 @@ package view;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import controller.GetDataFromDatabase;
 import controller.RegisterAndLogin;
 import model.Admin;
 import model.Customer;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 
 public class RegisterAndLoginPanel extends Menu {
     public RegisterAndLoginPanel(Menu parentMenu) {
-        super("Register And Login",parentMenu);
+        super("Login Or Register",parentMenu);
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1,getLoginMenu());
         submenus.put(2,getRegisterMenu());
@@ -25,7 +26,7 @@ public class RegisterAndLoginPanel extends Menu {
             public void show() {
                 System.out.println("Select Role:");
                 System.out.printf("1. Customer\n2. Seller\n");
-                if (new File("src/main/resources/Accounts/Admin").listFiles().length==0){
+                if (GetDataFromDatabase.checkIfAnyAdminExists()){
                     System.out.println("3. Admin");
                 }
             }
@@ -154,10 +155,14 @@ public class RegisterAndLoginPanel extends Menu {
                     nextMenu.run();
                 }
                 catch (ExceptionsLibrary.WrongUsernameException e){
-                    System.out.printf("No account with username %s exist!",e.getUsername());
+                    System.out.printf("No account with username %s exist!\n",e.getUsername());
+                    this.getParentMenu().show();
+                    this.getParentMenu().run();
                 }
                 catch (ExceptionsLibrary.WrongPasswordException e){
-                    System.out.printf("Password not correct!");
+                    System.out.printf("Password not correct!\n");
+                    this.getParentMenu().show();
+                    this.getParentMenu().run();
                 }
 
             }

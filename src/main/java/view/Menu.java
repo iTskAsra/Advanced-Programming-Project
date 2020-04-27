@@ -1,16 +1,15 @@
 package view;
 
 import controller.SellerController;
-//comment
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public abstract class Menu {
 
-    private String name;
-    private Menu parentMenu;
-    private HashMap<Integer , Menu> submenus;
+    protected String name;
+    protected Menu parentMenu;
+    protected HashMap<Integer , Menu> submenus;
     public static Scanner scanner;
     public static ArrayList<Menu> allMenus;
     public static void setScanner(Scanner scanner) {
@@ -19,8 +18,6 @@ public abstract class Menu {
     public void setParentMenu(Menu parentMenu){
         this.parentMenu = parentMenu;
     }
-    //protected abstract void logout();
-    //protected abstract void help();
     static {
         allMenus = new ArrayList<>();
     }

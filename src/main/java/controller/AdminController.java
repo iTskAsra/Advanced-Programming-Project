@@ -396,20 +396,29 @@ public class AdminController {
         File customerFolder = new File(customerPath);
         File sellerFolder = new File(sellerPath);
         File adminFolder = new File(adminPath);
-        for (File i : customerFolder.listFiles()) {
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : customerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
             Account account = GetDataFromDatabase.getAccount(username);
             customersList.add(account);
         }
-        for (File i : sellerFolder.listFiles()) {
+        for (File i : sellerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
             Account account = GetDataFromDatabase.getAccount(username);
             sellersList.add(account);
         }
 
-        for (File i : adminFolder.listFiles()) {
+        for (File i : adminFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
             Account account = GetDataFromDatabase.getAccount(username);

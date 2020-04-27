@@ -12,6 +12,28 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class GetDataFromDatabase {
+
+    public static void setResources() {
+        File folder = new File("src/main/resources/Accounts");
+        folder.mkdir();
+        File folder1 = new File("src/main/resources/Accounts/Customer");
+        folder1.mkdir();
+        File folder2 = new File("src/main/resources/Accounts/Seller");
+        folder2.mkdir();
+        File folder3 = new File("src/main/resources/Accounts/Admin");
+        folder3.mkdir();
+        File folder4 = new File("src/main/resources/Products");
+        folder4.mkdir();
+        File folder5 = new File("src/main/resources/Requests");
+        folder5.mkdir();
+        File folder6 = new File("src/main/resources/Offs");
+        folder6.mkdir();
+        File folder7 = new File("src/main/resources/Sale");
+        folder7.mkdir();
+        File folder8 = new File("src/main/resources/Category");
+        folder8.mkdir();
+    }
+
     public static Account getAccount(String username) {
         String pathCustomer = "src/main/resources/Accounts/Customer/" + username + ".json";
         String pathAdmin = "src/main/resources/Accounts/Admin/" + username + ".json";
@@ -60,13 +82,14 @@ public class GetDataFromDatabase {
                 e.printStackTrace();
             }
         } else if (!fileCustomer.exists() && !fileAdmin.exists() && !fileSeller.exists()) {
-            view.MessagesLibrary.errorLibrary(1);
+            //view.MessagesLibrary.errorLibrary(1);
             return null;
         }
         return null;
     }
 
     public static Product getProduct(int productId) {
+        //TODO Error
         if (!Files.exists(Paths.get("src/main/resources/Products"))) {
             File folder = new File("src/main/resources/Products");
             folder.mkdir();
@@ -177,4 +200,7 @@ public class GetDataFromDatabase {
         return null;
     }
 
+    public static boolean checkIfAnyAdminExists() {
+        return new File("src/main/resources/Accounts/Admin").listFiles().length==0;
+    }
 }

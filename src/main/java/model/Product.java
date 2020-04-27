@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 public class Product {
@@ -15,11 +16,12 @@ public class Product {
     private Category category;
     private ArrayList<Feature> categoryFetures;
     private String description;
+    private String date;
     private ArrayList<Rate> rates;
     private ArrayList<Comment> productComments;
     private ArrayList<Customer> productBuyers;
 
-    public Product(ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFetures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, ArrayList<Customer> productBuyers) {
+    public Product(ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFetures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, ArrayList<Customer> productBuyers,String date) {
         Random random = new Random();
         this.productId = random.nextInt(10000);
         this.productCondition = productCondition;
@@ -30,11 +32,21 @@ public class Product {
         this.availability = availability;
         this.category = category;
         //specify category features
-        this.categoryFetures = categoryFetures;
+        this.categoryFetures = new ArrayList<>();
+        categoryFetures.addAll(this.category.getFeatures());
         this.description = description;
         this.rates = new ArrayList<>();
         this.productComments = new ArrayList<>();
         this.productBuyers = new ArrayList<>();
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getProductId() {

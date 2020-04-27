@@ -45,7 +45,7 @@ public class RegisterAndLogin {
         } else {
             if (role.equals("Admin")){
                 if (new File("src/main/resources/Accounts/Admin").listFiles().length!=0){
-                    throw new ExceptionsLibrary.AdminExist("You can not register as an amin!");
+                    throw new ExceptionsLibrary.AdminExist("You can not register as an admin!");
                 }
                 else {
                     String firstAdminPath = "src/main/resources/Accounts/Admin" + account.getUsername() + ".json";
@@ -89,6 +89,20 @@ public class RegisterAndLogin {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public static void registerAdmin(String data){
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        Admin admin = gson.fromJson(data,Admin.class);
+        //TODO check username
+        File file = new File("src/main/resources/Accounts/Admin/"+admin.getUsername());
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(data);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

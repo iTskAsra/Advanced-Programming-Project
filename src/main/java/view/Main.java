@@ -2,6 +2,7 @@ package view;
 
 import controller.AdminController;
 import controller.CustomerController;
+import controller.GetDataFromDatabase;
 import controller.SellerController;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class Main {
         scanner = new Scanner(System.in);
         Menu.setScanner(Main.scanner);
         Menu mainMenu = new MainMenu();
+        GetDataFromDatabase.setResources();
         mainMenu.show();
         mainMenu.run();
     }

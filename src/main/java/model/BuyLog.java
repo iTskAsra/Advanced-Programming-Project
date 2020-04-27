@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BuyLog {
     public static ArrayList<BuyLog> allBuyLogs;
@@ -9,11 +10,12 @@ public class BuyLog {
     private double value;
     private double discountApplied;
     private ArrayList<Product> logProducts;
-    private String sellerName;
-    private boolean deliveryCondition;
+    private ArrayList<String> sellerName;
+    private String deliveryCondition;
 
-    public BuyLog(int logId, String logDate, double value, double discountApplied, ArrayList<Product> logProducts, String sellerName, boolean deliveryCondition) {
-        this.logId = logId;
+    public BuyLog(String logDate, double value, double discountApplied, ArrayList<Product> logProducts, ArrayList<String> sellerName, String deliveryCondition) {
+        Random random = new Random();
+        this.logId = random.nextInt(10000);
         this.logDate = logDate;
         this.value = value;
         this.discountApplied = discountApplied;
@@ -62,19 +64,19 @@ public class BuyLog {
         this.logProducts = logProducts;
     }
 
-    public String getSellerName() {
+    public ArrayList<String> getSellerName() {
         return sellerName;
     }
 
-    public void setSellerName(String sellerName) {
+    public void setSellerName(ArrayList<String> sellerName) {
         this.sellerName = sellerName;
     }
 
-    public boolean isDeliveryCondition() {
+    public String getDeliveryCondition() {
         return deliveryCondition;
     }
 
-    public void setDeliveryCondition(boolean deliveryCondition) {
+    public void setDeliveryCondition(String deliveryCondition) {
         this.deliveryCondition = deliveryCondition;
     }
 }
