@@ -96,7 +96,7 @@ public class RegisterAndLogin {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Admin admin = gson.fromJson(data,Admin.class);
         //TODO check username
-        File file = new File("src/main/resources/Accounts/Admin/"+admin.getUsername());
+        File file = new File("src/main/resources/Accounts/Admin/"+admin.getUsername()+".json");
         try {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(data);
