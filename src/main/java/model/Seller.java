@@ -13,9 +13,9 @@ public class Seller extends Account {
     public Seller(String username, String password, String role, String firstName, String lastName, String email, String phoneNumber, ArrayList<Sale> saleCodes, double credit, String companyName, ArrayList<Product> sellerProducts, ArrayList<SellLog> sellerLogs, ArrayList<Off> sellerOffs) {
         super(username, password, role, firstName, lastName, email, phoneNumber, saleCodes, credit);
         this.companyName = companyName;
-        this.sellerProducts = sellerProducts;
-        this.sellerLogs = sellerLogs;
-        this.sellerOffs = sellerOffs;
+        this.sellerProducts = new ArrayList<>();
+        this.sellerLogs = new ArrayList<>();
+        this.sellerOffs = new ArrayList<>();
     }
 
     public String getCompanyName() {

@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 public class Product {
     //public  static ArrayList<Product> allProducts;
@@ -9,17 +11,19 @@ public class Product {
     private String name;
     private String company;
     private double price;
-    private Seller seller;
+    private transient Seller seller;
     private int availability;
     private Category category;
     private ArrayList<Feature> categoryFetures;
     private String description;
+    private String date;
     private ArrayList<Rate> rates;
     private ArrayList<Comment> productComments;
     private ArrayList<Customer> productBuyers;
 
-    public Product(int productId, ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFetures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, ArrayList<Customer> productBuyers) {
-        this.productId = productId;
+    public Product(ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFetures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, ArrayList<Customer> productBuyers,String date) {
+        Random random = new Random();
+        this.productId = random.nextInt(10000);
         this.productCondition = productCondition;
         this.name = name;
         this.company = company;
@@ -28,11 +32,21 @@ public class Product {
         this.availability = availability;
         this.category = category;
         //specify category features
-        this.categoryFetures = categoryFetures;
+        this.categoryFetures = new ArrayList<>();
+        categoryFetures.addAll(this.category.getFeatures());
         this.description = description;
         this.rates = new ArrayList<>();
         this.productComments = new ArrayList<>();
         this.productBuyers = new ArrayList<>();
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getProductId() {

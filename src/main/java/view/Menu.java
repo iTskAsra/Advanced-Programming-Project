@@ -1,26 +1,27 @@
 package view;
 
-import controller.CustomerController;
-
+import controller.SellerController;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public abstract class Menu {
 
-    private String name;
-    private Menu parentMenu;
-    private HashMap<Integer , Menu> submenus;
+    protected String name;
+    protected Menu parentMenu;
+    protected HashMap<Integer , Menu> submenus;
     public static Scanner scanner;
     public static ArrayList<Menu> allMenus;
-
     public static void setScanner(Scanner scanner) {
         Menu.scanner = scanner;
     }
-
     public void setParentMenu(Menu parentMenu){
         this.parentMenu = parentMenu;
     }
+    static {
+        allMenus = new ArrayList<>();
+    }
+
 
     public Menu(String name , Menu parentMenu){
         this.name = name;
@@ -45,12 +46,9 @@ public abstract class Menu {
     }
 
     public void show(){
-
-
         System.out.println(this.name + " :");
-
        for(int i = 1 ; i <= this.submenus.size() ; i++){
-           System.out.println(i + ". " + this.submenus.get(i));
+           System.out.println(i + ". " + this.submenus.get(i).getName());
        }
 
         if (this.parentMenu != null)
@@ -64,7 +62,7 @@ public abstract class Menu {
         Menu nextMenu = null;
         int chosenNum = Integer.parseInt(scanner.nextLine());
         if(chosenNum > this.submenus.size() + 1 || chosenNum < 1){
-            System.out.println("Please choose a variable number");
+            System.out.println("Please choose a number");
             this.run();
         }
 

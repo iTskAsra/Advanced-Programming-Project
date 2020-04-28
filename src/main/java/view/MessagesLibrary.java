@@ -20,7 +20,18 @@ public class MessagesLibrary {
         else if (errorCode == 6){
             System.out.println("Don't have a product with this ID!");
         }
-
+        else if (errorCode == 7){
+            System.out.println("Don't have an off with this ID!");
+        }
+        else if (errorCode == 8){
+            System.out.println("Don't have an off with this ID!");
+        }
+        else if (errorCode == 9){
+            System.out.println("Don't have an off with this ID!");
+        }
+        else if (errorCode == 10){
+            System.out.println("Only an admin can register a new admin");
+        }
     }
 
     public static void messagesLibrary(int messageCode){
@@ -29,6 +40,9 @@ public class MessagesLibrary {
         }
         if (messageCode == 2){
             System.out.println("Logged in!");
+        }
+        if (messageCode == 3){
+            System.out.println("Product removed!");
         }
     }
 }

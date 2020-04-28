@@ -7,12 +7,13 @@ import model.Product;
 import model.ProductOrOffCondition;
 import org.junit.Assert;
 import org.junit.Test;
+import view.ExceptionsLibrary;
 
 import java.util.HashMap;
 
 public class EditTest {
     @Test
-    public void showTest(){
+    public void showTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","abc");
         data.put("password","klm");
@@ -32,12 +33,12 @@ public class EditTest {
     }
 
     @Test
-    public void rateTest(){
+    public void rateTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","abc");
         data.put("password","ok");
         RegisterAndLogin.login(data);
-        Product product = new Product(1, ProductOrOffCondition.ACCEPTED,"a","b",2,null,2,null,null,"n",null,null,null);
+        //Product product = new Product(1, ProductOrOffCondition.ACCEPTED,"a","b",2,null,2,null,null,"n",null,null,null);
         CustomerController.rateProduct(3,5);
     }
 }
