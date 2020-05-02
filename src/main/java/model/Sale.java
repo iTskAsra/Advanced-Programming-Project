@@ -10,16 +10,16 @@ public class Sale {
     private double salePercent;
     private double saleMaxAmount;
     private int validTimes;
-    private ArrayList<Customer> saleCustomer;
+    private transient ArrayList<Account> saleAccounts;
 
-    public Sale(String startDate, String endDate, double salePercent, double saleMaxAmount, int validTimes, ArrayList<Customer> saleCustomer) {
+    public Sale(String startDate, String endDate, double salePercent, double saleMaxAmount, int validTimes, ArrayList<Account> saleAccounts) {
         this.saleCode = getRandomSaleCode();
         this.startDate = startDate;
         this.endDate = endDate;
         this.salePercent = salePercent;
         this.saleMaxAmount = saleMaxAmount;
         this.validTimes = validTimes;
-        this.saleCustomer = saleCustomer;
+        this.saleAccounts = saleAccounts;
     }
 
     public static String getRandomSaleCode() {
@@ -80,11 +80,11 @@ public class Sale {
         this.validTimes = validTimes;
     }
 
-    public ArrayList<Customer> getSaleCustomer() {
-        return saleCustomer;
+    public ArrayList<Account> getSaleAccounts() {
+        return saleAccounts;
     }
 
-    public void setSaleCustomer(ArrayList<Customer> saleCustomer) {
-        this.saleCustomer = saleCustomer;
+    public void setSaleAccounts(ArrayList<Account> saleAccounts) {
+        this.saleAccounts = saleAccounts;
     }
 }
