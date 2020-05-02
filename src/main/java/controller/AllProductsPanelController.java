@@ -2,7 +2,6 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.Account;
 import model.Category;
 import model.Feature;
 import model.Product;
@@ -66,7 +65,7 @@ public class AllProductsPanelController {
     }
 
     public static ArrayList<String> viewCategories() {
-        String path = "src/main/resources/Categories";
+        String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -87,7 +86,7 @@ public class AllProductsPanelController {
 
     public static ArrayList<String> showAvailableFilters() {
         ArrayList<String> allAvailabelFilters = new ArrayList();
-        String path = "src/main/resources/Categories";
+        String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -157,7 +156,7 @@ public class AllProductsPanelController {
 
     public static ArrayList<Product> showProducts() {
         ArrayList<Product> products = new ArrayList<>();
-        String path = "src/main/resources/Products";
+        String path = "Resources/Products";
         File productsFolder = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -218,15 +217,13 @@ public class AllProductsPanelController {
         return products;
     }
 
-    public static String goToProductPage(int productId) {
+    public static Product goToProductPage(int productId) {
         Product product = GetDataFromDatabase.getProduct(productId);
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String data = gson.toJson(product);
-        return data;
+        return product;
     }
 
     private static boolean isFeature(Product i, String j) {
-        for (Feature k : i.getCategoryFetures()){
+        for (Feature k : i.getCategoryFeatures()){
             if (k.getParameter().equals(j)){
                 return true;
             }

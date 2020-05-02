@@ -2,6 +2,7 @@ package view;
 
 import controller.AdminController;
 import controller.AllProductsPanelController;
+import controller.ProductPageController;
 import model.Category;
 import model.Feature;
 import model.Product;
@@ -80,7 +81,11 @@ public class AllProductsPanel extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Menu.scanner.nextLine());
-                AllProductsPanelController.goToProductPage(productId);
+                Product product = AllProductsPanelController.goToProductPage(productId);
+                ProductPageController productPageController = new ProductPageController(product);
+                ProductPage productPage =new ProductPage(product.getName(),this);
+                productPage.show();
+                productPage.run();
                 //TODO Product Page , Exception and more!!!
                 getParentMenu().show();
                 getParentMenu().run();

@@ -21,65 +21,61 @@ public class ProductPageController {
         ProductPageController.product = product;
     }
 
-    public static String digest(){
+    public static String digest() {
         Gson gson = new GsonBuilder().serializeNulls().create();
         String data = gson.toJson(getProduct());
         return data;
     }
 
-    public static void addToCart(){
-        if (getProduct().getSeller() == null){
+    public static void addToCart() {
+        if (getProduct().getSeller() == null) {
             //TODO Error
-        }
-        else {
-            if (getProduct().getAvailability()>=1){
-                Cart.getCartProducts().put(getProduct(),1);
-            }
-            else {
+        } else {
+            if (getProduct().getAvailability() >= 1) {
+                CartController.getCartProducts().put(getProduct(), 1);
+            } else {
                 //TODO Error
             }
         }
     }
 
-    public static void selectSeller(String sellerUsername){
+    public static void selectSeller(String sellerUsername) {
         Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerUsername);
         product.setSeller(seller);
     }
 
-    public static String attributes(){
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String data = gson.toJson(getProduct());
-        return data;
+    public static Product attributes() {
+        return getProduct();
     }
 
-    public static String[] compare(int productId){
+    public static String[] compare(int productId) {
         String[] products = new String[2];
         Gson gson = new GsonBuilder().serializeNulls().create();
         String firstProductData = gson.toJson(getProduct());
         products[0] = firstProductData;
-        Gson gson1 =  new GsonBuilder().serializeNulls().create();
+        Gson gson1 = new GsonBuilder().serializeNulls().create();
         Product product1 = GetDataFromDatabase.getProduct(productId);
         String secondProductData = gson1.toJson(product1);
         products[1] = secondProductData;
         return products;
     }
 
-    public static ArrayList<Comment> comments(){
+    public static ArrayList<Comment> comments() {
         return getProduct().getProductComments();
     }
 
-    public static void addComment(String commentText){
-        Comment comment = new Comment(CustomerController.getCustomer(),getProduct(),commentText, RequestOrCommentCondition.PENDING_TO_ACCEPT,isBoughtByCommenter(CustomerController.getCustomer(),getProduct()));
-        if (isBoughtByCommenter(CustomerController.getCustomer(),getProduct())){
-            getProduct().getProductComments().add(comment);
-            SetDataToDatabase.setProduct(getProduct());
-        }
+    public static void addComment(String title, String commentText) {
+        Comment comment = new Comment(CustomerController.getCustomer(), getProduct(), commentText, RequestOrCommentCondition.PENDING_TO_ACCEPT, isBoughtByCommenter(CustomerController.getCustomer(), getProduct()), title);
+        comment.setBoughtByCommenter(isBoughtByCommenter(CustomerController.getCustomer(),getProduct()));
+        getProduct().getProductComments().add(comment);
+        SetDataToDatabase.setProduct(getProduct());
+
     }
 
     private static boolean isBoughtByCommenter(Customer customer, Product product) {
-        for (BuyLog i : customer.getCustomerLog()){
-            for (Product j : i.getLogProducts()){
-                if (j.getProductId() == product.getProductId()){
+        for (BuyLog i : customer.getCustomerLog()) {
+            for (Product j : i.getLogProducts()) {
+                if (j.getProductId() == product.getProductId()) {
                     return true;
                 }
             }

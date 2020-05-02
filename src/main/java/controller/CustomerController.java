@@ -56,7 +56,7 @@ public class CustomerController {
         setCustomer(customer);
         String editedDetails = gson.toJson(customer);
         try {
-            String path = "src/main/resources/Accounts/Customer/" + getCustomer().getUsername() + ".json";
+            String path = "Resources/Accounts/Customer/" + getCustomer().getUsername() + ".json";
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(editedDetails);
             fileWriter.close();
@@ -96,7 +96,7 @@ public class CustomerController {
             product.getRates().add(rate);
             Gson gson = new Gson();
             String ratedProduct = gson.toJson(product);
-            String path = "src/main/resources/Products/" + Integer.toString(productId) + ".json";
+            String path = "Resources/Products/" + Integer.toString(productId) + ".json";
             File file = new File(path);
             try (FileWriter fileWriter = new FileWriter(file)) {
                 fileWriter.write(ratedProduct);

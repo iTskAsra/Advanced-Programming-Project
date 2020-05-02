@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Cart {
+public class CartController {
     private static HashMap<Product, Integer> cartProducts;
     private static Customer cartCustomer;
     private static HashMap<String, String> receiverInfo;
@@ -23,7 +23,7 @@ public class Cart {
         receiverInfo = new HashMap<>();
     }
 
-    public Cart(Customer customer) {
+    public CartController(Customer customer) {
         this.cartCustomer = customer;
     }
 
@@ -32,7 +32,7 @@ public class Cart {
     }
 
     public static void setSaleDiscount(double saleDiscount) {
-        Cart.saleDiscount = saleDiscount;
+        CartController.saleDiscount = saleDiscount;
     }
 
     public static double getTotalPrice() {
@@ -40,7 +40,7 @@ public class Cart {
     }
 
     public static void setTotalPrice(double totalPrice) {
-        Cart.totalPrice = totalPrice;
+        CartController.totalPrice = totalPrice;
     }
 
     public static HashMap<String, String> getReceiverInfo() {
@@ -48,7 +48,7 @@ public class Cart {
     }
 
     public static void setReceiverInfo(HashMap<String, String> receiverInfo) {
-        Cart.receiverInfo = receiverInfo;
+        CartController.receiverInfo = receiverInfo;
     }
 
     public static HashMap<Product, Integer> getCartProducts() {
@@ -56,7 +56,7 @@ public class Cart {
     }
 
     public static void setCartProducts(HashMap<Product, Integer> cartProducts) {
-        Cart.cartProducts = cartProducts;
+        CartController.cartProducts = cartProducts;
     }
 
     public static Customer getCartCustomer() {
@@ -64,7 +64,7 @@ public class Cart {
     }
 
     public static void setCartCustomer(Customer cartCustomer) {
-        Cart.cartCustomer = cartCustomer;
+        CartController.cartCustomer = cartCustomer;
     }
 
     public static HashMap<Product, Integer> showCartProducts() {

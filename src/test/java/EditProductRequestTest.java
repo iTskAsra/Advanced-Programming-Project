@@ -1,5 +1,6 @@
-/*
+
 import com.google.gson.Gson;
+import controller.GetDataFromDatabase;
 import controller.RegisterAndLogin;
 import controller.SellerController;
 import model.Product;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 
 public class EditProductRequestTest {
 
-    @Test
+    /*@Test
     public void editProductRequestTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","a");
@@ -24,7 +25,7 @@ public class EditProductRequestTest {
         dataToEdit.put("description","This is good");
         SellerController.editProductRequest(1,dataToEdit);
     }
-    @Test
+    @Test*/
     public void removeProductRequestTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","a");
@@ -32,7 +33,7 @@ public class EditProductRequestTest {
         RegisterAndLogin.login(data);
         SellerController.removeProduct(1);
     }
-    @Test
+    /*@Test
     public void addProductRequestTest() throws ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
         HashMap<String,String> data = new HashMap<>();
         data.put("username","a");
@@ -42,6 +43,13 @@ public class EditProductRequestTest {
         Gson gson = new Gson();
         String productData = gson.toJson(product);
         SellerController.addProductRequest(productData);
+    }*/
+
+    @Test
+    public void productMaker(){
+        //Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE,"a","a",33,null,5, GetDataFromDatabase.getCategory("Hi"))
+
     }
+
 }
-*/
+

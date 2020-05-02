@@ -93,7 +93,7 @@ public class RegisterAndLoginPanel extends Menu {
                     catch (ExceptionsLibrary.UsernameExistException | ExceptionsLibrary.AdminExist e ){
                         System.out.println(e.getMessage());
                     }
-                } else if (chosenNumber == 3 && new File("src/main/resources/Accounts/Admin").listFiles().length == 0) {
+                } else if (chosenNumber == 3 && new File("Resources/Accounts/Admin").listFiles().length == 0) {
                     //TODO check username and password
                     System.out.println("Enter Username:");
                     String username = scanner.nextLine();

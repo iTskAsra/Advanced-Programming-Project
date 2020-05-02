@@ -7,15 +7,25 @@ public class Comment {
     private Account commenterAccount;
     private Product commentProduct;
     private String commentText;
+    private String commentTitle;
     private RequestOrCommentCondition commentCondition;
     private boolean isBoughtByCommenter;
 
-    public Comment(Account commenterAccount, Product commentProduct, String commentText, RequestOrCommentCondition commentCondition, boolean isBoughtByCommenter) {
+    public Comment(Account commenterAccount, Product commentProduct, String commentText, RequestOrCommentCondition commentCondition, boolean isBoughtByCommenter,String commentTitle) {
         this.commenterAccount = commenterAccount;
         this.commentProduct = commentProduct;
         this.commentText = commentText;
         this.commentCondition = commentCondition;
         this.isBoughtByCommenter = isBoughtByCommenter;
+        this.commentTitle = commentTitle;
+    }
+
+    public String getCommentTitle() {
+        return commentTitle;
+    }
+
+    public void setCommentTitle(String commentTitle) {
+        this.commentTitle = commentTitle;
     }
 
     public Account getCommenterAccount() {
