@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public abstract class Menu {
+public class Menu {
 
     protected String name;
     protected Menu parentMenu;
