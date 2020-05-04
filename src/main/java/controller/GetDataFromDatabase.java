@@ -6,38 +6,42 @@ import model.*;
 import view.MessagesLibrary;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GetDataFromDatabase {
 
     public static void setResources() {
-        File folder = new File("src/main/resources/Accounts");
+        File folder9 = new File("Resources");
+        folder9.mkdir();
+        File folder = new File("Resources/Accounts");
         folder.mkdir();
-        File folder1 = new File("src/main/resources/Accounts/Customer");
+        File folder1 = new File("Resources/Accounts/Customer");
         folder1.mkdir();
-        File folder2 = new File("src/main/resources/Accounts/Seller");
+        File folder2 = new File("Resources/Accounts/Seller");
         folder2.mkdir();
-        File folder3 = new File("src/main/resources/Accounts/Admin");
+        File folder3 = new File("Resources/Accounts/Admin");
         folder3.mkdir();
-        File folder4 = new File("src/main/resources/Products");
+        File folder4 = new File("Resources/Products");
         folder4.mkdir();
-        File folder5 = new File("src/main/resources/Requests");
+        File folder5 = new File("Resources/Requests");
         folder5.mkdir();
-        File folder6 = new File("src/main/resources/Offs");
+        File folder6 = new File("Resources/Offs");
         folder6.mkdir();
-        File folder7 = new File("src/main/resources/Sale");
+        File folder7 = new File("Resources/Sales");
         folder7.mkdir();
-        File folder8 = new File("src/main/resources/Category");
+        File folder8 = new File("Resources/Category");
         folder8.mkdir();
     }
 
     public static Account getAccount(String username) {
-        String pathCustomer = "src/main/resources/Accounts/Customer/" + username + ".json";
-        String pathAdmin = "src/main/resources/Accounts/Admin/" + username + ".json";
-        String pathSeller = "src/main/resources/Accounts/Seller/" + username + ".json";
+        String pathCustomer = "Resources/Accounts/Customer/" + username + ".json";
+        String pathAdmin = "Resources/Accounts/Admin/" + username + ".json";
+        String pathSeller = "Resources/Accounts/Seller/" + username + ".json";
         File fileCustomer = new File(pathCustomer);
         File fileAdmin = new File(pathAdmin);
         File fileSeller = new File(pathSeller);
@@ -90,11 +94,11 @@ public class GetDataFromDatabase {
 
     public static Product getProduct(int productId) {
         //TODO Error
-        if (!Files.exists(Paths.get("src/main/resources/Products"))) {
-            File folder = new File("src/main/resources/Products");
+        if (!Files.exists(Paths.get("Resources/Products"))) {
+            File folder = new File("Resources/Products");
             folder.mkdir();
         }
-        String productPath = "src/main/resources/Products/" + (productId) + ".json";
+        String productPath = "Resources/Products/" + (productId) + ".json";
         File fileProduct = new File(productPath);
         try {
             Scanner scanner;
@@ -113,11 +117,11 @@ public class GetDataFromDatabase {
 
 
     public static Off getOff(int offId) {
-        if (!Files.exists(Paths.get("src/main/resources/Offs"))) {
-            File folder = new File("src/main/resources/Offs");
+        if (!Files.exists(Paths.get("Resources/Offs"))) {
+            File folder = new File("Resources/Offs");
             folder.mkdir();
         }
-        String offPath = "src/main/resources/Offs/" + (offId) + ".json";
+        String offPath = "Resources/Offs/" + (offId) + ".json";
         File fileProduct = new File(offPath);
         try {
             Scanner scanner;
@@ -135,11 +139,11 @@ public class GetDataFromDatabase {
     }
 
     public static Request getRequest(int requestId) {
-        if (!Files.exists(Paths.get("src/main/resources/Requests"))) {
-            File folder = new File("src/main/resources/Requests");
+        if (!Files.exists(Paths.get("Resources/Requests"))) {
+            File folder = new File("Resources/Requests");
             folder.mkdir();
         }
-        String requestPath = "src/main/resources/Requests/" + (requestId) + ".json";
+        String requestPath = "Resources/Requests/" + (requestId) + ".json";
         File fileProduct = new File(requestPath);
         try {
             Scanner scanner;
@@ -157,11 +161,11 @@ public class GetDataFromDatabase {
     }
 
     public static Sale getSale(String saleCode) {
-        if (!Files.exists(Paths.get("src/main/resources/Sales"))) {
-            File folder = new File("src/main/resources/Sales");
+        if (!Files.exists(Paths.get("Resources/Sales"))) {
+            File folder = new File("Resources/Sales");
             folder.mkdir();
         }
-        String salePath = "src/main/resources/Sale/" + (saleCode) + ".json";
+        String salePath = "Resources/Sales/" + (saleCode) + ".json";
         File fileProduct = new File(salePath);
         try {
             Scanner scanner;
@@ -179,15 +183,15 @@ public class GetDataFromDatabase {
     }
 
     public static Category getCategory(String categoryName) {
-        if (!Files.exists(Paths.get("src/main/resources/Category"))) {
-            File folder = new File("src/main/resources/Category");
+        if (!Files.exists(Paths.get("Resources/Category"))) {
+            File folder = new File("Resources/Category");
             folder.mkdir();
         }
-        String categoryPath = "src/main/resources/Category/" + (categoryName) + ".json";
-        File fileProduct = new File(categoryPath);
+        String categoryPath = "Resources/Category/" + (categoryName) + ".json";
+        File fileCategory = new File(categoryPath);
         try {
             Scanner scanner;
-            scanner = new Scanner(fileProduct);
+            scanner = new Scanner(fileCategory);
             scanner.useDelimiter("\\z");
             String fileData = scanner.next();
             Gson gson = new GsonBuilder().serializeNulls().create();
@@ -195,12 +199,45 @@ public class GetDataFromDatabase {
             scanner.close();
             return category;
         } catch (FileNotFoundException e) {
-            MessagesLibrary.errorLibrary(13);//No category with this name
+            MessagesLibrary.errorLibrary(13);//TODO  No category with this name
         }
         return null;
     }
 
     public static boolean checkIfAnyAdminExists() {
-        return new File("src/main/resources/Accounts/Admin").listFiles().length==0;
+        return new File("Resources/Accounts/Admin").listFiles().length==0;
+    }
+
+    public static ArrayList<Seller> findSellersFromProductId(int productId) {
+        File folder = new File("Resources/Accounts/Seller");
+        ArrayList<Seller> sellers =new ArrayList<>();
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            try {
+                Scanner scanner;
+                scanner = new Scanner(i);
+                scanner.useDelimiter("\\z");
+                String fileData = scanner.next();
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                Seller seller = gson.fromJson(fileData, Seller.class);
+                for (Product j : seller.getSellerProducts()){
+                    if (j.getProductId() == productId){
+                        sellers.add(seller);
+                    }
+                }
+                scanner.close();
+            } catch (FileNotFoundException e) {
+                //TODO error (skip)
+            }
+        }
+        return sellers;
     }
 }

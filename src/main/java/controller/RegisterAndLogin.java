@@ -19,36 +19,36 @@ public class RegisterAndLogin {
         Gson gson = new Gson();
         Account account = gson.fromJson(dataToRegister, Account.class);
         String username = account.getUsername();
-        if (!Files.exists(Paths.get("src/main/resources/Accounts"))) {
-            File folder = new File("src/main/resources/Accounts");
+        if (!Files.exists(Paths.get("Resources/Accounts"))) {
+            File folder = new File("Resources/Accounts");
             folder.mkdir();
         }
-        if (Files.exists(Paths.get("src/main/resources/Accounts"))) {
-            if (!Files.exists(Paths.get("src/main/resources/Accounts/Customer"))) {
-                File folder1 = new File("src/main/resources/Accounts/Customer");
+        if (Files.exists(Paths.get("Resources/Accounts"))) {
+            if (!Files.exists(Paths.get("Resources/Accounts/Customer"))) {
+                File folder1 = new File("Resources/Accounts/Customer");
                 folder1.mkdir();
             }
-            if (!Files.exists(Paths.get("src/main/resources/Accounts/Admin"))) {
-                File folder1 = new File("src/main/resources/Accounts/Admin");
+            if (!Files.exists(Paths.get("Resources/Accounts/Admin"))) {
+                File folder1 = new File("Resources/Accounts/Admin");
                 folder1.mkdir();
             }
-            if (!Files.exists(Paths.get("src/main/resources/Accounts/Seller"))) {
-                File folder1 = new File("src/main/resources/Accounts/Seller");
+            if (!Files.exists(Paths.get("Resources/Accounts/Seller"))) {
+                File folder1 = new File("Resources/Accounts/Seller");
                 folder1.mkdir();
             }
         }
         String role = account.getRole();
-        String accountPath = "src/main/resources/Accounts/" + role + "/" + username + ".json";
+        String accountPath = "Resources/Accounts/" + role + "/" + username + ".json";
         File file = new File(accountPath);
         if (!checkUsername(username)) {
             throw new ExceptionsLibrary.UsernameExistException("Username already exist!",username);
         } else {
             if (role.equals("Admin")){
-                if (new File("src/main/resources/Accounts/Admin").listFiles().length!=0){
+                if (new File("Resources/Accounts/Admin").listFiles().length!=0){
                     throw new ExceptionsLibrary.AdminExist("You can not register as an admin!");
                 }
                 else {
-                    String firstAdminPath = "src/main/resources/Accounts/Admin" + account.getUsername() + ".json";
+                    String firstAdminPath = "Resources/Accounts/Admin" + account.getUsername() + ".json";
                     try {
                         File adminFile = new File(firstAdminPath);
                         adminFile.createNewFile();
@@ -64,7 +64,7 @@ public class RegisterAndLogin {
                 Gson gsonSeller =new GsonBuilder().serializeNulls().create();
                 Seller seller = gsonSeller.fromJson(dataToRegister,Seller.class);
                 Request request = new Request(dataToRegister,RequestType.REGISTER_SELLER,RequestOrCommentCondition.PENDING_TO_ACCEPT,seller);
-                String requestPath="src/main/resources/Requests/" + request.getRequestId() + ".json";
+                String requestPath="Resources/Requests/" + request.getRequestId() + ".json";
                 while (Files.exists(Paths.get(requestPath))) {
                     Random random = new Random();
                     request.setRequestId(random.nextInt(10000));
@@ -96,7 +96,7 @@ public class RegisterAndLogin {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Admin admin = gson.fromJson(data,Admin.class);
         //TODO check username
-        File file = new File("src/main/resources/Accounts/Admin/"+admin.getUsername()+".json");
+        File file = new File("Resources/Accounts/Admin/"+admin.getUsername()+".json");
         try {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(data);
@@ -107,9 +107,9 @@ public class RegisterAndLogin {
     }
 
     public static boolean checkUsername(String username) {
-        File folder1 = new File("src/main/resources/Accounts/Customer");
-        File folder2 = new File("src/main/resources/Accounts/Admin");
-        File folder3 = new File("src/main/resources/Accounts/Seller");
+        File folder1 = new File("Resources/Accounts/Customer");
+        File folder2 = new File("Resources/Accounts/Admin");
+        File folder3 = new File("Resources/Accounts/Seller");
         if (new File(folder1,username+".json").exists()){
             return false;
         }

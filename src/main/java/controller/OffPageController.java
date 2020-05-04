@@ -13,7 +13,7 @@ public class OffPageController {
 
     public static ArrayList<Off> listOffs(){
         ArrayList<Off> offsList = new ArrayList<>();
-        String path = "src/main/resources/Offs";
+        String path = "Resources/Offs";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override

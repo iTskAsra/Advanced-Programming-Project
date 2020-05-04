@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class SetDataToDatabase {
     public static void setProduct(Product product) {
-        String path = "src/main/resources/Products"+ product.getProductId() + ".json";
+        String path = "Resources/Products"+ product.getProductId() + ".json";
         File file = new File(path);
         try {
             FileWriter fileWriter = new FileWriter(file);
@@ -29,7 +29,7 @@ public class SetDataToDatabase {
     }
 
     public static void setAccount(Account account) {
-        String path = "src/main/resources/Accounts/" + account.getRole() + "/" + account.getUsername() + ".json";
+        String path = "Resources/Accounts/" + account.getRole() + "/" + account.getUsername() + ".json";
         File file = new File(path);
         try {
             FileWriter fileWriter = new FileWriter(file);
@@ -45,7 +45,7 @@ public class SetDataToDatabase {
     }
 
     public static void setSale(Sale sale) {
-        String path = "src/main/resources/Sales"+ sale.getSaleCode() + ".json";
+        String path = "Resources/Sales"+ sale.getSaleCode() + ".json";
         File file = new File(path);
         try {
             FileWriter fileWriter = new FileWriter(file);

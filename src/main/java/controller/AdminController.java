@@ -67,7 +67,7 @@ public class AdminController {
         setAdmin(admin);
         String editedDetails = gson.toJson(admin);
         try {
-            String path = "src/main/resources/Accounts/Admin/" + getAdmin().getUsername() + ".json";
+            String path = "Resources/Accounts/Admin/" + getAdmin().getUsername() + ".json";
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(editedDetails);
             fileWriter.close();
@@ -78,7 +78,7 @@ public class AdminController {
 
     public static ArrayList<Request> showAdminRequests() {
         ArrayList<Request> allRequests = new ArrayList<>();
-        String path = "src/main/resources/Requests";
+        String path = "Resources/Requests";
         File file = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -128,8 +128,8 @@ public class AdminController {
                         Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
                         seller.getSellerOffs().add(off);
                         try {
-                            String offPath = "src/main/resources/Offs/" + off.getOffId() + ".json";
-                            String sellerPath = "src/main/resources/Accounts/Seller" + seller.getUsername() + ".json";
+                            String offPath = "Resources/Offs/" + off.getOffId() + ".json";
+                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
                             File file = new File(offPath);
                             file.createNewFile();
                             FileWriter fileWriter = new FileWriter(file);
@@ -141,7 +141,7 @@ public class AdminController {
                             fileWriterSeller.write(sellerData);
                             fileWriterSeller.close();
                             MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                             File fileRequest = new File(requestPath);
                             fileRequest.delete();
                         } catch (IOException e) {
@@ -149,7 +149,7 @@ public class AdminController {
                             e.printStackTrace();
                         }
                     } else {
-                        String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                         MessagesLibrary.messagesLibrary(6);
@@ -171,8 +171,8 @@ public class AdminController {
                         }
                         seller.getSellerOffs().add(off);
                         try {
-                            String offPath = "src/main/resources/Offs/" + off.getOffId() + ".json";
-                            String sellerPath = "src/main/resources/Accounts/Seller" + seller.getUsername() + ".json";
+                            String offPath = "Resources/Offs/" + off.getOffId() + ".json";
+                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
                             FileWriter fileWriter = new FileWriter(offPath);
                             fileWriter.write(offDetails);
                             fileWriter.close();
@@ -182,7 +182,7 @@ public class AdminController {
                             fileWriterSeller.write(sellerData);
                             fileWriterSeller.close();
                             MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                             File fileRequest = new File(requestPath);
                             fileRequest.delete();
                         } catch (IOException e) {
@@ -190,7 +190,7 @@ public class AdminController {
                             e.printStackTrace();
                         }
                     } else {
-                        String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                         MessagesLibrary.messagesLibrary(6);
@@ -208,8 +208,8 @@ public class AdminController {
                         Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
                         seller.getSellerProducts().add(product);
                         try {
-                            String productPath = "src/main/resources/Products/" + product.getProductId() + ".json";
-                            String sellerPath = "src/main/resources/Accounts/Seller" + seller.getUsername() + ".json";
+                            String productPath = "Resources/Products/" + product.getProductId() + ".json";
+                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
                             File file = new File(productPath);
                             file.createNewFile();
                             FileWriter fileWriter = new FileWriter(file);
@@ -221,7 +221,7 @@ public class AdminController {
                             fileWriterSeller.write(sellerData);
                             fileWriterSeller.close();
                             MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                             File fileRequest = new File(requestPath);
                             fileRequest.delete();
                         } catch (IOException e) {
@@ -229,7 +229,7 @@ public class AdminController {
                             e.printStackTrace();
                         }
                     } else {
-                        String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     }
@@ -249,8 +249,8 @@ public class AdminController {
                         }
                         seller.getSellerProducts().add(product);
                         try {
-                            String productPath = "src/main/resources/Products/" + product.getProductId() + ".json";
-                            String sellerPath = "src/main/resources/Accounts/Seller" + seller.getUsername() + ".json";
+                            String productPath = "Resources/Products/" + product.getProductId() + ".json";
+                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
                             FileWriter fileWriter = new FileWriter(productPath);
                             fileWriter.write(productDetails);
                             fileWriter.close();
@@ -260,7 +260,7 @@ public class AdminController {
                             fileWriterSeller.write(sellerData);
                             fileWriterSeller.close();
                             MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                             File fileRequest = new File(requestPath);
                             fileRequest.delete();
                         } catch (IOException e) {
@@ -268,7 +268,7 @@ public class AdminController {
                             e.printStackTrace();
                         }
                     } else {
-                        String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     }
@@ -278,7 +278,7 @@ public class AdminController {
                         Seller seller = request.getRequestSeller();
                         String sellerDetails = gson.toJson(seller);
                         try {
-                            String sellerPath = "src/main/resources/Accounts/Seller/" + seller.getUsername() + ".json";
+                            String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
                             File file = new File(sellerPath);
                             file.createNewFile();
                             FileWriter fileWriterSeller = new FileWriter(sellerPath);
@@ -287,7 +287,7 @@ public class AdminController {
                             fileWriterSeller.write(sellerData);
                             fileWriterSeller.close();
                             MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                             File fileRequest = new File(requestPath);
                             fileRequest.delete();
                         } catch (IOException e) {
@@ -295,7 +295,7 @@ public class AdminController {
                             e.printStackTrace();
                         }
                     } else {
-                        String requestPath = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     }
@@ -307,7 +307,7 @@ public class AdminController {
     }
 
     private static boolean checkIfOffExist(int offId) {
-        String path = "src/main/resources/Offs/" + offId + ".json";
+        String path = "Resources/Offs/" + offId + ".json";
         File file = new File(path);
         if (!file.exists()) {
             return false;
@@ -318,7 +318,7 @@ public class AdminController {
 
     public static ArrayList<Sale> showSales() {
         ArrayList<Sale> allSales = new ArrayList<>();
-        String path = "src/main/resources/Sales";
+        String path = "Resources/Sales";
         File file = new File(path);
         for (File i : file.listFiles()) {
             String fileName = i.getName();
@@ -355,7 +355,7 @@ public class AdminController {
         Gson gson = new GsonBuilder().serializeNulls().create();
         String editedDetails = gson.toJson(sale);
         try {
-            String path = "src/main/resources/Sales/" + sale.getSaleCode() + ".json";
+            String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(editedDetails);
             fileWriter.close();
@@ -372,7 +372,7 @@ public class AdminController {
         }
         String newSaleDetails = gson.toJson(sale);
         try {
-            String path = "src/main/resources/Sales/" + sale.getSaleCode() + ".json";
+            String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(newSaleDetails);
             fileWriter.close();
@@ -383,9 +383,9 @@ public class AdminController {
     }
 
     public static HashMap<String, ArrayList<Account>> showAllUsers() {
-        String customerPath = "src/main/resources/Accounts/Customer";
-        String sellerPath = "src/main/resources/Accounts/Seller";
-        String adminPath = "src/main/resources/Accounts/Admin";
+        String customerPath = "Resources/Accounts/Customer";
+        String sellerPath = "Resources/Accounts/Seller";
+        String adminPath = "Resources/Accounts/Admin";
         ArrayList<Account> customersList = new ArrayList<>();
         ArrayList<Account> sellersList = new ArrayList<>();
         ArrayList<Account> adminsList = new ArrayList<>();
@@ -440,7 +440,7 @@ public class AdminController {
     public static void deleteUser(String username) {
         Account account = GetDataFromDatabase.getAccount(username);
         if (account != null) {
-            String path = "src/main/resources/Accounts/"+account.getRole()+"/"+account.getUsername()+".json";
+            String path = "Resources/Accounts/"+account.getRole()+"/"+account.getUsername()+".json";
             File file = new File(path);
             file.delete();
             //TODO Message delete user
@@ -454,7 +454,7 @@ public class AdminController {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Admin admin= gson.fromJson(newAdminDetails,Admin.class);
         if (RegisterAndLogin.checkUsername(admin.getUsername())){
-            String path = "src/main/resources/Accounts/Admin"+admin.getUsername()+".json";
+            String path = "Resources/Accounts/Admin"+admin.getUsername()+".json";
             try {
                 File file = new File(path);
                 file.createNewFile();
@@ -476,7 +476,7 @@ public class AdminController {
     public static void deleteProduct(int productId) {
         Product product = GetDataFromDatabase.getProduct(productId);
         if (product != null) {
-            String path = "src/main/resources/Products/"+product.getProductId()+".json";
+            String path = "Resources/Products/"+product.getProductId()+".json";
             File file = new File(path);
             file.delete();
             //TODO message delete product
@@ -488,7 +488,7 @@ public class AdminController {
 
     public static ArrayList<Category> showCategories() {
         ArrayList<Category> allCategories = new ArrayList<>();
-        String path = "src/main/resources/Category";
+        String path = "Resources/Category";
         File file = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -511,7 +511,7 @@ public class AdminController {
     public static void deleteCategory(String categoryName) {
         Category category = GetDataFromDatabase.getCategory(categoryName);
         if (category != null) {
-            String path = "src/main/resources/Category/"+category.getName()+".json";
+            String path = "Resources/Category/"+category.getName()+".json";
             File file = new File(path);
             file.delete();
         }
@@ -521,6 +521,7 @@ public class AdminController {
     }
 
     public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) {
+        //TODO update category to all products
         Category category =  GetDataFromDatabase.getCategory(categoryName);
         String oldName = category.getName();
         for (String i : dataToEdit.keySet()) {
@@ -548,7 +549,7 @@ public class AdminController {
         String editedDetails = gson.toJson(category);
         if (newName.equals(oldName)){
             try {
-                String path = "src/main/resources/Category/" + category.getName() + ".json";
+                String path = "Resources/Category/" + category.getName() + ".json";
                 FileWriter fileWriter = new FileWriter(path);
                 fileWriter.write(editedDetails);
                 fileWriter.close();
@@ -559,8 +560,8 @@ public class AdminController {
         }
         else {
             try {
-                String newPath = "src/main/resources/Category/" + newName + ".json";
-                String oldPath = "src/main/resources/Category/" + oldName + ".json";
+                String newPath = "Resources/Category/" + newName + ".json";
+                String oldPath = "Resources/Category/" + oldName + ".json";
                 //TODO check name
                 File file = new File(newPath);
                 file.createNewFile();
@@ -582,7 +583,7 @@ public class AdminController {
         if (!checkCategoryName(category.getName())) {
             String newSaleDetails = gson.toJson(category);
             try {
-                String path = "src/main/resources/Category/" + category.getName() + ".json";
+                String path = "Resources/Category/" + category.getName() + ".json";
                 File file = new File(path);
                 file.createNewFile();
                 FileWriter fileWriter = new FileWriter(path);
@@ -609,7 +610,7 @@ public class AdminController {
     public static void removeSaleCode(String saleCode) {
         Sale sale = GetDataFromDatabase.getSale(saleCode);
         if (sale != null) {
-            String path = "src/main/resources/Sales/"+sale.getSaleCode()+".json";
+            String path = "Resources/Sales/"+sale.getSaleCode()+".json";
             File file = new File(path);
             file.delete();
             MessagesLibrary.messagesLibrary(2);//delete sale
@@ -620,7 +621,7 @@ public class AdminController {
     }
 
     public static boolean checkCategoryName(String categoryName) {
-        String path = "src/main/resources/Category";
+        String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -631,7 +632,7 @@ public class AdminController {
                 return false;
             }
         };
-        for (File i : folder.listFiles()) {
+        for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String fileCategoryName = fileName.replace(".json", "");
             if (categoryName.equals(fileCategoryName)) {
@@ -642,7 +643,7 @@ public class AdminController {
     }
 
     public static boolean checkSaleCode(String saleCode) {
-        String path = "src/main/resources/Sales";
+        String path = "Resources/Sales";
         File folder = new File(path);
         for (File i : folder.listFiles()) {
             String fileName = i.getName();
@@ -656,7 +657,7 @@ public class AdminController {
 
 
     public static boolean checkIfProductExist(int productId) {
-        String path = "src/main/resources/Products/" + productId + ".json";
+        String path = "Resources/Products/" + productId + ".json";
         File file = new File(path);
         if (!file.exists()) {
             return false;
@@ -666,7 +667,7 @@ public class AdminController {
     }
 
     public static boolean checkIfRequestExist(int requestId) {
-        String path = "src/main/resources/Requests/" + requestId + ".json";
+        String path = "Resources/Requests/" + requestId + ".json";
         File file = new File(path);
         if (!file.exists()) {
             return false;

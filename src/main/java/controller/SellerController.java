@@ -64,7 +64,7 @@ public class SellerController {
         setSeller(seller);
         String editedDetails = gson.toJson(seller);
         try {
-            String path = "src/main/resources/Accounts/Seller/" + getSeller().getUsername() + ".json";
+            String path = "Resources/Accounts/Seller/" + getSeller().getUsername() + ".json";
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(editedDetails);
             fileWriter.close();
@@ -116,12 +116,12 @@ public class SellerController {
             Request request = new Request(editedProduct, RequestType.EDIT_PODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
             Gson gsonRequest = new Gson();
             String requestDetails = gsonRequest.toJson(request);
-            if (!Files.exists(Paths.get("src/main/resources/Requests"))) {
-                File folder = new File("src/main/resources/Requests");
+            if (!Files.exists(Paths.get("Resources/Requests"))) {
+                File folder = new File("Resources/Requests");
                 folder.mkdir();
             }
             try {
-                String path = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                String path = "Resources/Requests/" + request.getRequestId() + ".json";
                 FileWriter fileWriter = new FileWriter(path);
                 fileWriter.write(requestDetails);
                 fileWriter.close();
@@ -137,14 +137,14 @@ public class SellerController {
         Product product = GetDataFromDatabase.getProduct(productId);
         if (product != null) {
             Gson gsonProduct = new Gson();
-            String path = "src/main/resources/Products/" + product.getProductId() + ".json";
+            String path = "Resources/Products/" + product.getProductId() + ".json";
             getSeller().getSellerProducts().remove(product);
             File file = new File(path);
             if (file.delete()) {
                 MessagesLibrary.messagesLibrary(3);
             }
             try {
-                String sellerPath = "src/main/resources/Accounts/Seller/" + getSeller().getUsername() + ".json";
+                String sellerPath = "Resources/Accounts/Seller/" + getSeller().getUsername() + ".json";
                 FileWriter fileWriter = new FileWriter(sellerPath);
                 Gson gson = new Gson();
                 String editedSeller = gson.toJson(getSeller());
@@ -164,16 +164,16 @@ public class SellerController {
         product.setProductCondition(ProductOrOffCondition.PENDING_TO_CREATE);
         Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
         Gson gsonRequest = new Gson();
-        if (!Files.exists(Paths.get("src/main/resources/Requests"))) {
-            File folder = new File("src/main/resources/Requests");
+        if (!Files.exists(Paths.get("Resources/Requests"))) {
+            File folder = new File("Resources/Requests");
             folder.mkdir();
         }
         try {
-            String path = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+            String path = "Resources/Requests/" + request.getRequestId() + ".json";
             while (Files.exists(Paths.get(path))) {
                 Random random = new Random();
                 request.setRequestId(random.nextInt(10000));
-                path = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                path = "Resources/Requests/" + request.getRequestId() + ".json";
             }
             String requestDetails = gsonRequest.toJson(request);
             FileWriter fileWriter = new FileWriter(path);
@@ -211,12 +211,12 @@ public class SellerController {
                     Request request = new Request(editedOff, RequestType.EDIT_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
                     Gson gsonRequest = new Gson();
                     String requestDetails = gsonRequest.toJson(request);
-                    if (!Files.exists(Paths.get("src/main/resources/Requests"))) {
-                        File folder = new File("src/main/resources/Requests");
+                    if (!Files.exists(Paths.get("Resources/Requests"))) {
+                        File folder = new File("Resources/Requests");
                         folder.mkdir();
                     }
                     try {
-                        String path = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                        String path = "Resources/Requests/" + request.getRequestId() + ".json";
                         FileWriter fileWriter = new FileWriter(path);
                         fileWriter.write(requestDetails);
                         fileWriter.close();
@@ -239,16 +239,16 @@ public class SellerController {
         String offDetails = gsonOff.toJson(off);
         Request request = new Request(offDetails, RequestType.ADD_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
         Gson gsonRequest = new Gson();
-        if (!Files.exists(Paths.get("src/main/resources/Requests"))) {
-            File folder = new File("src/main/resources/Requests");
+        if (!Files.exists(Paths.get("Resources/Requests"))) {
+            File folder = new File("Resources/Requests");
             folder.mkdir();
         }
         try {
-            String path = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+            String path = "Resources/Requests/" + request.getRequestId() + ".json";
             while (Files.exists(Paths.get(path))) {
                 Random random = new Random();
                 request.setRequestId(random.nextInt(10000));
-                path = "src/main/resources/Requests/" + request.getRequestId() + ".json";
+                path = "Resources/Requests/" + request.getRequestId() + ".json";
             }
             String requestDetails = gsonRequest.toJson(request);
             FileWriter fileWriter = new FileWriter(path);
