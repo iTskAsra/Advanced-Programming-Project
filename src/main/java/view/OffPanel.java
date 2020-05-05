@@ -33,7 +33,16 @@ public class OffPanel extends Menu {
 
     public Menu goToProductPage(){
         return new Menu("Product Page",this){
-
+            @Override
+            public void show(){
+                System.out.println("Please Enter the Product's ID:");
+            }
+            @Override
+            public void run(){
+                int productID = scanner.nextInt();
+                //TODO check product availability
+                String productPageGson;
+            }
         };
     }
 }
