@@ -21,6 +21,8 @@ public class OffPanel extends Menu {
             @Override
             public void run(){
                 ArrayList<Off> offsList = controller.OffPageController.listOffs();
+                for (int i=0;i<offsList.size();i++)
+                    System.out.printf("%d. %s\n",i,offsList.get(i));
                 getParentMenu().show();
                 getParentMenu().run();
             }
