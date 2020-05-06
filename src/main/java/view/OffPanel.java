@@ -21,6 +21,8 @@ public class OffPanel extends Menu {
             @Override
             public void run(){
                 ArrayList<Off> offsList = controller.OffPageController.listOffs();
+                for (int i=0;i<offsList.size();i++)
+                    System.out.printf("%d. %s\n",i,offsList.get(i));
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -31,7 +33,16 @@ public class OffPanel extends Menu {
 
     public Menu goToProductPage(){
         return new Menu("Product Page",this){
-
+            @Override
+            public void show(){
+                System.out.println("Please Enter the Product's ID:");
+            }
+            @Override
+            public void run(){
+                int productID = scanner.nextInt();
+                //TODO check product availability
+                String productPageGson;
+            }
         };
     }
 }
