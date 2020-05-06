@@ -16,10 +16,9 @@ public class CustomerPanel extends Menu {
 
         submenus.put(1 , new CustomerInfo("Customer Info" , this));
         submenus.put(2 , new Cart("Cart" , this));
-        submenus.put(3 , new PurchasePanel("Purchase Panel" , this));
-        submenus.put(4 , new CustomerLogs("Customer Logs" , this));
-        submenus.put(5 , viewBalance());
-        submenus.put(6 , viewDiscountCodes());
+        submenus.put(3 , new CustomerLogs("Customer Logs" , this));
+        submenus.put(4 , viewBalance());
+        submenus.put(5 , viewDiscountCodes());
 
         this.setSubmenus(submenus);
 
