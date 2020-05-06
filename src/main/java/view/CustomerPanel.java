@@ -1,6 +1,12 @@
 package view;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import controller.AdminController;
 import controller.CustomerController;
+import model.Admin;
+import model.Customer;
+
 import java.util.HashMap;
 
 public class CustomerPanel extends Menu {
@@ -24,13 +30,13 @@ public class CustomerPanel extends Menu {
 
             @Override
             public void show() {
-                System.out.println(this.getName() + ":");
+                double balance = CustomerController.showCustomerBalance();
+                System.out.println("Your Current Balance is: " + balance);
             }
-
             @Override
             public void run() {
-
-
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
@@ -40,26 +46,14 @@ public class CustomerPanel extends Menu {
 
             @Override
             public void show(){
-                    System.out.println(this.getName() + ":");
-
+                String discountCodes = CustomerController.showDiscountCodes();
+                System.out.println(discountCodes);
             }
-
             @Override
             public void run(){
-
+                getParentMenu().show();
+                getParentMenu().run();
             }
-
         };
-
-    }
-    
-    public void showCustomerBalance(){
-        double balance=CustomerController.showCustomerBalance();
-        System.out.println("Your Current Balance is: " + balance);
-    }
-
-    public void showDiscountCodes(){
-        String discountCodes = CustomerController.showDiscountCodes();
-        System.out.println(discountCodes);
     }
 }
