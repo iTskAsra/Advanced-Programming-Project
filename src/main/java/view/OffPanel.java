@@ -41,7 +41,10 @@ public class OffPanel extends Menu {
             public void run(){
                 int productID = scanner.nextInt();
                 //TODO check product availability
-                String productPageGson;
+                String productGson = OffPageController.goToProductPage(productID);
+                Gson gson = new Gson();
+                Product theProduct = gson.fromJson(productGson, Product.class);
+
             }
         };
     }
