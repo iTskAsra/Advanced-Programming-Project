@@ -5,6 +5,9 @@ import model.Off;
 import controller.ProductPageController;
 import java.util.ArrayList;
 import controller.OffPageController;
+import com.google.gson.*;
+import model.Product;
+import java.lang.String;
 
 
 public class OffPanel extends Menu {
@@ -44,14 +47,33 @@ public class OffPanel extends Menu {
                 //TODO check product availability
                 String productGson = OffPageController.goToProductPage(productID);
                 Gson gson = new Gson();
-                Product theProduct = gson.fromJson(productGson, Product.class);
+                Product theProduct = gson.fromJson(productGson, model.Product.class);
                 //TODO check the entered command
                 String buffer = scanner.nextLine();
-                if (strcmp(buffer,"add to cart"))
+                if (buffer.equals("add to cart")){
 
-                else if(strcmp(buffer,"digest"))
+                }
+                else if(buffer.equals("digest")){
 
-                else if (strcmp)
+                }
+                else if (buffer.startsWith("select seller")){
+                    String[] tempArray = buffer.split("\\s");
+                    String sellerName = tempArray[2];
+                }
+                else if(buffer.equals("Comments")){
+
+                }
+                else if(buffer.equals("attributes")){
+
+                }
+                else if(buffer.startsWith(("compare"))){
+                    //TODO check if the statement after compare is a number(handle number format exception)
+                    String[] tempArray = buffer.split("\\s");
+                    String secondaryProductIdInString = tempArray[1];
+                    int secondaryProductId = Integer.parseInt(secondaryProductIdInString);
+                }
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
