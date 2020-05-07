@@ -42,6 +42,13 @@ public class Digest extends Menu {
             System.out.println((submenus.size() + 1) + ". Exit");
     }
 
+    void run(int whichMethod){
+      if (whichMethod == 0)
+          this.selectSeller();
+      else
+          this.addToCart();
+    }
+
     private Menu selectSeller() {
         return new Menu("Select Seller",this) {
             HashMap<Integer,Seller> sellerList = new HashMap<>();
