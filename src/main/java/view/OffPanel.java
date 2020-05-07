@@ -8,6 +8,7 @@ import controller.OffPageController;
 import com.google.gson.*;
 import model.Product;
 import java.lang.String;
+import view.ProductPage;
 
 
 public class OffPanel extends Menu {
@@ -50,6 +51,7 @@ public class OffPanel extends Menu {
                 Product theProduct = gson.fromJson(productGson, model.Product.class);
                 //TODO check the entered command
                 String buffer = scanner.nextLine();
+                Digest digest = new Digest("Digest",this);
                 if (buffer.equals("add to cart")){
 
                 }
@@ -71,6 +73,7 @@ public class OffPanel extends Menu {
                     String[] tempArray = buffer.split("\\s");
                     String secondaryProductIdInString = tempArray[1];
                     int secondaryProductId = Integer.parseInt(secondaryProductIdInString);
+
                 }
                 getParentMenu().show();
                 getParentMenu().run();
