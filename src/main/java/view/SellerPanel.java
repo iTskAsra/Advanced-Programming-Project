@@ -15,96 +15,107 @@ import java.util.HashMap;
 
 public class SellerPanel extends Menu {
     public SellerPanel(Menu parentMenu) {
-        super("User Panel",parentMenu);
+        super("User Panel", parentMenu);
     }
 
-    public static Menu sell(){
+    public  Menu sell() {
+        return new Menu ("sell",this){
 
+        };
     }
 
-    public static Menu showSellerCompany(){
-        return new Menu ("Seller Company",this){
+    public  Menu showSellerCompany() {
+        return new Menu("Seller Company", this) {
             @Override
-            void show (){
-                System.out.println(this.getName + ":");
+            public void show() {
+                System.out.println(this.getName() + ":");
             }
+
             @Override
-            void run (){
+            public void run() {
                 System.out.println(SellerController.showSellerCompany());
             }
-        }
+        };
     }
 
-    public static Menu showSellerLogs(){
-        return new Menu ("Seller Logs",this){
+    public  Menu showSellerLogs() {
+        return new Menu("Seller Logs", this) {
             @Override
-            void show (){
-                System.out.println(this.getName + ":");
+            public void show() {
+                System.out.println(this.getName() + ":");
             }
+
             @Override
-            void run (){
+            public void run() {
                 String sellerLogsGson = controller.SellerController.showSellerLogs();
                 Gson gson = new Gson();
                 ArrayList<SellLog> sellerLogs = gson.fromJson(sellerLogsGson, ArrayList.class);
-                for (int i=1;i<=sellerLogs.size;i++){
+                for (int i = 1; i <= sellerLogs.size(); i++) {
                     System.out.println("*".repeat(50));
-                    System.out.printf("%d \nLog ID: %s\n")
+                    System.out.printf("%d \nLog ID: %s\n");
                     System.out.println("*".repeat(50));
                 }
             }
-        }
+        };
     }
 
-    public static Menu addProductRequest(){
+    public  Menu addProductRequest() {
+        return new Menu ("Add Product Request",this){
 
+        };
     }
 
-    public static Menu removeProductRequest(){
+    public  Menu removeProductRequest() {
+        return new Menu ("Remove Product Request",this){
 
+        };
     }
 
-    public static Menu showCategories(){
-        return new Menu ("Categories",this){
+    public  Menu showCategories() {
+        return new Menu("Categories", this) {
             @Override
-            void show (){
-                System.out.println(this.getName + ":");
+            public void show() {
+                System.out.println(this.getName() + ":");
             }
+
             @Override
-            void run (){
+            public void run() {
                 String categoriesGson = SellerController.showCategories();
             }
         };
     }
 
-    public static Menu showBalance(){
-        return new Menu ("Balance",this){
+    public  Menu showBalance() {
+        return new Menu("Balance", this) {
             @Override
-            void show (){
-                System.out.println(this.getName + ":");
+            public void show() {
+                System.out.println(this.getName() + ":");
             }
+
             @Override
-            void run (){
+            public void run() {
                 System.out.println(SellerController.showBalance());
                 getParentMenu().show();
                 getParentMenu().run();
             }
         };
     }
-}
 
 
-    public Menu viewAndManageProducts (){
-        return new Menu ("Products",this){
+    public Menu viewAndManageProducts() {
+        return new Menu("Products", this) {
             String productsGson = controller.SellerController.showSellerProducts();
             Gson gson = new Gson();
             ArrayList<Product> allProducts = gson.fromJson(productsGson, ArrayList.class);
+
             @Override
-            void show (){
+            public void show() {
                 System.out.println("*".repeat(50));
-                for (int i=0;i<allProducts.size;i++){
-                    System.out.printf("Product's ID: %d\nProduct's Name: %s\n",i,allProducts.get(i).getProductId(),allProducts.get(i).getName());
+                for (int i = 0; i < allProducts.size(); i++) {
+                    System.out.printf("Product's ID: %d\nProduct's Name: %s\n", i, allProducts.get(i).getProductId(), allProducts.get(i).getName());
                     System.out.println("*".repeat(50));
                 }
             }
         };
     }
+}

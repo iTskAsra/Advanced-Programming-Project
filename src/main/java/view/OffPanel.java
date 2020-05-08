@@ -67,7 +67,8 @@ public class OffPanel extends Menu {
                     productPage.submenus.get(1).run(0);
                 }
                 else if(buffer.equals("Comments")){
-                    productPage.submenus.get(4).showAllComments();
+                    productPage.submenus.get(4).showAllComments().show();
+                    productPage.submenus.get(4).showAllComments().run();
                 }
                 else if(buffer.equals("attributes")){
                     productPage.submenus.get(2).show();
@@ -81,7 +82,7 @@ public class OffPanel extends Menu {
                     productPage.submenus.get(3).show();
                     productPage.submenus.get(3).run();
                 }
-                else if (buffer.equals"add comment"){
+                else if (buffer.equals("add comment"){
                     productPage.submenus.get(4).addComment().show();
                     productPage.submenus.get(4).addComment().run();
                 }
