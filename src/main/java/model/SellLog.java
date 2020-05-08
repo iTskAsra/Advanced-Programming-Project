@@ -72,7 +72,7 @@ public class SellLog {
         this.buyerName = buyerName;
     }
 
-    public String isDeliveryCondition() {
+    public String getDeliveryCondition() {
         return deliveryCondition;
     }
 
