@@ -82,19 +82,11 @@ public class SellerPanel extends Menu {
 
 
 
-
-
-
-
     public  Menu removeProductRequest() {
         return new Menu ("Remove Product Request",this){
 
         };
     }
-
-
-
-
 
 
     //DONE (probably)
@@ -115,9 +107,6 @@ public class SellerPanel extends Menu {
         };
     }
 
-
-
-
     //DONE
     public  Menu showBalance() {
         return new Menu("Balance", this) {
@@ -134,10 +123,6 @@ public class SellerPanel extends Menu {
             }
         };
     }
-
-
-
-
 
 
 
