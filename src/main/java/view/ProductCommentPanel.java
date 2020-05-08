@@ -15,7 +15,7 @@ public class ProductCommentPanel extends Menu {
         this.setSubmenus(submenus);
     }
 
-    private Menu addComment() {
+    public Menu addComment() {
         return new Menu("Add Comment",this) {
             @Override
             public void show() {
@@ -33,7 +33,7 @@ public class ProductCommentPanel extends Menu {
         };
     }
 
-    private Menu showAllComments() {
+    public Menu showAllComments() {
         return new Menu("All Product Comments",this) {
             @Override
             public void show() {

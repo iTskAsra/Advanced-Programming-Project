@@ -306,7 +306,12 @@ public class SellerController {
         return getSeller().getCredit();
     }
 
-    /*public static String showCategories() {
-    }*/
+
+
+    //TODO further development
+    public static String showCategories() {
+        String temp = "Hey There!";
+        return temp;
+    }
 
 }

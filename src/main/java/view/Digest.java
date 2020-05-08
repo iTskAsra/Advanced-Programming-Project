@@ -42,14 +42,14 @@ public class Digest extends Menu {
             System.out.println((submenus.size() + 1) + ". Exit");
     }
 
-    /*void run(int whichMethod){
+    public void run(int whichMethod){
       if (whichMethod == 0)
           this.selectSeller();
       else
           this.addToCart();
-    }*/
+    }
 
-    private Menu selectSeller() {
+    public Menu selectSeller() {
         return new Menu("Select Seller",this) {
             HashMap<Integer,Seller> sellerList = new HashMap<>();
             @Override
@@ -82,7 +82,7 @@ public class Digest extends Menu {
         };
     }
 
-    private Menu addToCart() {
+    public Menu addToCart() {
         return new Menu("Add To Cart",this) {
             @Override
             public void show() {

@@ -55,7 +55,8 @@ public class OffPanel extends Menu {
                 //ProductPageController productPageController = new ProductPageController(theProduct);
                 ProductPage productPage = new ProductPage("Product's Page",this.parentMenu);
                 if (buffer.equals("add to cart")){
-                    productPage.submenus.get(1).run(1);
+                    ((Digest)productPage.submenus.get(1)).addToCart().show();
+                    ((Digest)productPage.submenus.get(1)).addToCart().run();
                 }
                 else if(buffer.equals("digest")){
                     productPage.submenus.get(1).show();
@@ -64,11 +65,12 @@ public class OffPanel extends Menu {
                     //String[] tempArray = buffer.split("\\s");
                     //String sellerName = tempArray[2];
                     //digest.run(0);
-                    productPage.submenus.get(1).run(0);
+                    ((Digest)productPage.submenus.get(1)).selectSeller().show();
+                    ((Digest)productPage.submenus.get(1)).selectSeller().run();
                 }
                 else if(buffer.equals("Comments")){
-                    productPage.submenus.get(4).showAllComments().show();
-                    productPage.submenus.get(4).showAllComments().run();
+                    ((ProductCommentPanel)productPage.submenus.get(4)).showAllComments().show();
+                    ((ProductCommentPanel)productPage.submenus.get(4)).showAllComments().run();
                 }
                 else if(buffer.equals("attributes")){
                     productPage.submenus.get(2).show();
@@ -82,9 +84,9 @@ public class OffPanel extends Menu {
                     productPage.submenus.get(3).show();
                     productPage.submenus.get(3).run();
                 }
-                else if (buffer.equals("add comment"){
-                    productPage.submenus.get(4).addComment().show();
-                    productPage.submenus.get(4).addComment().run();
+                else if (buffer.equals("add comment")){
+                    ((ProductCommentPanel)productPage.submenus.get(4)).addComment().show();
+                    ((ProductCommentPanel)productPage.submenus.get(4)).addComment().run();
                 }
                 getParentMenu().show();
                 getParentMenu().run();

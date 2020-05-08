@@ -8,9 +8,10 @@ import controller.SellerController;
 import model.Product;
 import model.Seller;
 import model.SellLog;
-
+import controller.SellerController;
 import java.util.ArrayList;
 import java.util.HashMap;
+import view.AllProductsPanel;
 
 
 public class SellerPanel extends Menu {
@@ -24,6 +25,10 @@ public class SellerPanel extends Menu {
         };
     }
 
+
+
+
+    //DONE
     public  Menu showSellerCompany() {
         return new Menu("Seller Company", this) {
             @Override
@@ -34,10 +39,16 @@ public class SellerPanel extends Menu {
             @Override
             public void run() {
                 System.out.println(SellerController.showSellerCompany());
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
 
+
+
+
+    //DONE
     public  Menu showSellerLogs() {
         return new Menu("Seller Logs", this) {
             @Override
@@ -52,9 +63,12 @@ public class SellerPanel extends Menu {
                 ArrayList<SellLog> sellerLogs = gson.fromJson(sellerLogsGson, ArrayList.class);
                 for (int i = 1; i <= sellerLogs.size(); i++) {
                     System.out.println("*".repeat(50));
-                    System.out.printf("%d \nLog ID: %s\n");
+                    System.out.printf("%d \nLog ID: %s\nDate: %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s\nDelivery Condition: \n",sellerLogs.get(i).getLogId(),sellerLogs.get(i).getLogDate(),sellerLogs.get(i).getValue(),sellerLogs.get(i).getDiscountApplied(),(sellerLogs.get(i).getBuyerName().getFirstName()+sellerLogs.get(i).getBuyerName().getLastName()),sellerLogs.get(i).getDeliveryCondition());
+                    System.out.printf("List Of Products:\n%d: %s\n",i,sellerLogs.get(i).getLogProducts().get(i).getName());
                     System.out.println("*".repeat(50));
                 }
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
@@ -65,12 +79,25 @@ public class SellerPanel extends Menu {
         };
     }
 
+
+
+
+
+
+
+
     public  Menu removeProductRequest() {
         return new Menu ("Remove Product Request",this){
 
         };
     }
 
+
+
+
+
+
+    //DONE (probably)
     public  Menu showCategories() {
         return new Menu("Categories", this) {
             @Override
@@ -80,11 +107,18 @@ public class SellerPanel extends Menu {
 
             @Override
             public void run() {
-                String categoriesGson = SellerController.showCategories();
+                //String categoriesGson = SellerController.showCategories();
+                AllProductsPanel allProductPanel = new AllProductsPanel(this);
+                allProductPanel.viewCategories().show();
+                allProductPanel.viewCategories().run();
             }
         };
     }
 
+
+
+
+    //DONE
     public  Menu showBalance() {
         return new Menu("Balance", this) {
             @Override
@@ -100,6 +134,11 @@ public class SellerPanel extends Menu {
             }
         };
     }
+
+
+
+
+
 
 
     public Menu viewAndManageProducts() {
