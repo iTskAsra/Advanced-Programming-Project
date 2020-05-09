@@ -1,6 +1,7 @@
 package view;
 
 import controller.AdminController;
+import controller.ExceptionsLibrary;
 import model.Account;
 
 import java.util.ArrayList;
@@ -24,8 +25,12 @@ public class ManageAllProducts extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Menu.scanner.nextLine());
-                AdminController.deleteProduct(productId);
-                System.out.println("Removed Product!");
+                try {
+                    AdminController.deleteProduct(productId);
+                    System.out.println("Removed Product!");
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }

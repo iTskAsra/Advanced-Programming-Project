@@ -3,8 +3,7 @@ package view;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.AdminController;
-import controller.GetDataFromDatabase;
-import model.Account;
+import controller.ExceptionsLibrary;
 import model.Sale;
 
 import java.util.ArrayList;
@@ -33,8 +32,13 @@ public class ManageSalesMenu extends Menu {
             @Override
             public void run() {
                 String saleCode = Menu.scanner.nextLine();
-                AdminController.removeSaleCode(saleCode);
-                System.out.println("Deleted!");
+                try {
+                    AdminController.removeSaleCode(saleCode);
+                    System.out.println("Removed!");
+                } catch (ExceptionsLibrary.NoSaleException noSaleException) {
+                    noSaleException.printStackTrace();
+                }
+
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -59,7 +63,11 @@ public class ManageSalesMenu extends Menu {
                     String newValue = Menu.scanner.nextLine();
                     editedData.put(i,newValue);
                 }
-                AdminController.editSaleInfo(saleCode,editedData);
+                try {
+                    AdminController.editSaleInfo(saleCode,editedData);
+                } catch (ExceptionsLibrary.NoSaleException | ExceptionsLibrary.NoFeatureWithThisName e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -77,10 +85,15 @@ public class ManageSalesMenu extends Menu {
             @Override
             public void run() {
                 String saleCode = Menu.scanner.nextLine();
-                String data = AdminController.viewSaleCodeDetails(saleCode);
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                Sale sale = gson.fromJson(data, Sale.class);
-                System.out.printf("%s\n%-20s%10s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%s\n","-".repeat(60), "Sale code :", " ".repeat(10), sale.getSaleCode(), "Start date :", " ".repeat(10), sale.getStartDate(), "End date :", " ".repeat(10), sale.getEndDate(), "Percent :", " ".repeat(10), String.valueOf(sale.getSalePercent()), "Max amount :", " ".repeat(10), String.valueOf(sale.getSaleMaxAmount()), "Number of valid times :", " ".repeat(10), String.valueOf(sale.getValidTimes()),"-".repeat(60));
+                String data = null;
+                try {
+                    data = AdminController.viewSaleCodeDetails(saleCode);
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    Sale sale = gson.fromJson(data, Sale.class);
+                    System.out.printf("%s\n%-20s%10s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%s\n","-".repeat(60), "Sale code :", " ".repeat(10), sale.getSaleCode(), "Start date :", " ".repeat(10), sale.getStartDate(), "End date :", " ".repeat(10), sale.getEndDate(), "Percent :", " ".repeat(10), String.valueOf(sale.getSalePercent()), "Max amount :", " ".repeat(10), String.valueOf(sale.getSaleMaxAmount()), "Number of valid times :", " ".repeat(10), String.valueOf(sale.getValidTimes()),"-".repeat(60));
+                } catch (ExceptionsLibrary.NoSaleException noSaleException) {
+                    noSaleException.printStackTrace();
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -96,9 +109,14 @@ public class ManageSalesMenu extends Menu {
 
             @Override
             public void run() {
-                ArrayList<Sale> allSales = AdminController.showSales();
-                for (Sale i : allSales) {
-                    System.out.printf("%-15s%s%20s%s%20s\n", i.getSaleCode(), " ".repeat(5), i.getStartDate() + " ".repeat(5) + i.getEndDate());
+                ArrayList<Sale> allSales = null;
+                try {
+                    allSales = AdminController.showSales();
+                    for (Sale i : allSales) {
+                        System.out.printf("%-15s%s%20s%s%20s\n", i.getSaleCode(), " ".repeat(5), i.getStartDate() + " ".repeat(5) + i.getEndDate());
+                    }
+                } catch (ExceptionsLibrary.NoSaleException noSaleException) {
+                    System.out.println(noSaleException.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();

@@ -1,6 +1,7 @@
 package view;
 
 import controller.CartController;
+import controller.ExceptionsLibrary;
 import controller.GetDataFromDatabase;
 import controller.ProductPageController;
 import model.Seller;
@@ -36,20 +37,13 @@ public class Digest extends Menu {
             System.out.println(i + ". " + this.submenus.get(i).getName());
         }
 
-        if (this.parentMenu != null)
+        if (this.parentMenu != null) {
             System.out.println((submenus.size() + 1) + ". Back");
-        else
-            System.out.println((submenus.size() + 1) + ". Exit");
+        }
     }
 
-    public void run(int whichMethod){
-      if (whichMethod == 0)
-          this.selectSeller();
-      else
-          this.addToCart();
-    }
 
-    public Menu selectSeller() {
+    private Menu selectSeller() {
         return new Menu("Select Seller",this) {
             HashMap<Integer,Seller> sellerList = new HashMap<>();
             @Override
@@ -73,8 +67,12 @@ public class Digest extends Menu {
                     //TODO error
                 }
                 else {
-                    ProductPageController.selectSeller(sellerList.get(number).getUsername());
-                    System.out.println("Seller Selected!");
+                    try {
+                        ProductPageController.selectSeller(sellerList.get(number).getUsername());
+                        System.out.println("Seller Selected!");
+                    } catch (ExceptionsLibrary.NoAccountException e) {
+                        e.printStackTrace();
+                    }
                     getParentMenu().show();
                     getParentMenu().run();
                 }
@@ -82,7 +80,7 @@ public class Digest extends Menu {
         };
     }
 
-    public Menu addToCart() {
+    private Menu addToCart() {
         return new Menu("Add To Cart",this) {
             @Override
             public void show() {

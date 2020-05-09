@@ -2,12 +2,9 @@ import com.google.gson.Gson;
 import controller.CustomerController;
 import controller.GetDataFromDatabase;
 import controller.RegisterAndLogin;
-import model.Customer;
-import model.Product;
-import model.ProductOrOffCondition;
 import org.junit.Assert;
 import org.junit.Test;
-import view.ExceptionsLibrary;
+import controller.ExceptionsLibrary;
 
 import java.util.HashMap;
 
@@ -25,7 +22,7 @@ public class EditTest {
         CustomerController.editCustomerInfo(data1);
         String dataString = CustomerController.showCustomerInfo();
         System.out.println(CustomerController.getCustomer());
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String expected = gson.toJson(GetDataFromDatabase.getAccount("abc"));
         System.out.println(expected);
         Assert.assertEquals(expected,dataString);

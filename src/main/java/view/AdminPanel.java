@@ -3,8 +3,8 @@ package view;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.AdminController;
+import controller.ExceptionsLibrary;
 import controller.GetDataFromDatabase;
-import controller.SetDataToDatabase;
 import model.*;
 
 import java.util.ArrayList;
@@ -53,18 +53,19 @@ public class AdminPanel extends Menu {
                 String users = Menu.scanner.nextLine();
                 String[] userList = users.split("\\s*,\\s*");
                 for (String i : userList){
-                    Account account = GetDataFromDatabase.getAccount(i);
-                    saleAccounts.add(account);
+                    Account account = null;
+                    try {
+                        account = GetDataFromDatabase.getAccount(i);
+                        saleAccounts.add(account);
+                    } catch (ExceptionsLibrary.NoAccountException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
                 Sale sale = new Sale(startDate,endDate,percent,maximumDiscount,validTimes,saleAccounts);
-                while (AdminController.checkSaleCode(sale.getSaleCode())){
-                    sale.setSaleCode(Sale.getRandomSaleCode());
-                }
-                for (Account i : saleAccounts){
-                    i.getSaleCodes().add(sale);
-                    SetDataToDatabase.setAccount(i);
-                }
-                SetDataToDatabase.setSale(sale);
+                AdminController.addSale(sale);
+                System.out.println("Sale added!");
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
@@ -78,10 +79,15 @@ public class AdminPanel extends Menu {
 
             @Override
             public void run() {
-                String adminData = AdminController.showAdminInfo();
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                Admin admin = gson.fromJson(adminData,Admin.class);
-                System.out.printf("Username : %s\nFirst Name : %s\nLast name : %s\nE-Mail : %s\nPhone Number : %s\n",admin.getUsername(),admin.getFirstName(),admin.getLastName(),admin.getEmail(),admin.getPhoneNumber());
+                String adminData = null;
+                try {
+                    adminData = AdminController.showAdminInfo();
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    Admin admin = gson.fromJson(adminData,Admin.class);
+                    System.out.printf("Username : %s\nFirst Name : %s\nLast name : %s\nE-Mail : %s\nPhone Number : %s\n",admin.getUsername(),admin.getFirstName(),admin.getLastName(),admin.getEmail(),admin.getPhoneNumber());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -105,7 +111,14 @@ public class AdminPanel extends Menu {
                     String newValue = Menu.scanner.nextLine();
                     editedData.put(i,newValue);
                 }
-                AdminController.editAdminInfo(editedData);
+                try {
+                    AdminController.editAdminInfo(editedData);
+                    System.out.println("Edited info!");
+                } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
+                    System.out.println(noFeatureWithThisName.getMessage());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }

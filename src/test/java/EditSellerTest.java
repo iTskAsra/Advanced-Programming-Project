@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import controller.RegisterAndLogin;
 import controller.SellerController;
 import model.Account;
@@ -13,7 +14,7 @@ public class EditSellerTest {
     @Test
     public void editSellerTest(){
         Account account = new Seller("a","b","Seller","m","n","l","7",null,50,"apple",null,null,null);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String registerData = gson.toJson(account);
         //RegisterAndLogin.register(registerData);
         HashMap<String,String> data = new HashMap<>();

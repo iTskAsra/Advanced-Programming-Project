@@ -3,6 +3,7 @@ package view;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.AdminController;
+import controller.ExceptionsLibrary;
 import controller.RegisterAndLogin;
 import model.Account;
 import model.Admin;
@@ -32,12 +33,17 @@ public class ManageUsersMenu extends Menu {
 
             @Override
             public void run() {
-                HashMap<String,ArrayList<Account>> allUsers= AdminController.showAllUsers();
-                for (String i :allUsers.keySet()){
-                    System.out.println(i+" :");
-                    for (Account j : allUsers.get(i)){
-                        System.out.printf("%-15s%s%20s\n",j.getUsername()," ".repeat(5),j.getFirstName()+" "+j.getLastName());
+                HashMap<String,ArrayList<Account>> allUsers= null;
+                try {
+                    allUsers = AdminController.showAllUsers();
+                    for (String i :allUsers.keySet()){
+                        System.out.println(i+" :");
+                        for (Account j : allUsers.get(i)){
+                            System.out.printf("%-15s%s%20s\n",j.getUsername()," ".repeat(5),j.getFirstName()+" "+j.getLastName());
+                        }
                     }
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();
@@ -57,8 +63,12 @@ public class ManageUsersMenu extends Menu {
             @Override
             public void run() {
                 String username = Menu.scanner.nextLine();
-                AdminController.deleteUser(username);
-                System.out.println("Deleted!");
+                try {
+                    AdminController.deleteUser(username);
+                    System.out.println("Deleted!");
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -91,8 +101,12 @@ public class ManageUsersMenu extends Menu {
                 Admin admin = new Admin(username, password, "Admin", firstName, lastName, email, phoneNumber, null, credit, null);
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 String data = gson.toJson(admin);
-                RegisterAndLogin.registerAdmin(data);
-                System.out.println("Added admin account!");
+                try {
+                    AdminController.addAdminAccount(data);
+                    System.out.println("Added admin account!");
+                } catch (ExceptionsLibrary.UsernameAlreadyExists usernameAlreadyExists) {
+                    System.out.println(usernameAlreadyExists.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
 
@@ -111,10 +125,15 @@ public class ManageUsersMenu extends Menu {
             @Override
             public void run() {
                 String username = Menu.scanner.nextLine();
-                String data = AdminController.showUserDetails(username);
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                Account account = gson.fromJson(data, Account.class);
-                System.out.printf("%s\n%-20s%10s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%s\n","-".repeat(60), "Username :", " ".repeat(10), account.getUsername(), "First Name :", " ".repeat(10), account.getFirstName(), "Last Name :", " ".repeat(10), account.getLastName(), "Role : ", " ".repeat(10), account.getRole(), "Email", " ".repeat(10), account.getEmail(), "Phone Number", " ".repeat(10), account.getPhoneNumber(),"-".repeat(60));
+                String data = null;
+                try {
+                    data = AdminController.showUserDetails(username);
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    Account account = gson.fromJson(data, Account.class);
+                    System.out.printf("%s\n%-20s%10s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%s\n","-".repeat(60), "Username :", " ".repeat(10), account.getUsername(), "First Name :", " ".repeat(10), account.getFirstName(), "Last Name :", " ".repeat(10), account.getLastName(), "Role : ", " ".repeat(10), account.getRole(), "Email", " ".repeat(10), account.getEmail(), "Phone Number", " ".repeat(10), account.getPhoneNumber(),"-".repeat(60));
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }

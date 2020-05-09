@@ -99,7 +99,7 @@ public class CartController {
         //TODO Error
     }
 
-    public static String viewCartProductDetails(int productId) {
+    public static String viewCartProductDetails(int productId) throws ExceptionsLibrary.NoProductException {
         Product product = GetDataFromDatabase.getProduct(productId);
         Gson gson = new GsonBuilder().serializeNulls().create();
         String data = gson.toJson(product);
@@ -119,7 +119,7 @@ public class CartController {
         setReceiverInfo(data);
     }
 
-    public static void discountApply(String saleCode) {
+    public static void discountApply(String saleCode) throws ExceptionsLibrary.NoSaleException {
         Sale sale = GetDataFromDatabase.getSale(saleCode);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {

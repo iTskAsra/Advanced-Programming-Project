@@ -1,11 +1,10 @@
 package view;
 
-import controller.SellerController;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Menu {
+public abstract class Menu {
 
     protected String name;
     protected Menu parentMenu;

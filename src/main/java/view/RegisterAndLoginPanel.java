@@ -2,6 +2,7 @@ package view;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import controller.ExceptionsLibrary;
 import controller.GetDataFromDatabase;
 import controller.RegisterAndLogin;
 import model.Admin;
@@ -59,7 +60,7 @@ public class RegisterAndLoginPanel extends Menu {
                         getParentMenu().show();
                         getParentMenu().run();
                     }
-                    catch (ExceptionsLibrary.UsernameExistException | ExceptionsLibrary.AdminExist e ){
+                    catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.AdminExist e ){
                         System.out.println(e.getMessage());
                     }
 
@@ -90,7 +91,7 @@ public class RegisterAndLoginPanel extends Menu {
                         getParentMenu().show();
                         getParentMenu().run();
                     }
-                    catch (ExceptionsLibrary.UsernameExistException | ExceptionsLibrary.AdminExist e ){
+                    catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.AdminExist e ){
                         System.out.println(e.getMessage());
                     }
                 } else if (chosenNumber == 3 && new File("Resources/Accounts/Admin").listFiles().length == 0) {
@@ -117,7 +118,7 @@ public class RegisterAndLoginPanel extends Menu {
                         getParentMenu().show();
                         getParentMenu().run();
                     }
-                    catch (ExceptionsLibrary.UsernameExistException | ExceptionsLibrary.AdminExist e ){
+                    catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.AdminExist e ){
                         System.out.println(e.getMessage());
                     }
                 }

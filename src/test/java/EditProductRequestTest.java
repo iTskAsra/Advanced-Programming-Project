@@ -1,12 +1,8 @@
 
-import com.google.gson.Gson;
-import controller.GetDataFromDatabase;
 import controller.RegisterAndLogin;
 import controller.SellerController;
-import model.Product;
-import model.ProductOrOffCondition;
 import org.junit.Test;
-import view.ExceptionsLibrary;
+import controller.ExceptionsLibrary;
 
 import java.util.HashMap;
 
@@ -40,7 +36,7 @@ public class EditProductRequestTest {
         data.put("password","b");
         RegisterAndLogin.login(data);
         Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE,"apple","fruit",5,null,2,null,null,"hello",null,null,null);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String productData = gson.toJson(product);
         SellerController.addProductRequest(productData);
     }*/

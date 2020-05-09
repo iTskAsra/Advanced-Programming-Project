@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import model.BuyLog;
 import model.Customer;
 import model.Product;
@@ -29,7 +30,7 @@ public class CustomerController {
     }
 
     public static String showCustomerInfo() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         if (getCustomer() == null) {
             MessagesLibrary.errorLibrary(4);
             return null;
@@ -52,7 +53,7 @@ public class CustomerController {
                 e.printStackTrace();
             }
         }
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         setCustomer(customer);
         String editedDetails = gson.toJson(customer);
         try {
@@ -70,17 +71,17 @@ public class CustomerController {
     }
 
     public static String showDiscountCodes() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         return gson.toJson(getCustomer().getSaleCodes());
     }
 
     public static String showCustomerLogs() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         return gson.toJson(getCustomer().getCustomerLog());
     }
 
     public static String showCustomerLogDetail(int logId) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         for (BuyLog i : getCustomer().getCustomerLog()) {
             if (i.getLogId() == logId) {
                 return gson.toJson(i);
@@ -94,7 +95,7 @@ public class CustomerController {
         if (product != null) {
             Rate rate = new Rate(getCustomer(), product, rateScore);
             product.getRates().add(rate);
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().serializeNulls().create();
             String ratedProduct = gson.toJson(product);
             String path = "Resources/Products/" + Integer.toString(productId) + ".json";
             File file = new File(path);

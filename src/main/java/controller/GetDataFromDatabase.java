@@ -38,7 +38,7 @@ public class GetDataFromDatabase {
         folder8.mkdir();
     }
 
-    public static Account getAccount(String username) {
+    public static Account getAccount(String username) throws ExceptionsLibrary.NoAccountException {
         String pathCustomer = "Resources/Accounts/Customer/" + username + ".json";
         String pathAdmin = "Resources/Accounts/Admin/" + username + ".json";
         String pathSeller = "Resources/Accounts/Seller/" + username + ".json";
@@ -51,12 +51,12 @@ public class GetDataFromDatabase {
                 scanner = new Scanner(fileCustomer);
                 scanner.useDelimiter("\\z");
                 String fileData = scanner.next();
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().serializeNulls().create();
                 Customer account = gson.fromJson(fileData, Customer.class);
                 scanner.close();
                 return account;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoAccountException();
             }
 
         } else if (!fileCustomer.exists() && fileAdmin.exists() && !fileSeller.exists()) {
@@ -65,12 +65,12 @@ public class GetDataFromDatabase {
                 scanner = new Scanner(fileAdmin);
                 scanner.useDelimiter("\\z");
                 String fileData = scanner.next();
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().serializeNulls().create();
                 Admin account = gson.fromJson(fileData, Admin.class);
                 scanner.close();
                 return account;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoAccountException();
             }
         } else if (!fileCustomer.exists() && !fileAdmin.exists() && fileSeller.exists()) {
             try {
@@ -78,26 +78,20 @@ public class GetDataFromDatabase {
                 scanner = new Scanner(fileSeller);
                 scanner.useDelimiter("\\z");
                 String fileData = scanner.next();
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().serializeNulls().create();
                 Seller account = gson.fromJson(fileData, Seller.class);
                 scanner.close();
                 return account;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoAccountException();
             }
         } else if (!fileCustomer.exists() && !fileAdmin.exists() && !fileSeller.exists()) {
-            //view.MessagesLibrary.errorLibrary(1);
-            return null;
+            throw new ExceptionsLibrary.NoAccountException();
         }
         return null;
     }
 
-    public static Product getProduct(int productId) {
-        //TODO Error
-        if (!Files.exists(Paths.get("Resources/Products"))) {
-            File folder = new File("Resources/Products");
-            folder.mkdir();
-        }
+    public static Product getProduct(int productId) throws ExceptionsLibrary.NoProductException {
         String productPath = "Resources/Products/" + (productId) + ".json";
         File fileProduct = new File(productPath);
         try {
@@ -105,18 +99,17 @@ public class GetDataFromDatabase {
             scanner = new Scanner(fileProduct);
             scanner.useDelimiter("\\z");
             String fileData = scanner.next();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().serializeNulls().create();
             Product product = gson.fromJson(fileData, Product.class);
             scanner.close();
             return product;
         } catch (FileNotFoundException e) {
-            MessagesLibrary.errorLibrary(6);
+            throw new ExceptionsLibrary.NoProductException();
         }
-        return null;
     }
 
 
-    public static Off getOff(int offId) {
+    public static Off getOff(int offId) throws ExceptionsLibrary.NoOffException {
         if (!Files.exists(Paths.get("Resources/Offs"))) {
             File folder = new File("Resources/Offs");
             folder.mkdir();
@@ -128,17 +121,16 @@ public class GetDataFromDatabase {
             scanner = new Scanner(fileProduct);
             scanner.useDelimiter("\\z");
             String fileData = scanner.next();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().serializeNulls().create();
             Off off = gson.fromJson(fileData, Off.class);
             scanner.close();
             return off;
         } catch (FileNotFoundException e) {
-            MessagesLibrary.errorLibrary(6);
+            throw new ExceptionsLibrary.NoOffException();
         }
-        return null;
     }
 
-    public static Request getRequest(int requestId) {
+    public static Request getRequest(int requestId) throws ExceptionsLibrary.NoRequestException {
         if (!Files.exists(Paths.get("Resources/Requests"))) {
             File folder = new File("Resources/Requests");
             folder.mkdir();
@@ -150,17 +142,16 @@ public class GetDataFromDatabase {
             scanner = new Scanner(fileProduct);
             scanner.useDelimiter("\\z");
             String fileData = scanner.next();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().serializeNulls().create();
             Request request = gson.fromJson(fileData, Request.class);
             scanner.close();
             return request;
         } catch (FileNotFoundException e) {
-            MessagesLibrary.errorLibrary(6);
+            throw new ExceptionsLibrary.NoRequestException();
         }
-        return null;
     }
 
-    public static Sale getSale(String saleCode) {
+    public static Sale getSale(String saleCode) throws ExceptionsLibrary.NoSaleException {
         if (!Files.exists(Paths.get("Resources/Sales"))) {
             File folder = new File("Resources/Sales");
             folder.mkdir();
@@ -172,17 +163,16 @@ public class GetDataFromDatabase {
             scanner = new Scanner(fileProduct);
             scanner.useDelimiter("\\z");
             String fileData = scanner.next();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().serializeNulls().create();
             Sale sale = gson.fromJson(fileData, Sale.class);
             scanner.close();
             return sale;
         } catch (FileNotFoundException e) {
-            MessagesLibrary.errorLibrary(11);
+            throw new ExceptionsLibrary.NoSaleException();
         }
-        return null;
     }
 
-    public static Category getCategory(String categoryName) {
+    public static Category getCategory(String categoryName) throws ExceptionsLibrary.NoCategoryException {
         if (!Files.exists(Paths.get("Resources/Category"))) {
             File folder = new File("Resources/Category");
             folder.mkdir();
@@ -199,9 +189,8 @@ public class GetDataFromDatabase {
             scanner.close();
             return category;
         } catch (FileNotFoundException e) {
-            MessagesLibrary.errorLibrary(13);//TODO  No category with this name
+            throw new ExceptionsLibrary.NoCategoryException();
         }
-        return null;
     }
 
     public static boolean checkIfAnyAdminExists() {
@@ -235,7 +224,7 @@ public class GetDataFromDatabase {
                 }
                 scanner.close();
             } catch (FileNotFoundException e) {
-                //TODO error (skip)
+                e.printStackTrace();
             }
         }
         return sellers;

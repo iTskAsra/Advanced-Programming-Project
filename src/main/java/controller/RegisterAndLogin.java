@@ -3,7 +3,6 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
-import view.ExceptionsLibrary;
 import view.MessagesLibrary;
 
 import java.io.File;
@@ -15,8 +14,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class RegisterAndLogin {
-    public static void register(String dataToRegister) throws ExceptionsLibrary.UsernameExistException, ExceptionsLibrary.AdminExist {
-        Gson gson = new Gson();
+    public static void register(String dataToRegister) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.AdminExist {
+        Gson gson = new GsonBuilder().serializeNulls().create();
         Account account = gson.fromJson(dataToRegister, Account.class);
         String username = account.getUsername();
         if (!Files.exists(Paths.get("Resources/Accounts"))) {
@@ -41,13 +40,12 @@ public class RegisterAndLogin {
         String accountPath = "Resources/Accounts/" + role + "/" + username + ".json";
         File file = new File(accountPath);
         if (!checkUsername(username)) {
-            throw new ExceptionsLibrary.UsernameExistException("Username already exist!",username);
+            throw new ExceptionsLibrary.NoAccountException();
         } else {
-            if (role.equals("Admin")){
-                if (new File("Resources/Accounts/Admin").listFiles().length!=0){
-                    throw new ExceptionsLibrary.AdminExist("You can not register as an admin!");
-                }
-                else {
+            if (role.equals("Admin")) {
+                if (new File("Resources/Accounts/Admin").listFiles().length != 0) {
+                    throw new ExceptionsLibrary.AdminExist();
+                } else {
                     String firstAdminPath = "Resources/Accounts/Admin" + account.getUsername() + ".json";
                     try {
                         File adminFile = new File(firstAdminPath);
@@ -59,12 +57,11 @@ public class RegisterAndLogin {
                         e.printStackTrace();
                     }
                 }
-            }
-            else if (role.equals("Seller")){
-                Gson gsonSeller =new GsonBuilder().serializeNulls().create();
-                Seller seller = gsonSeller.fromJson(dataToRegister,Seller.class);
-                Request request = new Request(dataToRegister,RequestType.REGISTER_SELLER,RequestOrCommentCondition.PENDING_TO_ACCEPT,seller);
-                String requestPath="Resources/Requests/" + request.getRequestId() + ".json";
+            } else if (role.equals("Seller")) {
+                Gson gsonSeller = new GsonBuilder().serializeNulls().create();
+                Seller seller = gsonSeller.fromJson(dataToRegister, Seller.class);
+                Request request = new Request(dataToRegister, RequestType.REGISTER_SELLER, RequestOrCommentCondition.PENDING_TO_ACCEPT, seller);
+                String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                 while (Files.exists(Paths.get(requestPath))) {
                     Random random = new Random();
                     request.setRequestId(random.nextInt(10000));
@@ -79,8 +76,7 @@ public class RegisterAndLogin {
                     e.printStackTrace();
                 }
                 MessagesLibrary.messagesLibrary(8);
-            }
-            else {
+            } else {
                 try (FileWriter fileWriter = new FileWriter(file)) {
                     fileWriter.write(dataToRegister);
                     fileWriter.close();
@@ -92,11 +88,10 @@ public class RegisterAndLogin {
         }
     }
 
-    public static void registerAdmin(String data){
+    public static void registerAdmin(String data) {
         Gson gson = new GsonBuilder().serializeNulls().create();
-        Admin admin = gson.fromJson(data,Admin.class);
-        //TODO check username
-        File file = new File("Resources/Accounts/Admin/"+admin.getUsername()+".json");
+        Admin admin = gson.fromJson(data, Admin.class);
+        File file = new File("Resources/Accounts/Admin/" + admin.getUsername() + ".json");
         try {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(data);
@@ -110,16 +105,14 @@ public class RegisterAndLogin {
         File folder1 = new File("Resources/Accounts/Customer");
         File folder2 = new File("Resources/Accounts/Admin");
         File folder3 = new File("Resources/Accounts/Seller");
-        if (new File(folder1,username+".json").exists()){
+        if (new File(folder1, username + ".json").exists()) {
             return false;
-        }
-        else if (new File(folder2,username+".json").exists()){
+        } else if (new File(folder2, username + ".json").exists()) {
             return false;
-        }
-        else return !new File(folder3, username + ".json").exists();
+        } else return !new File(folder3, username + ".json").exists();
     }
 
-    public static String login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException {
+    public static String login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException {
         Account account = GetDataFromDatabase.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
@@ -138,7 +131,7 @@ public class RegisterAndLogin {
                 throw new ExceptionsLibrary.WrongPasswordException("Password not correct!");
             }
         } else {
-            throw new ExceptionsLibrary.WrongUsernameException("Username not found!",dataToLogin.get("username"));
+            throw new ExceptionsLibrary.WrongUsernameException("Username not found!", dataToLogin.get("username"));
         }
         return null;
     }

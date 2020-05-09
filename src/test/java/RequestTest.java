@@ -1,12 +1,7 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import controller.AdminController;
 import controller.RegisterAndLogin;
-import controller.SellerController;
-import model.*;
 import org.junit.Test;
-import view.ExceptionsLibrary;
-import view.Main;
+import controller.ExceptionsLibrary;
 
 import java.util.HashMap;
 

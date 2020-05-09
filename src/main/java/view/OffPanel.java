@@ -39,55 +39,19 @@ public class OffPanel extends Menu {
         return new Menu("Product Page",this){
             @Override
             public void show(){
-                System.out.println("Please Enter the Product's ID:");
+                System.out.println(this.getName() + ":");
+                System.out.println("Enter product ID :");
             }
+
             @Override
-            public void run(){
-                System.out.println("You Are In The Product Page Now, How Do You Want To Proceed?");
-                int productID = scanner.nextInt();
-                //TODO check product availability
-                String productGson = OffPageController.goToProductPage(productID);
-                Gson gson = new Gson();
-                Product theProduct = gson.fromJson(productGson, model.Product.class);
-                //TODO check the entered command
-                String buffer = scanner.nextLine();
-                //Digest digest = new Digest("Digest",this);
-                //ProductPageController productPageController = new ProductPageController(theProduct);
-                ProductPage productPage = new ProductPage("Product's Page",this.parentMenu);
-                if (buffer.equals("add to cart")){
-                    ((Digest)productPage.submenus.get(1)).addToCart().show();
-                    ((Digest)productPage.submenus.get(1)).addToCart().run();
-                }
-                else if(buffer.equals("digest")){
-                    productPage.submenus.get(1).show();
-                }
-                else if (buffer.startsWith("select seller")){
-                    //String[] tempArray = buffer.split("\\s");
-                    //String sellerName = tempArray[2];
-                    //digest.run(0);
-                    ((Digest)productPage.submenus.get(1)).selectSeller().show();
-                    ((Digest)productPage.submenus.get(1)).selectSeller().run();
-                }
-                else if(buffer.equals("Comments")){
-                    ((ProductCommentPanel)productPage.submenus.get(4)).showAllComments().show();
-                    ((ProductCommentPanel)productPage.submenus.get(4)).showAllComments().run();
-                }
-                else if(buffer.equals("attributes")){
-                    productPage.submenus.get(2).show();
-                    productPage.submenus.get(2).run();
-                }
-                else if(buffer.startsWith(("compare"))){
-                    //TODO check if the statement after compare is a number(handle number format exception)
-                    //String[] tempArray = buffer.split("\\s");
-                    //String secondaryProductIdInString = tempArray[1];
-                    //int secondaryProductId = Integer.parseInt(secondaryProductIdInString);
-                    productPage.submenus.get(3).show();
-                    productPage.submenus.get(3).run();
-                }
-                else if (buffer.equals("add comment")){
-                    ((ProductCommentPanel)productPage.submenus.get(4)).addComment().show();
-                    ((ProductCommentPanel)productPage.submenus.get(4)).addComment().run();
-                }
+            public void run() {
+                int productId = Integer.parseInt(Menu.scanner.nextLine());
+                Product product = AllProductsPanelController.goToProductPage(productId);
+                ProductPageController productPageController = new ProductPageController(product);
+                ProductPage productPage =new ProductPage(product.getName(),this);
+                productPage.show();
+                productPage.run();
+                //TODO Product Page , Exception and more!!!
                 getParentMenu().show();
                 getParentMenu().run();
             }

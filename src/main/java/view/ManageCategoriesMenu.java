@@ -3,6 +3,7 @@ package view;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.AdminController;
+import controller.ExceptionsLibrary;
 import model.Admin;
 import model.Category;
 import model.Feature;
@@ -32,8 +33,13 @@ public class ManageCategoriesMenu extends Menu {
             @Override
             public void run() {
                 String categoryName = Menu.scanner.nextLine();
-                AdminController.deleteCategory(categoryName);
-                System.out.println("Removed Category!");
+                try {
+                    AdminController.deleteCategory(categoryName);
+                    System.out.println("Removed Category!");
+                } catch (ExceptionsLibrary.NoCategoryException e) {
+                    System.out.println(e.getMessage());
+                }
+
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -62,8 +68,12 @@ public class ManageCategoriesMenu extends Menu {
                 Category category = new Category(name,categoryFeatures,null);
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 String data = gson.toJson(category);
-                AdminController.addCategory(data);
-                System.out.println("Category Added!");
+                try {
+                    AdminController.addCategory(data);
+                    System.out.println("Category Added!");
+                } catch (ExceptionsLibrary.CategoryExistsWithThisName categoryExistsWithThisName) {
+                    System.out.println(categoryExistsWithThisName.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -93,7 +103,15 @@ public class ManageCategoriesMenu extends Menu {
                     String newValue = Menu.scanner.nextLine();
                     editedData.put(i, newValue);
                 }
-                AdminController.editCategory(categoryName, editedData);
+                try {
+                    AdminController.editCategory(categoryName, editedData);
+                } catch (ExceptionsLibrary.CategoryExistsWithThisName categoryExistsWithThisName) {
+                    System.out.println(categoryExistsWithThisName.getMessage());
+                } catch (ExceptionsLibrary.NoCategoryException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
+                    System.out.println(noFeatureWithThisName.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -109,16 +127,21 @@ public class ManageCategoriesMenu extends Menu {
 
             @Override
             public void run() {
-                ArrayList<Category> allCategories = AdminController.showCategories();
-                for (Category i : allCategories){
-                    System.out.printf("%s\n","-".repeat(30));
-                    System.out.printf("Category name : %s\nFeatures:\n",i.getName());
-                    int featureCount = 1;
-                    for (Feature j : i.getFeatures()){
-                        System.out.printf("%d. %s\n",featureCount,j.getParameter());
-                        featureCount++;
+                ArrayList<Category> allCategories = null;
+                try {
+                    allCategories = AdminController.showCategories();
+                    for (Category i : allCategories){
+                        System.out.printf("%s\n","-".repeat(30));
+                        System.out.printf("Category name : %s\nFeatures:\n",i.getName());
+                        int featureCount = 1;
+                        for (Feature j : i.getFeatures()){
+                            System.out.printf("%d. %s\n",featureCount,j.getParameter());
+                            featureCount++;
+                        }
+                        System.out.printf("%s\n","-".repeat(30));
                     }
-                    System.out.printf("%s\n","-".repeat(30));
+                } catch (ExceptionsLibrary.NoCategoryException e) {
+                    e.printStackTrace();
                 }
                 getParentMenu().show();
                 getParentMenu().run();

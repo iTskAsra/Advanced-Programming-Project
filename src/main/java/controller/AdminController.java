@@ -5,15 +5,9 @@ import com.google.gson.GsonBuilder;
 import model.*;
 import view.MessagesLibrary;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 public class AdminController {
     private static Admin admin;
@@ -27,17 +21,15 @@ public class AdminController {
         return admin;
     }
 
-    //TODO check errors
 
     public static void setAdmin(Admin admin) {
         AdminController.admin = admin;
     }
 
-    public static String showAdminInfo() {
-        Gson gson = new Gson();
+    public static String showAdminInfo() throws ExceptionsLibrary.NoAccountException {
+        Gson gson = new GsonBuilder().serializeNulls().create();
         if (getAdmin() == null) {
-            MessagesLibrary.errorLibrary(4);
-            return null;
+            throw new ExceptionsLibrary.NoAccountException();
         }
         Admin admin = (Admin) GetDataFromDatabase.getAccount(getAdmin().getUsername());
         setAdmin(admin);
@@ -45,7 +37,7 @@ public class AdminController {
         return data;
     }
 
-    public static void editAdminInfo(HashMap<String, String> dataToEdit) {
+    public static void editAdminInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException {
         Admin admin = (Admin) GetDataFromDatabase.getAccount(getAdmin().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
@@ -59,24 +51,15 @@ public class AdminController {
                     field.set(admin, dataToEdit.get(i));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                MessagesLibrary.errorLibrary(5);
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoFeatureWithThisName();
             }
         }
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         setAdmin(admin);
-        String editedDetails = gson.toJson(admin);
-        try {
-            String path = "Resources/Accounts/Admin/" + getAdmin().getUsername() + ".json";
-            FileWriter fileWriter = new FileWriter(path);
-            fileWriter.write(editedDetails);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SetDataToDatabase.setAccount(getAdmin());
     }
 
-    public static ArrayList<Request> showAdminRequests() {
+    public static ArrayList<Request> showAdminRequests() throws ExceptionsLibrary.NoRequestException {
         ArrayList<Request> allRequests = new ArrayList<>();
         String path = "Resources/Requests";
         File file = new File(path);
@@ -98,10 +81,10 @@ public class AdminController {
         return allRequests;
     }
 
-    public static String showRequest(int requestId) {
+    public static String showRequest(int requestId) throws ExceptionsLibrary.NoRequestException {
         Request request = GetDataFromDatabase.getRequest(requestId);
         if (request != null) {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().serializeNulls().create();
             String reuestData = gson.toJson(request);
             return reuestData;
         } else {
@@ -111,172 +94,167 @@ public class AdminController {
 
     }
 
-    public static void processRequest(int requestId, boolean acceptStatus) {
+    public static void processRequest(int requestId, boolean acceptStatus) throws ExceptionsLibrary.NoRequestException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.UsernameAlreadyExists {
         Request request = GetDataFromDatabase.getRequest(requestId);
-        if (request != null) {
-            Gson gson = new GsonBuilder().serializeNulls().create();
-            switch (request.getRequestType()) {
-                case ADD_OFF:
-                    if (acceptStatus) {
-                        Off off = gson.fromJson(request.getRequestDescription(), Off.class);
-                        off.setOffCondition(ProductOrOffCondition.ACCEPTED);
-                        while (checkIfOffExist(off.getOffId())) {
-                            Random random = new Random();
-                            off.setOffId(random.nextInt(10000));
-                        }
-                        String offDetails = gson.toJson(off);
-                        Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
-                        seller.getSellerOffs().add(off);
-                        try {
-                            String offPath = "Resources/Offs/" + off.getOffId() + ".json";
-                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
-                            File file = new File(offPath);
-                            file.createNewFile();
-                            FileWriter fileWriter = new FileWriter(file);
-                            fileWriter.write(offDetails);
-                            fileWriter.close();
-                            FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                            Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                            String sellerData = gsonSeller.toJson(seller);
-                            fileWriterSeller.write(sellerData);
-                            fileWriterSeller.close();
-                            MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                            File fileRequest = new File(requestPath);
-                            fileRequest.delete();
-                        } catch (IOException e) {
-                            MessagesLibrary.errorLibrary(9);
-                            e.printStackTrace();
-                        }
-                    } else {
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        switch (request.getRequestType()) {
+            case ADD_OFF:
+                if (acceptStatus) {
+                    Off off = gson.fromJson(request.getRequestDescription(), Off.class);
+                    off.setOffCondition(ProductOrOffCondition.ACCEPTED);
+                    while (checkIfOffExist(off.getOffId())) {
+                        Random random = new Random();
+                        off.setOffId(random.nextInt(10000));
+                    }
+                    String offDetails = gson.toJson(off);
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    seller.getSellerOffs().add(off);
+                    try {
+                        String offPath = "Resources/Offs/" + off.getOffId() + ".json";
+                        String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
+                        File file = new File(offPath);
+                        file.createNewFile();
+                        FileWriter fileWriter = new FileWriter(file);
+                        fileWriter.write(offDetails);
+                        fileWriter.close();
+                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
+                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
+                        String sellerData = gsonSeller.toJson(seller);
+                        fileWriterSeller.write(sellerData);
+                        fileWriterSeller.close();
+                        MessagesLibrary.messagesLibrary(4);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
-                        MessagesLibrary.messagesLibrary(6);
+                    } catch (IOException e) {
+                        throw new ExceptionsLibrary.NoAccountException();
+                    }
+                } else {
+                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                    File fileRequest = new File(requestPath);
+                    fileRequest.delete();
 
+                }
+                break;
+            case EDIT_OFF:
+                if (acceptStatus) {
+                    Off off = gson.fromJson(request.getRequestDescription(), Off.class);
+                    off.setOffCondition(ProductOrOffCondition.ACCEPTED);
+                    String offDetails = gson.toJson(off);
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    Iterator iterator = seller.getSellerOffs().iterator();
+                    while (iterator.hasNext()) {
+                        Off tempOff = (Off) iterator.next();
+                        if (tempOff.getOffId() == off.getOffId()) {
+                            iterator.remove();
+                        }
                     }
-                    break;
-                case EDIT_OFF:
-                    if (acceptStatus) {
-                        Off off = gson.fromJson(request.getRequestDescription(), Off.class);
-                        off.setOffCondition(ProductOrOffCondition.ACCEPTED);
-                        String offDetails = gson.toJson(off);
-                        Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
-                        Iterator iterator = seller.getSellerOffs().iterator();
-                        while (iterator.hasNext()) {
-                            Off tempOff = (Off) iterator.next();
-                            if (tempOff.getOffId() == off.getOffId()) {
-                                iterator.remove();
-                            }
-                        }
-                        seller.getSellerOffs().add(off);
-                        try {
-                            String offPath = "Resources/Offs/" + off.getOffId() + ".json";
-                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
-                            FileWriter fileWriter = new FileWriter(offPath);
-                            fileWriter.write(offDetails);
-                            fileWriter.close();
-                            FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                            Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                            String sellerData = gsonSeller.toJson(seller);
-                            fileWriterSeller.write(sellerData);
-                            fileWriterSeller.close();
-                            MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                            File fileRequest = new File(requestPath);
-                            fileRequest.delete();
-                        } catch (IOException e) {
-                            MessagesLibrary.errorLibrary(9);
-                            e.printStackTrace();
-                        }
-                    } else {
+                    seller.getSellerOffs().add(off);
+                    try {
+                        String offPath = "Resources/Offs/" + off.getOffId() + ".json";
+                        String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
+                        FileWriter fileWriter = new FileWriter(offPath);
+                        fileWriter.write(offDetails);
+                        fileWriter.close();
+                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
+                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
+                        String sellerData = gsonSeller.toJson(seller);
+                        fileWriterSeller.write(sellerData);
+                        fileWriterSeller.close();
+                        MessagesLibrary.messagesLibrary(4);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
-                        MessagesLibrary.messagesLibrary(6);
+                    } catch (IOException e) {
+                        MessagesLibrary.errorLibrary(9);
+                        e.printStackTrace();
                     }
-                    break;
-                case ADD_PRODUCT:
-                    if (acceptStatus) {
-                        Product product = gson.fromJson(request.getRequestDescription(), Product.class);
-                        product.setProductCondition(ProductOrOffCondition.ACCEPTED);
-                        while (checkIfProductExist(product.getProductId())) {
-                            Random random = new Random();
-                            product.setProductId(random.nextInt(10000));
-                        }
-                        String productDetails = gson.toJson(product);
-                        Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
-                        seller.getSellerProducts().add(product);
-                        try {
-                            String productPath = "Resources/Products/" + product.getProductId() + ".json";
-                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
-                            File file = new File(productPath);
-                            file.createNewFile();
-                            FileWriter fileWriter = new FileWriter(file);
-                            fileWriter.write(productDetails);
-                            fileWriter.close();
-                            FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                            Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                            String sellerData = gsonSeller.toJson(seller);
-                            fileWriterSeller.write(sellerData);
-                            fileWriterSeller.close();
-                            MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                            File fileRequest = new File(requestPath);
-                            fileRequest.delete();
-                        } catch (IOException e) {
-                            MessagesLibrary.errorLibrary(9);
-                            e.printStackTrace();
-                        }
-                    } else {
+                } else {
+                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                    File fileRequest = new File(requestPath);
+                    fileRequest.delete();
+                }
+                break;
+            case ADD_PRODUCT:
+                if (acceptStatus) {
+                    Product product = gson.fromJson(request.getRequestDescription(), Product.class);
+                    product.setProductCondition(ProductOrOffCondition.ACCEPTED);
+                    while (checkIfProductExist(product.getProductId())) {
+                        Random random = new Random();
+                        product.setProductId(random.nextInt(10000));
+                    }
+                    String productDetails = gson.toJson(product);
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    seller.getSellerProducts().add(product);
+                    try {
+                        String productPath = "Resources/Products/" + product.getProductId() + ".json";
+                        String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
+                        File file = new File(productPath);
+                        file.createNewFile();
+                        FileWriter fileWriter = new FileWriter(file);
+                        fileWriter.write(productDetails);
+                        fileWriter.close();
+                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
+                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
+                        String sellerData = gsonSeller.toJson(seller);
+                        fileWriterSeller.write(sellerData);
+                        fileWriterSeller.close();
+                        MessagesLibrary.messagesLibrary(4);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
+                    } catch (IOException e) {
+                        throw new ExceptionsLibrary.NoAccountException();
                     }
-                    break;
-                case EDIT_PODUCT:
-                    if (acceptStatus) {
-                        Product product = gson.fromJson(request.getRequestDescription(), Product.class);
-                        product.setProductCondition(ProductOrOffCondition.ACCEPTED);
-                        String productDetails = gson.toJson(product);
-                        Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
-                        Iterator iterator = seller.getSellerProducts().iterator();
-                        while (iterator.hasNext()) {
-                            Product tempProduct = (Product) iterator.next();
-                            if (tempProduct.getProductId() == product.getProductId()) {
-                                iterator.remove();
-                            }
+                } else {
+                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                    File fileRequest = new File(requestPath);
+                    fileRequest.delete();
+                }
+                break;
+            case EDIT_PODUCT:
+                if (acceptStatus) {
+                    Product product = gson.fromJson(request.getRequestDescription(), Product.class);
+                    product.setProductCondition(ProductOrOffCondition.ACCEPTED);
+                    String productDetails = gson.toJson(product);
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    Iterator iterator = seller.getSellerProducts().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = (Product) iterator.next();
+                        if (tempProduct.getProductId() == product.getProductId()) {
+                            iterator.remove();
                         }
-                        seller.getSellerProducts().add(product);
-                        try {
-                            String productPath = "Resources/Products/" + product.getProductId() + ".json";
-                            String sellerPath = "Resources/Accounts/Seller" + seller.getUsername() + ".json";
-                            FileWriter fileWriter = new FileWriter(productPath);
-                            fileWriter.write(productDetails);
-                            fileWriter.close();
-                            FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                            Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                            String sellerData = gsonSeller.toJson(seller);
-                            fileWriterSeller.write(sellerData);
-                            fileWriterSeller.close();
-                            MessagesLibrary.messagesLibrary(4);
-                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                            File fileRequest = new File(requestPath);
-                            fileRequest.delete();
-                        } catch (IOException e) {
-                            MessagesLibrary.errorLibrary(9);
-                            e.printStackTrace();
-                        }
-                    } else {
+                    }
+                    seller.getSellerProducts().add(product);
+                    try {
+                        String productPath = "Resources/Products/" + product.getProductId() + ".json";
+                        String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
+                        FileWriter fileWriter = new FileWriter(productPath);
+                        fileWriter.write(productDetails);
+                        fileWriter.close();
+                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
+                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
+                        String sellerData = gsonSeller.toJson(seller);
+                        fileWriterSeller.write(sellerData);
+                        fileWriterSeller.close();
+                        MessagesLibrary.messagesLibrary(4);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
+                    } catch (IOException e) {
+                        MessagesLibrary.errorLibrary(9);
+                        e.printStackTrace();
                     }
-                    break;
-                case REGISTER_SELLER:
-                    if (acceptStatus) {
-                        Seller seller = request.getRequestSeller();
-                        String sellerDetails = gson.toJson(seller);
+                } else {
+                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                    File fileRequest = new File(requestPath);
+                    fileRequest.delete();
+                }
+                break;
+            case REGISTER_SELLER:
+                if (acceptStatus) {
+                    Seller seller = request.getRequestSeller();
+                    if (RegisterAndLogin.checkUsername(seller.getUsername())) {
                         try {
                             String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
                             File file = new File(sellerPath);
@@ -294,15 +272,16 @@ public class AdminController {
                             MessagesLibrary.errorLibrary(9);
                             e.printStackTrace();
                         }
-                    } else {
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
                     }
-                    break;
-            }
-        } else {
-            MessagesLibrary.errorLibrary(8);
+                    else {
+                        throw new ExceptionsLibrary.UsernameAlreadyExists();
+                    }
+                } else {
+                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                    File fileRequest = new File(requestPath);
+                    fileRequest.delete();
+                }
+                break;
         }
     }
 
@@ -316,7 +295,7 @@ public class AdminController {
         }
     }
 
-    public static ArrayList<Sale> showSales() {
+    public static ArrayList<Sale> showSales() throws ExceptionsLibrary.NoSaleException {
         ArrayList<Sale> allSales = new ArrayList<>();
         String path = "Resources/Sales";
         File file = new File(path);
@@ -329,8 +308,8 @@ public class AdminController {
         return allSales;
     }
 
-    public static void editSaleInfo(String saleCode, HashMap<String, String> dataToEdit) {
-        Sale sale = (Sale) GetDataFromDatabase.getSale(saleCode);
+    public static void editSaleInfo(String saleCode, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFeatureWithThisName {
+        Sale sale = GetDataFromDatabase.getSale(saleCode);
         for (String i : dataToEdit.keySet()) {
             try {
                 Field field = Sale.class.getDeclaredField(i);
@@ -348,8 +327,7 @@ public class AdminController {
                     field.set(sale, dataToEdit.get(i));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                MessagesLibrary.errorLibrary(5);
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoFeatureWithThisName();
             }
         }
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -364,25 +342,18 @@ public class AdminController {
         }
     }
 
-    public static void addSale(String saleDetails) {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        Sale sale = gson.fromJson(saleDetails, Sale.class);
+    public static void addSale(Sale sale) {
         while (checkSaleCode(sale.getSaleCode())) {
             sale.setSaleCode(Sale.getRandomSaleCode());
         }
-        String newSaleDetails = gson.toJson(sale);
-        try {
-            String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
-            FileWriter fileWriter = new FileWriter(path);
-            fileWriter.write(newSaleDetails);
-            fileWriter.close();
-            MessagesLibrary.messagesLibrary(7);
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (Account i : sale.getSaleAccounts()) {
+            i.getSaleCodes().add(sale);
+            SetDataToDatabase.setAccount(i);
         }
+        SetDataToDatabase.setSale(sale);
     }
 
-    public static HashMap<String, ArrayList<Account>> showAllUsers() {
+    public static HashMap<String, ArrayList<Account>> showAllUsers() throws ExceptionsLibrary.NoAccountException {
         String customerPath = "Resources/Accounts/Customer";
         String sellerPath = "Resources/Accounts/Seller";
         String adminPath = "Resources/Accounts/Admin";
@@ -427,66 +398,35 @@ public class AdminController {
         return list;
     }
 
-    public static String showUserDetails(String username) {
+    public static String showUserDetails(String username) throws ExceptionsLibrary.NoAccountException {
         Account account = GetDataFromDatabase.getAccount(username);
-        if (account != null) {
-            Gson gson = new GsonBuilder().serializeNulls().create();
-            return gson.toJson(account);
-        } else {
-            return null;
-        }
-    }
-
-    public static void deleteUser(String username) {
-        Account account = GetDataFromDatabase.getAccount(username);
-        if (account != null) {
-            String path = "Resources/Accounts/"+account.getRole()+"/"+account.getUsername()+".json";
-            File file = new File(path);
-            file.delete();
-            //TODO Message delete user
-        }
-        else {
-            // TODO Error no user with this username
-        }
-    }
-
-    public static String addAdminAccount(String newAdminDetails) {
         Gson gson = new GsonBuilder().serializeNulls().create();
-        Admin admin= gson.fromJson(newAdminDetails,Admin.class);
-        if (RegisterAndLogin.checkUsername(admin.getUsername())){
-            String path = "Resources/Accounts/Admin"+admin.getUsername()+".json";
-            try {
-                File file = new File(path);
-                file.createNewFile();
-                FileWriter fileWriter = new FileWriter(file);
-                fileWriter.write(newAdminDetails);
-                fileWriter.close();
-                return admin.getRole();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        else {
-            return null;
-        }
-        return null;
+        return gson.toJson(account);
     }
 
-    public static void deleteProduct(int productId) {
+    public static void deleteUser(String username) throws ExceptionsLibrary.NoAccountException {
+        Account account = GetDataFromDatabase.getAccount(username);
+        String path = "Resources/Accounts/" + account.getRole() + "/" + account.getUsername() + ".json";
+        File file = new File(path);
+        file.delete();
+    }
+
+    public static void addAdminAccount(String newAdminDetails) throws ExceptionsLibrary.UsernameAlreadyExists {
+        if (RegisterAndLogin.checkUsername(admin.getUsername())) {
+            RegisterAndLogin.registerAdmin(newAdminDetails);
+        } else {
+            throw new ExceptionsLibrary.UsernameAlreadyExists();
+        }
+    }
+
+    public static void deleteProduct(int productId) throws ExceptionsLibrary.NoProductException {
         Product product = GetDataFromDatabase.getProduct(productId);
-        if (product != null) {
-            String path = "Resources/Products/"+product.getProductId()+".json";
-            File file = new File(path);
-            file.delete();
-            //TODO message delete product
-        }
-        else {
-            //TODO error no Product with this productId
-        }
+        String path = "Resources/Products/" + product.getProductId() + ".json";
+        File file = new File(path);
+        file.delete();
     }
 
-    public static ArrayList<Category> showCategories() {
+    public static ArrayList<Category> showCategories() throws ExceptionsLibrary.NoCategoryException {
         ArrayList<Category> allCategories = new ArrayList<>();
         String path = "Resources/Category";
         File file = new File(path);
@@ -508,21 +448,16 @@ public class AdminController {
         return allCategories;
     }
 
-    public static void deleteCategory(String categoryName) {
+    public static void deleteCategory(String categoryName) throws ExceptionsLibrary.NoCategoryException {
+        //TODO delete form products
         Category category = GetDataFromDatabase.getCategory(categoryName);
-        if (category != null) {
-            String path = "Resources/Category/"+category.getName()+".json";
-            File file = new File(path);
-            file.delete();
-        }
-        else {
-            MessagesLibrary.errorLibrary(10);//no category with this name
-        }
+        String path = "Resources/Category/" + category.getName() + ".json";
+        File file = new File(path);
+        file.delete();
     }
 
-    public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) {
-        //TODO update category to all products
-        Category category =  GetDataFromDatabase.getCategory(categoryName);
+    public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoFeatureWithThisName {
+        Category category = GetDataFromDatabase.getCategory(categoryName);
         String oldName = category.getName();
         for (String i : dataToEdit.keySet()) {
             try {
@@ -531,8 +466,8 @@ public class AdminController {
                     field.setAccessible(true);
                     String[] splitFeatures = dataToEdit.get(i).split("\\s*,\\s*");
                     ArrayList<Feature> newFeatures = new ArrayList<>();
-                    for (String j : splitFeatures){
-                        newFeatures.add(new Feature(j,null));
+                    for (String j : splitFeatures) {
+                        newFeatures.add(new Feature(j, null));
                     }
                     field.set(category, newFeatures);
                 } else {
@@ -540,14 +475,13 @@ public class AdminController {
                     field.set(category, dataToEdit.get(i));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                MessagesLibrary.errorLibrary(5);
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoFeatureWithThisName();
             }
         }
         Gson gson = new GsonBuilder().serializeNulls().create();
         String newName = category.getName();
         String editedDetails = gson.toJson(category);
-        if (newName.equals(oldName)){
+        if (newName.equals(oldName)) {
             try {
                 String path = "Resources/Category/" + category.getName() + ".json";
                 FileWriter fileWriter = new FileWriter(path);
@@ -557,13 +491,14 @@ public class AdminController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             try {
                 String newPath = "Resources/Category/" + newName + ".json";
                 String oldPath = "Resources/Category/" + oldName + ".json";
-                //TODO check name
                 File file = new File(newPath);
+                if (file.exists()) {
+                    throw new ExceptionsLibrary.CategoryExistsWithThisName();
+                }
                 file.createNewFile();
                 FileWriter fileWriter = new FileWriter(newPath);
                 fileWriter.write(editedDetails);
@@ -574,10 +509,34 @@ public class AdminController {
                 e.printStackTrace();
             }
         }
-
+        File folder = new File("Resources/Products");
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            Gson gson1 = new GsonBuilder().serializeNulls().create();
+            try {
+                Scanner scanner;
+                scanner = new Scanner(i);
+                scanner.useDelimiter("\\z");
+                String fileData = scanner.next();
+                Product product = gson1.fromJson(fileData, Product.class);
+                scanner.close();
+                product.setCategory(category);
+                SetDataToDatabase.setProduct(product);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public static void addCategory(String categoryDetails) {
+    public static void addCategory(String categoryDetails) throws ExceptionsLibrary.CategoryExistsWithThisName {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Category category = gson.fromJson(categoryDetails, Category.class);
         if (!checkCategoryName(category.getName())) {
@@ -589,35 +548,26 @@ public class AdminController {
                 FileWriter fileWriter = new FileWriter(path);
                 fileWriter.write(newSaleDetails);
                 fileWriter.close();
-                MessagesLibrary.messagesLibrary(8);
             } catch (IOException e) {
-                //Error
                 e.printStackTrace();
             }
-        }
-    }
-
-    public static String viewSaleCodeDetails(String saleCode) {
-        Sale sale = GetDataFromDatabase.getSale(saleCode);
-        if (sale != null) {
-            Gson gson = new GsonBuilder().serializeNulls().create();
-            return gson.toJson(sale);
         } else {
-            return null;
+            throw new ExceptionsLibrary.CategoryExistsWithThisName();
         }
     }
 
-    public static void removeSaleCode(String saleCode) {
+    public static String viewSaleCodeDetails(String saleCode) throws ExceptionsLibrary.NoSaleException {
         Sale sale = GetDataFromDatabase.getSale(saleCode);
-        if (sale != null) {
-            String path = "Resources/Sales/"+sale.getSaleCode()+".json";
-            File file = new File(path);
-            file.delete();
-            MessagesLibrary.messagesLibrary(2);//delete sale
-        }
-        else {
-            MessagesLibrary.errorLibrary(10);//no sale with this code
-        }
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        return gson.toJson(sale);
+    }
+
+    public static void removeSaleCode(String saleCode) throws ExceptionsLibrary.NoSaleException {
+        //TODO remove sales from accounts
+        Sale sale = GetDataFromDatabase.getSale(saleCode);
+        String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
+        File file = new File(path);
+        file.delete();
     }
 
     public static boolean checkCategoryName(String categoryName) {
@@ -625,8 +575,8 @@ public class AdminController {
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
             @Override
-            public boolean accept(File file) {
-                if (file.getName().endsWith(".json")) {
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
                     return true;
                 }
                 return false;

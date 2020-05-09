@@ -39,7 +39,7 @@ public class ProductPageController {
         }
     }
 
-    public static void selectSeller(String sellerUsername) {
+    public static void selectSeller(String sellerUsername) throws ExceptionsLibrary.NoAccountException {
         Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerUsername);
         product.setSeller(seller);
     }
@@ -48,7 +48,7 @@ public class ProductPageController {
         return getProduct();
     }
 
-    public static String[] compare(int productId) {
+    public static String[] compare(int productId) throws ExceptionsLibrary.NoProductException {
         String[] products = new String[2];
         Gson gson = new GsonBuilder().serializeNulls().create();
         String firstProductData = gson.toJson(getProduct());

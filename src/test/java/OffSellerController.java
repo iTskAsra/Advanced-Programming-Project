@@ -35,7 +35,7 @@ public class OffSellerController {
         data.put("password","b");
         RegisterAndLogin.login(data);
         Off off = new Off(null,ProductOrOffCondition.ACCEPTED, Main.localDateTime.format(Main.dateTimeFormatter),"2020-10-10 23:59",50);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String offData = gson.toJson(off);
         SellerController.addOffRequest(offData);
     }
@@ -47,7 +47,7 @@ public class OffSellerController {
         data.put("password","b");
         RegisterAndLogin.login(data);
         Product product = GetDataFromDatabase.getProduct(1);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String productData = gson.toJson(product);
         Assert.assertEquals(SellerController.showProductDetails(1),productData);
     }
