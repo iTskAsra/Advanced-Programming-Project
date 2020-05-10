@@ -84,7 +84,7 @@ public class AllProductsPanelController {
         return categoriesName;
     }
 
-    public static ArrayList<String> showAvailableFilters() {
+    public static ArrayList<String> showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
         ArrayList<String> allAvailabelFilters = new ArrayList();
         String path = "Resources/Category";
         File folder = new File(path);
@@ -110,23 +110,24 @@ public class AllProductsPanelController {
         return allAvailabelFilters;
     }
 
-    public static void filterAnAvailableFilter(String filter) {
+    public static void filterAnAvailableFilter(String filter) throws ExceptionsLibrary.NoFilterWithThisName {
         for (String i : getAvailableFilters()) {
             if (i.equals(filter)) {
                 currentFilters.add(i);
             }
         }
+        throw new ExceptionsLibrary.NoFilterWithThisName();
     }
 
     public static ArrayList<String> showCurrentFilters() {
         return getCurrentFilters();
     }
 
-    public static void disableFilter(String filter) {
+    public static void disableFilter(String filter) throws ExceptionsLibrary.NoFilterWithThisName {
         if (currentFilters.contains(filter)) {
             currentFilters.remove(filter);
         } else {
-            //TODO error
+            throw new ExceptionsLibrary.NoFilterWithThisName();
         }
     }
 
@@ -134,7 +135,7 @@ public class AllProductsPanelController {
         return getAvailableSorts();
     }
 
-    public static void sortAnAvailableSort(String sort) {
+    public static void sortAnAvailableSort(String sort) throws ExceptionsLibrary.NoSortWithThisName {
         for (String i : getAvailableSorts()) {
             if (i.equals(sort)) {
                 currentSort.clear();
@@ -142,7 +143,7 @@ public class AllProductsPanelController {
                 return;
             }
         }
-        //TODO error
+        throw new ExceptionsLibrary.NoSortWithThisName();
     }
 
     public static ArrayList<String> currentSort() {
@@ -154,7 +155,7 @@ public class AllProductsPanelController {
         getCurrentSort().add("name");
     }
 
-    public static ArrayList<Product> showProducts() {
+    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException {
         ArrayList<Product> products = new ArrayList<>();
         String path = "Resources/Products";
         File productsFolder = new File(path);
@@ -217,8 +218,13 @@ public class AllProductsPanelController {
         return products;
     }
 
-    public static Product goToProductPage(int productId) {
-        Product product = GetDataFromDatabase.getProduct(productId);
+    public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
+        Product product = null;
+        try {
+            product = GetDataFromDatabase.getProduct(productId);
+        } catch (ExceptionsLibrary.NoProductException e) {
+            throw new ExceptionsLibrary.NoProductException();
+        }
         return product;
     }
 

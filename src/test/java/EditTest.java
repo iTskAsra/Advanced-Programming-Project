@@ -1,3 +1,4 @@
+/*
 import com.google.gson.Gson;
 import controller.CustomerController;
 import controller.GetDataFromDatabase;
@@ -39,3 +40,4 @@ public class EditTest {
         CustomerController.rateProduct(3,5);
     }
 }
+*/

@@ -1,10 +1,10 @@
 package view;
 
-import controller.ProductPageController;
+import controller.*;
 import model.Off;
 import controller.ProductPageController;
 import java.util.ArrayList;
-import controller.OffPageController;
+
 import com.google.gson.*;
 import model.Product;
 import java.lang.String;
@@ -16,6 +16,8 @@ public class OffPanel extends Menu {
         super("Off Menu",parentMenu);
     }
 
+    //TODO show products
+
     public Menu listOffs(){
         return new Menu("List of Offs",this){
             @Override
@@ -24,9 +26,14 @@ public class OffPanel extends Menu {
             }
             @Override
             public void run(){
-                ArrayList<Off> offsList = controller.OffPageController.listOffs();
-                for (int i=0;i<offsList.size();i++)
-                    System.out.printf("%d. %s\n",i,offsList.get(i));
+                ArrayList<Off> offsList = null;
+                try {
+                    offsList = OffPageController.listOffs();
+                    for (int i=0;i<offsList.size();i++)
+                        System.out.printf("%d. %s\n",i,offsList.get(i));
+                } catch (ExceptionsLibrary.NoOffException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -46,12 +53,16 @@ public class OffPanel extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Menu.scanner.nextLine());
-                Product product = AllProductsPanelController.goToProductPage(productId);
-                ProductPageController productPageController = new ProductPageController(product);
-                ProductPage productPage =new ProductPage(product.getName(),this);
-                productPage.show();
-                productPage.run();
-                //TODO Product Page , Exception and more!!!
+                Product product = null;
+                try {
+                    product = AllProductsPanelController.goToProductPage(productId);
+                    ProductPageController productPageController = new ProductPageController(product);
+                    ProductPage productPage =new ProductPage(product.getName(),this);
+                    productPage.show();
+                    productPage.run();
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }

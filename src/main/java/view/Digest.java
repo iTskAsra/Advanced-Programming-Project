@@ -64,7 +64,7 @@ public class Digest extends Menu {
             public void run() {
                 int number = Integer.parseInt(Menu.scanner.nextLine());
                 if (number>sellerList.size()+1||number<0){
-                    //TODO error
+                    System.out.println("Enter a valid number");
                 }
                 else {
                     try {
@@ -73,9 +73,9 @@ public class Digest extends Menu {
                     } catch (ExceptionsLibrary.NoAccountException e) {
                         e.printStackTrace();
                     }
-                    getParentMenu().show();
-                    getParentMenu().run();
                 }
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
@@ -89,8 +89,14 @@ public class Digest extends Menu {
 
             @Override
             public void run() {
-                ProductPageController.addToCart();
-                System.out.println("Added to cart!");
+                try {
+                    ProductPageController.addToCart();
+                    System.out.println("Added to cart!");
+                } catch (ExceptionsLibrary.SelectASeller selectASeller) {
+                    System.out.println(selectASeller.getMessage());
+                } catch (ExceptionsLibrary.NotEnoughNumberAvailableException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }

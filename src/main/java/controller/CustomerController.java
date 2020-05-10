@@ -29,11 +29,10 @@ public class CustomerController {
         CustomerController.customer = customer;
     }
 
-    public static String showCustomerInfo() {
+    public static String showCustomerInfo() throws ExceptionsLibrary.NoAccountException {
         Gson gson = new GsonBuilder().serializeNulls().create();
         if (getCustomer() == null) {
-            MessagesLibrary.errorLibrary(4);
-            return null;
+            throw new ExceptionsLibrary.NoAccountException();
         }
         Customer customer = (Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername());
         setCustomer(customer);
@@ -41,7 +40,7 @@ public class CustomerController {
         return data;
     }
 
-    public static void editCustomerInfo(HashMap<String, String> dataToEdit) {
+    public static void editCustomerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName {
         Customer customer = (Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
@@ -49,21 +48,12 @@ public class CustomerController {
                 field.setAccessible(true);
                 field.set(customer, dataToEdit.get(i));
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                MessagesLibrary.errorLibrary(5);
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoFeatureWithThisName();
             }
         }
         Gson gson = new GsonBuilder().serializeNulls().create();
         setCustomer(customer);
-        String editedDetails = gson.toJson(customer);
-        try {
-            String path = "Resources/Accounts/Customer/" + getCustomer().getUsername() + ".json";
-            FileWriter fileWriter = new FileWriter(path);
-            fileWriter.write(editedDetails);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SetDataToDatabase.setAccount(getCustomer());
     }
 
     public static double showCustomerBalance() {
@@ -90,7 +80,7 @@ public class CustomerController {
         return null;
     }
 
-    public static void rateProduct(int productId, double rateScore) {
+    public static void rateProduct(int productId, double rateScore) throws ExceptionsLibrary.NoProductException {
         Product product = GetDataFromDatabase.getProduct(productId);
         if (product != null) {
             Rate rate = new Rate(getCustomer(), product, rateScore);
@@ -105,6 +95,7 @@ public class CustomerController {
                 e.printStackTrace();
             }
         } else {
+            throw new ExceptionsLibrary.NoProductException();
         }
     }
 

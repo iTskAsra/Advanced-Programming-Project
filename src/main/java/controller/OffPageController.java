@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class OffPageController {
 
-    public static ArrayList<Off> listOffs(){
+    public static ArrayList<Off> listOffs() throws ExceptionsLibrary.NoOffException {
         ArrayList<Off> offsList = new ArrayList<>();
         String path = "Resources/Offs";
         File folder = new File(path);
@@ -33,10 +33,13 @@ public class OffPageController {
     }
 
 
-    public static String goToProductPage(int productId) {
-        Product product = GetDataFromDatabase.getProduct(productId);
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String data = gson.toJson(product);
-        return data;
+    public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
+        Product product = null;
+        try {
+            product = GetDataFromDatabase.getProduct(productId);
+        } catch (ExceptionsLibrary.NoProductException e) {
+            throw new ExceptionsLibrary.NoProductException();
+        }
+        return product;
     }
 }

@@ -2,6 +2,7 @@ package view;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import controller.ExceptionsLibrary;
 import controller.ProductPageController;
 import model.Feature;
 import model.Product;
@@ -34,36 +35,40 @@ public class ProductPage extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Menu.scanner.nextLine());
-                //TODO Exception
-                String[] products = ProductPageController.compare(productId);
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                Product product1 = gson.fromJson(products[0],Product.class);
-                Product product2 = gson.fromJson(products[1],Product.class);
+                String[] products = new String[0];
+                try {
+                    products = ProductPageController.compare(productId);
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    Product product1 = gson.fromJson(products[0],Product.class);
+                    Product product2 = gson.fromJson(products[1],Product.class);
 
-                Double product1Rate = 0.00;
-                for (Rate i : product1.getRates()){
-                    product1Rate+=i.getRateScore();
+                    Double product1Rate = 0.00;
+                    for (Rate i : product1.getRates()){
+                        product1Rate+=i.getRateScore();
+                    }
+
+                    product1Rate = product1Rate /product1.getRates().size();
+
+                    Double product2Rate = 0.00;
+                    for (Rate i : product2.getRates()){
+                        product2Rate+=i.getRateScore();
+                    }
+
+                    product2Rate = product2Rate /product2.getRates().size();
+
+                    System.out.println("-".repeat(80));
+                    System.out.printf("ProductID : %-6d   %6d\n",product1.getProductId(),product2.getProductId());
+                    System.out.printf("Name : %-20s%s%20s\n",product1.getName()," ".repeat(10),product2.getName());
+                    System.out.printf("Rates : %.2f%s%.2f\n",product1Rate," ".repeat(5),product2Rate);
+                    System.out.printf("Company : %-20s%s%20s\n",product1.getCompany()," ".repeat(10),product2.getCompany());
+                    for (Feature i : product1.getCategory().getFeatures()){
+                        System.out.printf("%s : %s%s%s\n",i.getParameter(),product1.getCategoryFeatures().get(product1.getCategoryFeatures().indexOf(i)).getParameterValue()," ".repeat(5),product2.getCategoryFeatures().get(product2.getCategoryFeatures().indexOf(i)).getParameterValue());
+                    }
+                    System.out.printf("Description : %-20s%s%20s\n",product1.getDescription()," ".repeat(10),product2.getDescription());
+                    System.out.println("-".repeat(80));
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
                 }
-
-                product1Rate = product1Rate /product1.getRates().size();
-
-                Double product2Rate = 0.00;
-                for (Rate i : product2.getRates()){
-                    product2Rate+=i.getRateScore();
-                }
-
-                product2Rate = product2Rate /product2.getRates().size();
-
-                System.out.println("-".repeat(80));
-                System.out.printf("ProductID : %-6d   %6d\n",product1.getProductId(),product2.getProductId());
-                System.out.printf("Name : %-20s%s%20s\n",product1.getName()," ".repeat(10),product2.getName());
-                System.out.printf("Rates : %.2f%s%.2f\n",product1Rate," ".repeat(5),product2Rate);
-                System.out.printf("Company : %-20s%s%20s\n",product1.getCompany()," ".repeat(10),product2.getCompany());
-                for (Feature i : product1.getCategory().getFeatures()){
-                    System.out.printf("%s : %s%s%s\n",i.getParameter(),product1.getCategoryFeatures().get(product1.getCategoryFeatures().indexOf(i)).getParameterValue()," ".repeat(5),product2.getCategoryFeatures().get(product2.getCategoryFeatures().indexOf(i)).getParameterValue());
-                }
-                System.out.printf("Description : %-20s%s%20s\n",product1.getDescription()," ".repeat(10),product2.getDescription());
-                System.out.println("-".repeat(80));
                 getParentMenu().show();
                 getParentMenu().run();
             }

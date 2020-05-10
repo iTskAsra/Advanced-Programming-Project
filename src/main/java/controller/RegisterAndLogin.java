@@ -128,10 +128,10 @@ public class RegisterAndLogin {
                     return account.getRole();
                 }
             } else {
-                throw new ExceptionsLibrary.WrongPasswordException("Password not correct!");
+                throw new ExceptionsLibrary.WrongPasswordException();
             }
         } else {
-            throw new ExceptionsLibrary.WrongUsernameException("Username not found!", dataToLogin.get("username"));
+            throw new ExceptionsLibrary.WrongUsernameException();
         }
         return null;
     }

@@ -27,14 +27,14 @@ public class ProductPageController {
         return data;
     }
 
-    public static void addToCart() {
+    public static void addToCart() throws ExceptionsLibrary.SelectASeller, ExceptionsLibrary.NotEnoughNumberAvailableException {
         if (getProduct().getSeller() == null) {
-            //TODO Error
+            throw new ExceptionsLibrary.SelectASeller();
         } else {
             if (getProduct().getAvailability() >= 1) {
                 CartController.getCartProducts().put(getProduct(), 1);
             } else {
-                //TODO Error
+                throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
             }
         }
     }

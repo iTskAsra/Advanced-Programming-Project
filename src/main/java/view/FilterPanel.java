@@ -1,6 +1,7 @@
 package view;
 
 import controller.AllProductsPanelController;
+import controller.ExceptionsLibrary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +27,11 @@ public class FilterPanel extends Menu {
             @Override
             public void run() {
                 String filterName = Menu.scanner.nextLine();
-                AllProductsPanelController.disableFilter(filterName);
-                //TODO Exception
+                try {
+                    AllProductsPanelController.disableFilter(filterName);
+                } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
+                    noFilterWithThisName.printStackTrace();
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -44,10 +48,14 @@ public class FilterPanel extends Menu {
             @Override
             public void run() {
                 ArrayList<String> currentFilters = AllProductsPanelController.showCurrentFilters();
-                for (String i : currentFilters){
-                    System.out.println(i.substring(0,1).toUpperCase()+i.substring(1));
+                if (currentFilters.size() == 0){
+                    System.out.println("No filter selected!");
                 }
-                //TODO size=0 -> error
+                else {
+                    for (String i : currentFilters) {
+                        System.out.println(i.substring(0, 1).toUpperCase() + i.substring(1));
+                    }
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -65,8 +73,11 @@ public class FilterPanel extends Menu {
             @Override
             public void run() {
                 String filterName = Menu.scanner.nextLine();
-                AllProductsPanelController.filterAnAvailableFilter(filterName);
-                //TODO Exception
+                try {
+                    AllProductsPanelController.filterAnAvailableFilter(filterName);
+                } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
+                    System.out.println(noFilterWithThisName.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -82,9 +93,14 @@ public class FilterPanel extends Menu {
 
             @Override
             public void run() {
-                ArrayList<String> availableFilters = AllProductsPanelController.showAvailableFilters();
-                for (String i : availableFilters){
-                    System.out.println(i.substring(0,1).toUpperCase()+i.substring(1));
+                ArrayList<String> availableFilters = null;
+                try {
+                    availableFilters = AllProductsPanelController.showAvailableFilters();
+                    for (String i : availableFilters){
+                        System.out.println(i.substring(0,1).toUpperCase()+i.substring(1));
+                    }
+                } catch (ExceptionsLibrary.NoFilterWithThisName | ExceptionsLibrary.NoCategoryException e) {
+                    System.out.println("No filter found");
                 }
                 getParentMenu().show();
                 getParentMenu().run();

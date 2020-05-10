@@ -1,6 +1,7 @@
 package view;
 
 import controller.CustomerController;
+import controller.ExceptionsLibrary;
 
 import java.util.HashMap;
 
@@ -63,7 +64,11 @@ public class CustomerLogs extends Menu {
                 int productID = Integer.parseInt(Menu.scanner.nextLine());
                 System.out.println("Enter the Rate in the scale of 1-5");
                 int productRate = Integer.parseInt(Menu.scanner.nextLine());
-                CustomerController.rateProduct(productID , productRate);
+                try {
+                    CustomerController.rateProduct(productID , productRate);
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }

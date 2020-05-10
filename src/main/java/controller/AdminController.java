@@ -41,15 +41,9 @@ public class AdminController {
         Admin admin = (Admin) GetDataFromDatabase.getAccount(getAdmin().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
-                try {
-                    Field field = Admin.class.getSuperclass().getDeclaredField(i);
-                    field.setAccessible(true);
-                    field.set(admin, dataToEdit.get(i));
-                } catch (NoSuchFieldException e) {
-                    Field field = Admin.class.getDeclaredField(i);
-                    field.setAccessible(true);
-                    field.set(admin, dataToEdit.get(i));
-                }
+                Field field = Admin.class.getSuperclass().getDeclaredField(i);
+                field.setAccessible(true);
+                field.set(admin, dataToEdit.get(i));
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new ExceptionsLibrary.NoFeatureWithThisName();
             }
@@ -272,8 +266,7 @@ public class AdminController {
                             MessagesLibrary.errorLibrary(9);
                             e.printStackTrace();
                         }
-                    }
-                    else {
+                    } else {
                         throw new ExceptionsLibrary.UsernameAlreadyExists();
                     }
                 } else {
@@ -347,6 +340,9 @@ public class AdminController {
             sale.setSaleCode(Sale.getRandomSaleCode());
         }
         for (Account i : sale.getSaleAccounts()) {
+            if (i.getSaleCodes() == null){
+                i.setSaleCodes(new ArrayList<>());
+            }
             i.getSaleCodes().add(sale);
             SetDataToDatabase.setAccount(i);
         }
@@ -449,11 +445,41 @@ public class AdminController {
     }
 
     public static void deleteCategory(String categoryName) throws ExceptionsLibrary.NoCategoryException {
-        //TODO delete form products
-        Category category = GetDataFromDatabase.getCategory(categoryName);
-        String path = "Resources/Category/" + category.getName() + ".json";
-        File file = new File(path);
-        file.delete();
+        try {
+            Category category = GetDataFromDatabase.getCategory(categoryName);
+            FileFilter fileFilter = new FileFilter() {
+                @Override
+                public boolean accept(File file1) {
+                    if (file1.getName().endsWith(".json")) {
+                        return true;
+                    }
+                    return false;
+                }
+            };
+            File productsFolder = new File("Resources/Products");
+            for (File i : productsFolder.listFiles(fileFilter)) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                try {
+                    Scanner scanner;
+                    scanner = new Scanner(i);
+                    scanner.useDelimiter("\\z");
+                    String fileData = scanner.next();
+                    Product product = gson.fromJson(fileData, Product.class);
+                    scanner.close();
+                    if (product.getCategory().getName().equals(categoryName)) {
+                        i.delete();
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            String path = "Resources/Category/" + category.getName() + ".json";
+            File file = new File(path);
+            file.delete();
+        } catch (ExceptionsLibrary.NoCategoryException e) {
+            throw new ExceptionsLibrary.NoCategoryException();
+        }
+
     }
 
     public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoFeatureWithThisName {
@@ -563,11 +589,82 @@ public class AdminController {
     }
 
     public static void removeSaleCode(String saleCode) throws ExceptionsLibrary.NoSaleException {
-        //TODO remove sales from accounts
-        Sale sale = GetDataFromDatabase.getSale(saleCode);
-        String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
-        File file = new File(path);
-        file.delete();
+        try {
+            Sale sale = GetDataFromDatabase.getSale(saleCode);
+            FileFilter fileFilter = new FileFilter() {
+                @Override
+                public boolean accept(File file1) {
+                    if (file1.getName().endsWith(".json")) {
+                        return true;
+                    }
+                    return false;
+                }
+            };
+            File customerFolder = new File("Resources/Accounts/Customer");
+            File sellerFolder = new File("Resources/Accounts/Seller");
+            File adminFolder = new File("Resources/Accounts/Admin");
+
+            for (File i : customerFolder.listFiles(fileFilter)) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                try {
+                    Scanner scanner;
+                    scanner = new Scanner(i);
+                    scanner.useDelimiter("\\z");
+                    String fileData = scanner.next();
+                    Customer customer = gson.fromJson(fileData, Customer.class);
+                    scanner.close();
+                    if (customer.getSaleCodes().contains(sale)) {
+                        customer.getSaleCodes().remove(sale);
+                        SetDataToDatabase.setAccount(customer);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for (File i : sellerFolder.listFiles(fileFilter)) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                try {
+                    Scanner scanner;
+                    scanner = new Scanner(i);
+                    scanner.useDelimiter("\\z");
+                    String fileData = scanner.next();
+                    Seller seller = gson.fromJson(fileData, Seller.class);
+                    scanner.close();
+                    if (seller.getSaleCodes().contains(sale)) {
+                        seller.getSaleCodes().remove(sale);
+                        SetDataToDatabase.setAccount(seller);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for (File i : adminFolder.listFiles(fileFilter)) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                try {
+                    Scanner scanner;
+                    scanner = new Scanner(i);
+                    scanner.useDelimiter("\\z");
+                    String fileData = scanner.next();
+                    Admin admin = gson.fromJson(fileData, Admin.class);
+                    scanner.close();
+                    if (admin.getSaleCodes().contains(sale)) {
+                        admin.getSaleCodes().remove(sale);
+                        SetDataToDatabase.setAccount(admin);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
+            File file = new File(path);
+            file.delete();
+        } catch (ExceptionsLibrary.NoSaleException e){
+            throw new ExceptionsLibrary.NoSaleException();
+        }
+
     }
 
     public static boolean checkCategoryName(String categoryName) {

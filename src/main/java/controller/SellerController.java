@@ -6,11 +6,13 @@ import model.*;
 import view.MessagesLibrary;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -29,13 +31,10 @@ public class SellerController {
         SellerController.seller = seller;
     }
 
-    //TODO Check to update seller products,offs,info and exceptions check
-
     public static String showSellerInfo() throws ExceptionsLibrary.NoAccountException {
         Gson gson = new GsonBuilder().serializeNulls().create();
         if (getSeller() == null) {
-            MessagesLibrary.errorLibrary(4);
-            return null;
+            throw new ExceptionsLibrary.NoAccountException();
         }
         Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
         setSeller(seller);
@@ -43,7 +42,7 @@ public class SellerController {
         return data;
     }
 
-    public static void editSellerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException {
+    public static void editSellerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName {
         Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
@@ -57,8 +56,7 @@ public class SellerController {
                     field.set(seller, dataToEdit.get(i));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                MessagesLibrary.errorLibrary(5);
-                e.printStackTrace();
+                throw new ExceptionsLibrary.NoFeatureWithThisName();
             }
         }
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -90,7 +88,7 @@ public class SellerController {
         return data;
     }
 
-    public static void editProductRequest(int productId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoProductException {
+    public static void editProductRequest(int productId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFeatureWithThisName {
         Product product = GetDataFromDatabase.getProduct(productId);
         if (product != null) {
             for (String i : dataToEdit.keySet()) {
@@ -107,8 +105,7 @@ public class SellerController {
                         field.set(product, dataToEdit.get(i));
                     }
                 } catch (NoSuchFieldException | IllegalAccessException e) {
-                    MessagesLibrary.errorLibrary(5);
-                    e.printStackTrace();
+                    throw new ExceptionsLibrary.NoFeatureWithThisName();
                 }
             }
             Gson gsonProduct = new GsonBuilder().serializeNulls().create();
@@ -130,7 +127,7 @@ public class SellerController {
                 e.printStackTrace();
             }
         } else {
-            MessagesLibrary.errorLibrary(6);
+            throw new ExceptionsLibrary.NoProductException();
         }
     }
 
@@ -155,7 +152,7 @@ public class SellerController {
                 e.printStackTrace();
             }
         } else {
-            MessagesLibrary.errorLibrary(6);
+            throw new ExceptionsLibrary.NoProductException();
         }
     }
 
@@ -186,7 +183,7 @@ public class SellerController {
 
     }
 
-    public static void editOffRequest(int offId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoOffException {
+    public static void editOffRequest(int offId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoFeatureWithThisName {
         Off off = GetDataFromDatabase.getOff(offId);
         if (off != null) {
             for (Off i : getSeller().getSellerOffs()){
@@ -202,8 +199,7 @@ public class SellerController {
                                 field.set(off, dataToEdit.get(s));
                             }
                         } catch (NoSuchFieldException | IllegalAccessException e) {
-                            MessagesLibrary.errorLibrary(5);
-                            e.printStackTrace();
+                            throw new ExceptionsLibrary.NoFeatureWithThisName();
                         }
                     }
                     off.setOffCondition(ProductOrOffCondition.PENDING_TO_EDIT);
@@ -227,9 +223,8 @@ public class SellerController {
                     }
                 }
             }
-            MessagesLibrary.errorLibrary(7);
         } else {
-            MessagesLibrary.errorLibrary(7);
+            throw new ExceptionsLibrary.NoOffException();
         }
     }
 
@@ -267,7 +262,7 @@ public class SellerController {
         return offs;
     }
 
-    public static String showOffDetails(int offId) {
+    public static String showOffDetails(int offId) throws ExceptionsLibrary.NoOffException {
         for (Off i : getSeller().getSellerOffs()) {
             if (i.getOffId() == offId) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
@@ -275,8 +270,7 @@ public class SellerController {
                 return offDetails;
             }
         }
-        MessagesLibrary.errorLibrary(7);
-        return null;
+        throw new ExceptionsLibrary.NoOffException();
     }
 
     public static String showProductDetails(int productId) throws ExceptionsLibrary.NoProductException {
@@ -286,8 +280,7 @@ public class SellerController {
             String productDetails = gson.toJson(product);
             return productDetails;
         } else {
-            MessagesLibrary.errorLibrary(6);
-            return null;
+            throw new ExceptionsLibrary.NoProductException();
         }
     }
 
@@ -298,8 +291,7 @@ public class SellerController {
             String productBuyers = gson.toJson(product.getProductBuyers());
             return productBuyers;
         } else {
-            MessagesLibrary.errorLibrary(6);
-            return null;
+            throw new ExceptionsLibrary.NoProductException();
         }
     }
 
@@ -309,10 +301,27 @@ public class SellerController {
 
 
 
-    //TODO further development
-    public static String showCategories() {
-        String temp = "Hey There!";
-        return temp;
+
+    public static ArrayList<Category> showCategories() throws ExceptionsLibrary.NoCategoryException {
+        ArrayList<Category> allCategories = new ArrayList<>();
+        String path = "Resources/Category";
+        File file = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : file.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String categoryName = fileName.replace(".json", "");
+            Category category = GetDataFromDatabase.getCategory(categoryName);
+            allCategories.add(category);
+        }
+        return allCategories;
     }
 
 }

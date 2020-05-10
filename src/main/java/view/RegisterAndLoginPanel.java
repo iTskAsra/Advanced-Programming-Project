@@ -156,16 +156,20 @@ public class RegisterAndLoginPanel extends Menu {
                     nextMenu.run();
                 }
                 catch (ExceptionsLibrary.WrongUsernameException e){
-                    System.out.printf("No account with username %s exist!\n",e.getUsername());
-                    this.getParentMenu().show();
-                    this.getParentMenu().run();
+                    System.out.println(e.getMessage());
+                    getParentMenu().show();
+                    getParentMenu().run();
                 }
                 catch (ExceptionsLibrary.WrongPasswordException e){
-                    System.out.printf("Password not correct!\n");
-                    this.getParentMenu().show();
-                    this.getParentMenu().run();
-                }
+                    System.out.println(e.getMessage());
+                    getParentMenu().show();
+                    getParentMenu().run();
 
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                    getParentMenu().show();
+                    getParentMenu().run();
+                }
             }
         };
     }

@@ -2,21 +2,14 @@ package controller;
 
 public class  ExceptionsLibrary {
     public static class WrongUsernameException extends Exception{
-        String username;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public WrongUsernameException(String message, String username) {
-            super(message);
-            this.username = username;
+        public WrongUsernameException() {
+            super("No account with this username!");
         }
     }
 
     public static class WrongPasswordException extends Exception{
-        public WrongPasswordException(String message) {
-            super(message);
+        public WrongPasswordException() {
+            super("Password is not correct!");
         }
     }
 
@@ -86,5 +79,31 @@ public class  ExceptionsLibrary {
             super("No feature found with this name");
         }
     }
+
+    public static class NoFilterWithThisName extends Exception{
+        public NoFilterWithThisName() {
+            super("No filter found with this name!");
+        }
+    }
+
+    public static class NoSortWithThisName extends Exception{
+        public NoSortWithThisName() {
+            super("No sort found with this name!");
+        }
+    }
+
+    public static class SelectASeller extends Exception{
+        public SelectASeller() {
+            super("You should select a seller to proceed!");
+        }
+    }
+
+    public static class NotEnoughNumberAvailableException extends Exception{
+        public NotEnoughNumberAvailableException() {
+            super("Not enough number of this product to proceed!");
+        }
+    }
+
+
 
 }

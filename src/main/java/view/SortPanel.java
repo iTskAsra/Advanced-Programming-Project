@@ -1,6 +1,7 @@
 package view;
 
 import controller.AllProductsPanelController;
+import controller.ExceptionsLibrary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class SortPanel extends Menu {
             @Override
             public void run() {
                 AllProductsPanelController.disableSort();
-                //TODO Exception Or Message
+                System.out.println("Sort set to default");
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -42,10 +43,15 @@ public class SortPanel extends Menu {
             @Override
             public void run() {
                 ArrayList<String> currentSort = AllProductsPanelController.showAvailableSorts();
-                for (String i : currentSort){
-                    System.out.println(i.substring(0,1).toUpperCase()+i.substring(1));
+                if (currentSort.size() == 0){
+                    System.out.println("Sort is set to default!");
                 }
-                //TODO size=0 -> error
+                else {
+                    for (String i : currentSort){
+                        System.out.println(i.substring(0,1).toUpperCase()+i.substring(1));
+                    }
+                }
+
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -63,8 +69,12 @@ public class SortPanel extends Menu {
             @Override
             public void run() {
                 String sortName = Menu.scanner.nextLine();
-                AllProductsPanelController.sortAnAvailableSort(sortName);
-                //TODO Exception
+                try {
+                    AllProductsPanelController.sortAnAvailableSort(sortName);
+                } catch (ExceptionsLibrary.NoSortWithThisName noSortWithThisName) {
+                    noSortWithThisName.printStackTrace();
+                }
+
                 getParentMenu().show();
                 getParentMenu().run();
             }

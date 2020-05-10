@@ -1,8 +1,11 @@
 package view;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import controller.CartController;
 import controller.CustomerController;
+import controller.ExceptionsLibrary;
+import controller.ProductPageController;
 import jdk.jshell.execution.JdiExecutionControl;
 import model.Product;
 
@@ -54,10 +57,21 @@ public class Cart extends Menu {
             @Override
             public void run(){
                 int productID = Integer.parseInt(Menu.scanner.nextLine());
-                String productDetails = CartController.viewCartProductDetails(productID);
-                System.out.println(productDetails);
-                parentMenu.show();
-                parentMenu.run();
+                String productDetails = null;
+                try {
+                    productDetails = CartController.viewCartProductDetails(productID);
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    Product product = gson.fromJson(productDetails,Product.class);
+                    ProductPageController.setProduct(product);
+                    ProductPage productPage =new ProductPage("Product Page",this);
+                    productPage.show();
+                    productPage.run();
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    e.printStackTrace();
+                }
+
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
@@ -73,7 +87,13 @@ public class Cart extends Menu {
             @Override
             public void run(){
                 int productID = Integer.parseInt(Menu.scanner.nextLine());
-                CartController.increaseProduct(productID);
+                try {
+                    CartController.increaseProduct(productID);
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NotEnoughNumberAvailableException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -91,7 +111,11 @@ public class Cart extends Menu {
         @Override
         public void run(){
             int productID = Integer.parseInt(Menu.scanner.nextLine());
-            CartController.decreaseProduct(productID);
+            try {
+                CartController.decreaseProduct(productID);
+            } catch (ExceptionsLibrary.NoProductException e) {
+                System.out.println(e.getMessage());
+            }
             getParentMenu().show();
             getParentMenu().run();
             }

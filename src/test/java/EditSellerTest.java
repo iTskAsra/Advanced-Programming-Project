@@ -1,3 +1,4 @@
+/*
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.RegisterAndLogin;
@@ -30,3 +31,4 @@ public class EditSellerTest {
         System.out.println(SellerController.getSeller().getFirstName());
     }
 }
+*/

@@ -2,6 +2,7 @@ package view;
 
 import controller.AdminController;
 import controller.AllProductsPanelController;
+import controller.ExceptionsLibrary;
 import controller.ProductPageController;
 import model.Category;
 import model.Feature;
@@ -32,16 +33,21 @@ public class AllProductsPanel extends Menu {
 
             @Override
             public void run() {
-                ArrayList<Category> allCategories = AdminController.showCategories();
-                for (Category i : allCategories){
-                    System.out.printf("%s\n","-".repeat(30));
-                    System.out.printf("Category name : %s\nFeatures:\n",i.getName());
-                    int featureCount = 1;
-                    for (Feature j : i.getFeatures()){
-                        System.out.printf("%d. %s\n",featureCount,j.getParameter());
-                        featureCount++;
+                ArrayList<Category> allCategories = null;
+                try {
+                    allCategories = AdminController.showCategories();
+                    for (Category i : allCategories){
+                        System.out.printf("%s\n","-".repeat(30));
+                        System.out.printf("Category name : %s\nFeatures:\n",i.getName());
+                        int featureCount = 1;
+                        for (Feature j : i.getFeatures()){
+                            System.out.printf("%d. %s\n",featureCount,j.getParameter());
+                            featureCount++;
+                        }
+                        System.out.printf("%s\n","-".repeat(30));
                     }
-                    System.out.printf("%s\n","-".repeat(30));
+                } catch (ExceptionsLibrary.NoCategoryException e) {
+                    System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();
@@ -58,14 +64,19 @@ public class AllProductsPanel extends Menu {
 
             @Override
             public void run() {
-                ArrayList<Product> products = AllProductsPanelController.showProducts();
-                System.out.printf("Results :\n%s","-".repeat(60));
-                for (Product i : products){
-                    System.out.printf("%-40s%s%d%s%s%s%d\n",i.getName()," ".repeat(10),i.getAvailability()," ".repeat(10),String.valueOf(i.getPrice())," ".repeat(10),i.getProductId());
+                ArrayList<Product> products = null;
+                try {
+                    products = AllProductsPanelController.showProducts();
+                    System.out.printf("Results :\n%s","-".repeat(60));
+                    for (Product i : products){
+                        System.out.printf("%-40s%s%d%s%s%s%d\n",i.getName()," ".repeat(10),i.getAvailability()," ".repeat(10),String.valueOf(i.getPrice())," ".repeat(10),i.getProductId());
+                    }
+                    System.out.printf("%s","-".repeat(60));
+                    getParentMenu().show();
+                    getParentMenu().run();
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
                 }
-                System.out.printf("%s","-".repeat(60));
-                getParentMenu().show();
-                getParentMenu().run();
             }
         };
     }
@@ -81,12 +92,16 @@ public class AllProductsPanel extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Menu.scanner.nextLine());
-                Product product = AllProductsPanelController.goToProductPage(productId);
-                ProductPageController productPageController = new ProductPageController(product);
-                ProductPage productPage =new ProductPage(product.getName(),this);
-                productPage.show();
-                productPage.run();
-                //TODO Product Page , Exception and more!!!
+                Product product = null;
+                try {
+                    product = AllProductsPanelController.goToProductPage(productId);
+                    ProductPageController productPageController = new ProductPageController(product);
+                    ProductPage productPage =new ProductPage(product.getName(),this);
+                    productPage.show();
+                    productPage.run();
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }

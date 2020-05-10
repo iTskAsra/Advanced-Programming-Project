@@ -45,7 +45,7 @@ public class SetDataToDatabase {
     }
 
     public static void setSale(Sale sale) {
-        String path = "Resources/Sales"+ sale.getSaleCode() + ".json";
+        String path = "Resources/Sales/"+ sale.getSaleCode() + ".json";
         File file = new File(path);
         try {
             FileWriter fileWriter = new FileWriter(file);

@@ -71,23 +71,21 @@ public class CartController {
         return getCartProducts();
     }
 
-    public static void increaseProduct(int productId) {
+    public static void increaseProduct(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NotEnoughNumberAvailableException {
         for (Product i : getCartProducts().keySet()) {
-            //Product temp = GetDataFromDatabase.getProduct(i.getProductId());
             if (i.getProductId() == productId) {
                 if (i.getAvailability() >= cartProducts.get(i) + 1) {
                     cartProducts.put(i, cartProducts.get(i) + 1);
                 } else {
-                    //TODO Error
+                    throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
                 }
             }
         }
-        //TODO Error
+        throw new ExceptionsLibrary.NoProductException();
     }
 
-    public static void decreaseProduct(int productId) {
+    public static void decreaseProduct(int productId) throws ExceptionsLibrary.NoProductException {
         for (Product i : getCartProducts().keySet()) {
-            //Product temp = GetDataFromDatabase.getProduct(i.getProductId());
             if (i.getProductId() == productId) {
                 if (cartProducts.get(i) == 1) {
                     cartProducts.remove(i);
@@ -96,7 +94,7 @@ public class CartController {
                 }
             }
         }
-        //TODO Error
+        throw new ExceptionsLibrary.NoProductException();
     }
 
     public static String viewCartProductDetails(int productId) throws ExceptionsLibrary.NoProductException {
