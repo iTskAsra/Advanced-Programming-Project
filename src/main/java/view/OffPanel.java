@@ -52,7 +52,7 @@ public class OffPanel extends Menu {
 
             @Override
             public void run() {
-                int productId = Integer.parseInt(Menu.scanner.nextLine());
+                int productId = Integer.parseInt(Main.scanInput("int"));
                 Product product = null;
                 try {
                     product = AllProductsPanelController.goToProductPage(productId);

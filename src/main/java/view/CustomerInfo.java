@@ -56,12 +56,12 @@ public class CustomerInfo extends Menu {
 
             @Override
             public void run(){
-                String fields = Menu.scanner.nextLine();
+                String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String,String> editedData = new HashMap<>();
                 for (String i : splitFields){
                     System.out.printf("Enter new %s\n",i.substring(0, 1).toUpperCase() + i.substring(1));
-                    String newValue = Menu.scanner.nextLine();
+                    String newValue = Main.scanInput("String");
                     editedData.put(i,newValue);
                 }
                 try {

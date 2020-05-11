@@ -75,12 +75,10 @@ public class RegisterAndLogin {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                MessagesLibrary.messagesLibrary(8);
             } else {
                 try (FileWriter fileWriter = new FileWriter(file)) {
                     fileWriter.write(dataToRegister);
                     fileWriter.close();
-                    MessagesLibrary.messagesLibrary(1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -116,7 +114,6 @@ public class RegisterAndLogin {
         Account account = GetDataFromDatabase.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
-                MessagesLibrary.messagesLibrary(2);
                 if (account.getRole().equals("Customer")) {
                     CustomerController customerController = new CustomerController((Customer) account);
                     return account.getRole();

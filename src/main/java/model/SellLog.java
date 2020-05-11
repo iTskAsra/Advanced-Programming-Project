@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class SellLog {
@@ -9,18 +10,18 @@ public class SellLog {
     private String logDate;
     private double value;
     private double discountApplied;
-    private ArrayList<Product> logProducts;
-    private Customer buyerName;
+    private HashMap<Product,Integer> logProducts;
+    private Customer buyer;
     private String deliveryCondition;
 
-    public SellLog(String logDate, double value, double discountApplied, ArrayList<Product> logProducts, Customer buyerName, String deliveryCondition) {
+    public SellLog(String logDate, double value, double discountApplied, HashMap<Product,Integer> logProducts, Customer buyer, String deliveryCondition) {
         Random random = new Random();
         this.logId = random.nextInt(10000);
         this.logDate = logDate;
         this.value = value;
         this.discountApplied = discountApplied;
         this.logProducts = logProducts;
-        this.buyerName = buyerName;
+        this.buyer = buyer;
         this.deliveryCondition = deliveryCondition;
     }
 
@@ -56,20 +57,20 @@ public class SellLog {
         this.discountApplied = discountApplied;
     }
 
-    public ArrayList<Product> getLogProducts() {
+    public HashMap<Product,Integer> getLogProducts() {
         return logProducts;
     }
 
-    public void setLogProducts(ArrayList<Product> logProducts) {
+    public void setLogProducts(HashMap<Product,Integer> logProducts) {
         this.logProducts = logProducts;
     }
 
-    public Customer getBuyerName() {
-        return buyerName;
+    public Customer getBuyer() {
+        return buyer;
     }
 
-    public void setBuyerName(Customer buyerName) {
-        this.buyerName = buyerName;
+    public void setBuyer(Customer buyer) {
+        this.buyer = buyer;
     }
 
     public String getDeliveryCondition() {

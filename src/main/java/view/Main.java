@@ -34,6 +34,37 @@ public class Main {
             return "Admin";
         }
         else return null;
-
     }
+
+    public static String scanInput(String type){
+        switch (type) {
+            case "String":
+                String temp = Menu.scanner.nextLine();
+                return temp;
+            case "int":
+                try {
+                    String tempIntString = Menu.scanner.nextLine();
+                    int tempInt = Integer.parseInt(tempIntString);
+                    return tempIntString;
+                }
+                catch (Exception e){
+                    System.out.println("Please enter a valid integer:");
+                    return scanInput("int");
+                }
+            case "double":
+                try {
+                    String tempDoubleString = Menu.scanner.nextLine();
+                    double tempDouble = Double.parseDouble(tempDoubleString);
+                    return tempDoubleString;
+                }
+                catch (Exception e){
+                    System.out.println("Please enter a valid double:");
+                    return scanInput("double");
+                }
+            default:
+                System.out.println("Enter again:");
+                return scanInput("String");
+        }
+    }
+
 }

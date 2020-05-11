@@ -62,7 +62,7 @@ public class ManageUsersMenu extends Menu {
 
             @Override
             public void run() {
-                String username = Menu.scanner.nextLine();
+                String username = Main.scanInput("String");
                 try {
                     AdminController.deleteUser(username);
                     System.out.println("Deleted!");
@@ -85,19 +85,19 @@ public class ManageUsersMenu extends Menu {
             @Override
             public void run() {
                 System.out.println("Enter Username:");
-                String username = scanner.nextLine();
+                String username = Main.scanInput("String");
                 System.out.println("Enter Password:");
-                String password = scanner.nextLine();
+                String password = Main.scanInput("String");
                 System.out.println("Enter First Name:");
-                String firstName = scanner.nextLine();
+                String firstName = Main.scanInput("String");
                 System.out.println("Enter Last Name:");
-                String lastName = scanner.nextLine();
+                String lastName = Main.scanInput("String");
                 System.out.println("Enter Email:");
-                String email = scanner.nextLine();
+                String email = Main.scanInput("String");
                 System.out.println("Enter Phone Number:");
-                String phoneNumber = scanner.nextLine();
+                String phoneNumber = Main.scanInput("String");
                 System.out.println("Enter Credit:");
-                double credit = Double.parseDouble(scanner.nextLine());
+                double credit = Double.parseDouble(Main.scanInput("double"));
                 Admin admin = new Admin(username, password, "Admin", firstName, lastName, email, phoneNumber, null, credit, null);
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 String data = gson.toJson(admin);
@@ -124,7 +124,7 @@ public class ManageUsersMenu extends Menu {
 
             @Override
             public void run() {
-                String username = Menu.scanner.nextLine();
+                String username = Main.scanInput("String");
                 String data = null;
                 try {
                     data = AdminController.showUserDetails(username);

@@ -1,9 +1,6 @@
 package view;
 
-import controller.AdminController;
-import controller.AllProductsPanelController;
-import controller.ExceptionsLibrary;
-import controller.ProductPageController;
+import controller.*;
 import model.Category;
 import model.Feature;
 import model.Product;
@@ -67,11 +64,11 @@ public class AllProductsPanel extends Menu {
                 ArrayList<Product> products = null;
                 try {
                     products = AllProductsPanelController.showProducts();
-                    System.out.printf("Results :\n%s","-".repeat(60));
+                    System.out.printf("Results :\n%s\n","-".repeat(60));
                     for (Product i : products){
-                        System.out.printf("%-40s%s%d%s%s%s%d\n",i.getName()," ".repeat(10),i.getAvailability()," ".repeat(10),String.valueOf(i.getPrice())," ".repeat(10),i.getProductId());
+                        System.out.printf("%-20s%s%d%s%s%s%d\n",i.getName()," ".repeat(10),i.getAvailability()," ".repeat(10),String.valueOf(i.getPrice())," ".repeat(10),i.getProductId());
                     }
-                    System.out.printf("%s","-".repeat(60));
+                    System.out.printf("%s\n","-".repeat(60));
                     getParentMenu().show();
                     getParentMenu().run();
                 } catch (ExceptionsLibrary.NoProductException e) {
@@ -91,12 +88,12 @@ public class AllProductsPanel extends Menu {
 
             @Override
             public void run() {
-                int productId = Integer.parseInt(Menu.scanner.nextLine());
+                int productId = Integer.parseInt(Main.scanInput("int"));
                 Product product = null;
                 try {
                     product = AllProductsPanelController.goToProductPage(productId);
                     ProductPageController productPageController = new ProductPageController(product);
-                    ProductPage productPage =new ProductPage(product.getName(),this);
+                    ProductPage productPage =new ProductPage(product.getName(),this.getParentMenu());
                     productPage.show();
                     productPage.run();
                 } catch (ExceptionsLibrary.NoProductException e) {

@@ -21,6 +21,43 @@ public class RegisterAndLoginPanel extends Menu {
         this.setSubmenus(submenus);
     }
 
+    @Override
+    public void show(){
+        System.out.println(this.name + " :");
+
+        for(int i = 1 ; i <= this.submenus.size() ; i++){
+            System.out.println(i + ". " + this.submenus.get(i).getName());
+        }
+
+        if (this.parentMenu != null)
+            System.out.println((submenus.size() + 1) + ". Back");
+        else
+            System.out.println((submenus.size() + 1) + ". Exit");
+    }
+
+    @Override
+    public void run(){
+        Menu nextMenu = null;
+        int chosenNum = Integer.parseInt(Main.scanInput("int"));
+        if(chosenNum > this.submenus.size() + 1 || chosenNum < 1){
+            System.out.println("Please select a valid number:");
+            this.run();
+        }
+
+        if(chosenNum == this.submenus.size() + 1){
+            if(this.parentMenu == null){
+                System.exit(1);
+            }
+            else
+                nextMenu = this.parentMenu;
+        }
+        else
+            nextMenu = this.submenus.get(chosenNum);
+        nextMenu.update();
+        nextMenu.show();
+        nextMenu.run();
+    }
+
     protected Menu getRegisterMenu() {
         return new Menu("Register",this) {
             @Override
@@ -34,29 +71,31 @@ public class RegisterAndLoginPanel extends Menu {
 
             @Override
             public void run() {
-                int chosenNumber = Integer.parseInt(scanner.nextLine());
+                int chosenNumber = Integer.parseInt(Main.scanInput("int"));
                 if (chosenNumber == 1){
                     //TODO check username and password
                     //TODO check credit
+
                     System.out.println("Enter Username:");
-                    String username = scanner.nextLine();
+                    String username = Main.scanInput("String");
                     System.out.println("Enter Password:");
-                    String password = scanner.nextLine();
+                    String password = Main.scanInput("String");
                     System.out.println("Enter First Name:");
-                    String firstName = scanner.nextLine();
+                    String firstName = Main.scanInput("String");
                     System.out.println("Enter Last Name:");
-                    String lastName = scanner.nextLine();
+                    String lastName = Main.scanInput("String");
                     System.out.println("Enter Email:");
-                    String email = scanner.nextLine();
+                    String email = Main.scanInput("String");
                     System.out.println("Enter Phone Number:");
-                    String phoneNumber = scanner.nextLine();
+                    String phoneNumber = Main.scanInput("String");
                     System.out.println("Enter Credit:");
-                    double credit = Double.parseDouble(scanner.nextLine());
+                    double credit = Double.parseDouble(Main.scanInput("double"));
                     Customer customer = new Customer(username,password,"Customer",firstName,lastName,email,phoneNumber,null,credit,null);
                     Gson gson = new GsonBuilder().serializeNulls().create();
                     String data = gson.toJson(customer);
                     try {
                         RegisterAndLogin.register(data);
+                        System.out.println("Registered!");
                         getParentMenu().show();
                         getParentMenu().run();
                     }
@@ -68,26 +107,27 @@ public class RegisterAndLoginPanel extends Menu {
                 else if (chosenNumber == 2){
                     //TODO check username and password
                     System.out.println("Enter Username:");
-                    String username = scanner.nextLine();
+                    String username = Main.scanInput("String");
                     System.out.println("Enter Password:");
-                    String password = scanner.nextLine();
+                    String password = Main.scanInput("String");
                     System.out.println("Enter First Name:");
-                    String firstName = scanner.nextLine();
+                    String firstName = Main.scanInput("String");
                     System.out.println("Enter Last Name:");
-                    String lastName = scanner.nextLine();
+                    String lastName = Main.scanInput("String");
                     System.out.println("Enter Email:");
-                    String email = scanner.nextLine();
+                    String email = Main.scanInput("String");
                     System.out.println("Enter Phone Number:");
-                    String phoneNumber = scanner.nextLine();
+                    String phoneNumber = Main.scanInput("String");
                     System.out.println("Enter Credit:");
-                    double credit = Double.parseDouble(scanner.nextLine());
+                    double credit = Double.parseDouble(Main.scanInput("double"));
                     System.out.println("Enter Company Name:");
-                    String company = scanner.nextLine();
+                    String company = Main.scanInput("String");
                     Seller seller = new Seller(username,password,"Seller",firstName,lastName,email,phoneNumber,null,credit,company,null,null,null);
                     Gson gson = new GsonBuilder().serializeNulls().create();
                     String data = gson.toJson(seller);
                     try {
                         RegisterAndLogin.register(data);
+                        System.out.println("Request sent!");
                         getParentMenu().show();
                         getParentMenu().run();
                     }
@@ -97,24 +137,25 @@ public class RegisterAndLoginPanel extends Menu {
                 } else if (chosenNumber == 3 && new File("Resources/Accounts/Admin").listFiles().length == 0) {
                     //TODO check username and password
                     System.out.println("Enter Username:");
-                    String username = scanner.nextLine();
+                    String username = Main.scanInput("String");
                     System.out.println("Enter Password:");
-                    String password = scanner.nextLine();
+                    String password = Main.scanInput("String");
                     System.out.println("Enter First Name:");
-                    String firstName = scanner.nextLine();
+                    String firstName = Main.scanInput("String");
                     System.out.println("Enter Last Name:");
-                    String lastName = scanner.nextLine();
+                    String lastName = Main.scanInput("String");
                     System.out.println("Enter Email:");
-                    String email = scanner.nextLine();
+                    String email = Main.scanInput("String");
                     System.out.println("Enter Phone Number:");
-                    String phoneNumber = scanner.nextLine();
+                    String phoneNumber = Main.scanInput("String");
                     System.out.println("Enter Credit:");
-                    double credit = Double.parseDouble(scanner.nextLine());
+                    double credit = Double.parseDouble(Main.scanInput("double"));
                     Admin admin = new Admin(username,password,"Admin",firstName,lastName,email,phoneNumber,null,credit,null);
                     Gson gson = new GsonBuilder().serializeNulls().create();
                     String data = gson.toJson(admin);
                     try {
                         RegisterAndLogin.register(data);
+                        System.out.println("Registered!");
                         getParentMenu().show();
                         getParentMenu().run();
                     }
@@ -139,10 +180,10 @@ public class RegisterAndLoginPanel extends Menu {
             public void show() {
                 System.out.println("Enter Username:");
                 //TODO check if username is valid
-                String username = Menu.scanner.nextLine();
-                System.out.println("Enter Username:");
+                String username = Main.scanInput("String");
+                System.out.println("Enter Password:");
                 //TODO check if password is valid
-                String password = Menu.scanner.nextLine();
+                String password = Main.scanInput("String");
                 dataToSend.put("username",username);
                 dataToSend.put("password", password);
             }
@@ -151,9 +192,10 @@ public class RegisterAndLoginPanel extends Menu {
             public void run() {
                 try {
                     RegisterAndLogin.login(dataToSend);
-                    Menu nextMenu = new MainMenu();
-                    nextMenu.show();
-                    nextMenu.run();
+                    System.out.println("Logged in!");
+                    getParentMenu().getParentMenu().update();
+                    getParentMenu().getParentMenu().show();
+                    getParentMenu().getParentMenu().run();
                 }
                 catch (ExceptionsLibrary.WrongUsernameException e){
                     System.out.println(e.getMessage());

@@ -184,8 +184,8 @@ public class CartController {
                 for (Product j : productSellers.get(i)){
                     price+=j.getPrice();
                 }
-                SellLog sellLog = new SellLog(dateNow, price, getSaleDiscount(),productSellers.get(i),cartCustomer,receiverInfo);
-                i.getSellerLogs().add(sellLog);
+                //SellLog sellLog = new SellLog(dateNow, price, getSaleDiscount(),productSellers.get(i),cartCustomer,receiverInfo);
+                //i.getSellerLogs().add(sellLog);
                 i.setCredit(i.getCredit()+price);//TODO calculate off
                 SetDataToDatabase.setAccount(i);
             }

@@ -37,8 +37,17 @@ public class Digest extends Menu {
             System.out.println(i + ". " + this.submenus.get(i).getName());
         }
 
-        if (this.parentMenu != null) {
-            System.out.println((submenus.size() + 1) + ". Back");
+        if (Main.checkLoggedIn() !=null){
+            System.out.println((submenus.size() + 1) + ". Logout");
+        }
+        else {
+            System.out.println((submenus.size() + 1) + ". Login or Register");
+        }
+
+        if (this.parentMenu != null)
+            System.out.println((submenus.size() + 2) + ". Back");
+        else {
+            System.out.println((submenus.size() + 2) + ". Exit");
         }
     }
 
@@ -62,7 +71,7 @@ public class Digest extends Menu {
 
             @Override
             public void run() {
-                int number = Integer.parseInt(Menu.scanner.nextLine());
+                int number = Integer.parseInt(Main.scanInput("int"));
                 if (number>sellerList.size()+1||number<0){
                     System.out.println("Enter a valid number");
                 }

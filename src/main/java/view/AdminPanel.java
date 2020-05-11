@@ -2,9 +2,7 @@ package view;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controller.AdminController;
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
+import controller.*;
 import model.*;
 
 import java.util.ArrayList;
@@ -22,8 +20,26 @@ public class AdminPanel extends Menu {
         submenus.put(6,new ManageSalesMenu("Sales Menu",this));
         submenus.put(7, new ManageRequestsMenu("Requests Menu",this));
         submenus.put(8,new ManageCategoriesMenu("Categories Menu",this));
-
+        submenus.put(submenus.size()+1,help());
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("You can manage users, products and categories,\nhandle requests and sales and edit your info.\n");
+                System.out.println("------------------------------");
+
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu createDiscountCode() {
@@ -36,21 +52,21 @@ public class AdminPanel extends Menu {
             @Override
             public void run() {
                 System.out.println("Enter start date : (in yyyy-MM-dd HH:mm format)");
-                String startDate = Menu.scanner.nextLine();
+                String startDate = Main.scanInput("String");
                 System.out.println("Enter end date : (in yyyy-MM-dd HH:mm format)");
-                String endDate = Menu.scanner.nextLine();
+                String endDate = Main.scanInput("String");
                 System.out.println("Enter discount percent :");
-                String percentString = Menu.scanner.nextLine();
+                String percentString = Main.scanInput("double");
                 double percent = Double.parseDouble(percentString);
                 System.out.println("Enter maximum discount amount :");
-                String maximumDiscountString = Menu.scanner.nextLine();
+                String maximumDiscountString = Main.scanInput("double");
                 double maximumDiscount = Double.parseDouble(maximumDiscountString);
                 System.out.println("Enter valid times :");
-                String validTimesString = Menu.scanner.nextLine();
+                String validTimesString = Main.scanInput("int");
                 int validTimes = Integer.parseInt(validTimesString);
                 ArrayList<Account> saleAccounts = new ArrayList<>();
                 System.out.println("Enter usernames : (separate by ,)");
-                String users = Menu.scanner.nextLine();
+                String users = Main.scanInput("String");
                 String[] userList = users.split("\\s*,\\s*");
                 for (String i : userList){
                     Account account = null;
@@ -103,12 +119,12 @@ public class AdminPanel extends Menu {
 
             @Override
             public void run() {
-                String fields = Menu.scanner.nextLine();
+                String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String,String> editedData = new HashMap<>();
                 for (String i : splitFields){
                     System.out.printf("Enter new %s\n",i.substring(0, 1).toUpperCase() + i.substring(1));
-                    String newValue = Menu.scanner.nextLine();
+                    String newValue = Main.scanInput("String");
                     editedData.put(i,newValue);
                 }
                 try {
@@ -117,6 +133,8 @@ public class AdminPanel extends Menu {
                 } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
                     System.out.println(noFeatureWithThisName.getMessage());
                 } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.ChangeUsernameException e) {
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();

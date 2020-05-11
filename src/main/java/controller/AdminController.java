@@ -3,7 +3,6 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
-import view.MessagesLibrary;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -37,9 +36,12 @@ public class AdminController {
         return data;
     }
 
-    public static void editAdminInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException {
+    public static void editAdminInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.ChangeUsernameException {
         Admin admin = (Admin) GetDataFromDatabase.getAccount(getAdmin().getUsername());
         for (String i : dataToEdit.keySet()) {
+            if (i.equals("username")){
+                throw new ExceptionsLibrary.ChangeUsernameException();
+            }
             try {
                 Field field = Admin.class.getSuperclass().getDeclaredField(i);
                 field.setAccessible(true);
@@ -82,13 +84,13 @@ public class AdminController {
             String reuestData = gson.toJson(request);
             return reuestData;
         } else {
-            MessagesLibrary.errorLibrary(8);
-            return null;
+            throw new ExceptionsLibrary.NoRequestException();
         }
 
     }
 
     public static void processRequest(int requestId, boolean acceptStatus) throws ExceptionsLibrary.NoRequestException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.UsernameAlreadyExists {
+        //TODO check exceptions and messages in process request
         Request request = GetDataFromDatabase.getRequest(requestId);
         Gson gson = new GsonBuilder().serializeNulls().create();
         switch (request.getRequestType()) {
@@ -105,18 +107,12 @@ public class AdminController {
                     seller.getSellerOffs().add(off);
                     try {
                         String offPath = "Resources/Offs/" + off.getOffId() + ".json";
-                        String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
                         File file = new File(offPath);
                         file.createNewFile();
                         FileWriter fileWriter = new FileWriter(file);
                         fileWriter.write(offDetails);
                         fileWriter.close();
-                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                        String sellerData = gsonSeller.toJson(seller);
-                        fileWriterSeller.write(sellerData);
-                        fileWriterSeller.close();
-                        MessagesLibrary.messagesLibrary(4);
+                        SetDataToDatabase.setAccount(seller);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
@@ -150,18 +146,12 @@ public class AdminController {
                         FileWriter fileWriter = new FileWriter(offPath);
                         fileWriter.write(offDetails);
                         fileWriter.close();
-                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                        String sellerData = gsonSeller.toJson(seller);
-                        fileWriterSeller.write(sellerData);
-                        fileWriterSeller.close();
-                        MessagesLibrary.messagesLibrary(4);
+                        SetDataToDatabase.setAccount(seller);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     } catch (IOException e) {
-                        MessagesLibrary.errorLibrary(9);
-                        e.printStackTrace();
+                        throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
                     String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
@@ -182,18 +172,12 @@ public class AdminController {
                     seller.getSellerProducts().add(product);
                     try {
                         String productPath = "Resources/Products/" + product.getProductId() + ".json";
-                        String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
                         File file = new File(productPath);
                         file.createNewFile();
                         FileWriter fileWriter = new FileWriter(file);
                         fileWriter.write(productDetails);
                         fileWriter.close();
-                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                        String sellerData = gsonSeller.toJson(seller);
-                        fileWriterSeller.write(sellerData);
-                        fileWriterSeller.close();
-                        MessagesLibrary.messagesLibrary(4);
+                        SetDataToDatabase.setAccount(seller);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
@@ -226,18 +210,12 @@ public class AdminController {
                         FileWriter fileWriter = new FileWriter(productPath);
                         fileWriter.write(productDetails);
                         fileWriter.close();
-                        FileWriter fileWriterSeller = new FileWriter(sellerPath);
-                        Gson gsonSeller = new GsonBuilder().serializeNulls().create();
-                        String sellerData = gsonSeller.toJson(seller);
-                        fileWriterSeller.write(sellerData);
-                        fileWriterSeller.close();
-                        MessagesLibrary.messagesLibrary(4);
+                        SetDataToDatabase.setAccount(seller);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     } catch (IOException e) {
-                        MessagesLibrary.errorLibrary(9);
-                        e.printStackTrace();
+                        throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
                     String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
@@ -258,13 +236,11 @@ public class AdminController {
                             String sellerData = gsonSeller.toJson(seller);
                             fileWriterSeller.write(sellerData);
                             fileWriterSeller.close();
-                            MessagesLibrary.messagesLibrary(4);
                             String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                             File fileRequest = new File(requestPath);
                             fileRequest.delete();
                         } catch (IOException e) {
-                            MessagesLibrary.errorLibrary(9);
-                            e.printStackTrace();
+                            throw new ExceptionsLibrary.NoAccountException();
                         }
                     } else {
                         throw new ExceptionsLibrary.UsernameAlreadyExists();
@@ -292,7 +268,16 @@ public class AdminController {
         ArrayList<Sale> allSales = new ArrayList<>();
         String path = "Resources/Sales";
         File file = new File(path);
-        for (File i : file.listFiles()) {
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : file.listFiles(fileFilter)) {
             String fileName = i.getName();
             String saleCode = fileName.replace(".json", "");
             Sale sale = GetDataFromDatabase.getSale(saleCode);
@@ -340,7 +325,7 @@ public class AdminController {
             sale.setSaleCode(Sale.getRandomSaleCode());
         }
         for (Account i : sale.getSaleAccounts()) {
-            if (i.getSaleCodes() == null){
+            if (i.getSaleCodes() == null) {
                 i.setSaleCodes(new ArrayList<>());
             }
             i.getSaleCodes().add(sale);
@@ -661,7 +646,7 @@ public class AdminController {
             String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
             File file = new File(path);
             file.delete();
-        } catch (ExceptionsLibrary.NoSaleException e){
+        } catch (ExceptionsLibrary.NoSaleException e) {
             throw new ExceptionsLibrary.NoSaleException();
         }
 
@@ -692,7 +677,16 @@ public class AdminController {
     public static boolean checkSaleCode(String saleCode) {
         String path = "Resources/Sales";
         File folder = new File(path);
-        for (File i : folder.listFiles()) {
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String fileSaleCode = fileName.replace(".json", "");
             if (saleCode.equals(fileSaleCode)) {

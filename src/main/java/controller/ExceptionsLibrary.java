@@ -104,6 +104,12 @@ public class  ExceptionsLibrary {
         }
     }
 
+    public static class ChangeUsernameException extends Exception{
+        public ChangeUsernameException() {
+            super("You can not change username of your account!");
+        }
+    }
+
 
 
 }

@@ -24,7 +24,7 @@ public class ManageAllProducts extends Menu {
 
             @Override
             public void run() {
-                int productId = Integer.parseInt(Menu.scanner.nextLine());
+                int productId = Integer.parseInt(Main.scanInput("int"));
                 try {
                     AdminController.deleteProduct(productId);
                     System.out.println("Removed Product!");

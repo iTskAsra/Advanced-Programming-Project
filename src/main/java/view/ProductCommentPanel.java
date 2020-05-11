@@ -25,9 +25,9 @@ public class ProductCommentPanel extends Menu {
             @Override
             public void run() {
                 System.out.println("Enter title :");
-                String title =Menu.scanner.nextLine();
+                String title =Main.scanInput("String");
                 System.out.println("Enter text :");
-                String text =Menu.scanner.nextLine();
+                String text =Main.scanInput("String");
                 ProductPageController.addComment(title,text);
             }
         };

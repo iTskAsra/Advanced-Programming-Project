@@ -35,7 +35,7 @@ public class CustomerLogs extends Menu {
 
             @Override
             public void run(){
-                int LogID = Integer.parseInt(Menu.scanner.nextLine());
+                int LogID = Integer.parseInt(Main.scanInput("int"));
                 String LogDetail = CustomerController.showCustomerLogDetail(LogID);
                 if(LogDetail == null){
                     System.out.println("You Have No Order with such a ID");
@@ -61,9 +61,9 @@ public class CustomerLogs extends Menu {
 
             @Override
             public void run(){
-                int productID = Integer.parseInt(Menu.scanner.nextLine());
+                int productID = Integer.parseInt(Main.scanInput("int"));
                 System.out.println("Enter the Rate in the scale of 1-5");
-                int productRate = Integer.parseInt(Menu.scanner.nextLine());
+                int productRate = Integer.parseInt(Main.scanInput("int"));
                 try {
                     CustomerController.rateProduct(productID , productRate);
                 } catch (ExceptionsLibrary.NoProductException e) {

@@ -68,7 +68,7 @@ public class SortPanel extends Menu {
 
             @Override
             public void run() {
-                String sortName = Menu.scanner.nextLine();
+                String sortName = Main.scanInput("String");
                 try {
                     AllProductsPanelController.sortAnAvailableSort(sortName);
                 } catch (ExceptionsLibrary.NoSortWithThisName noSortWithThisName) {

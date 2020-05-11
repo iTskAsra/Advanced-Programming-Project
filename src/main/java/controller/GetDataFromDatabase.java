@@ -8,6 +8,7 @@ import view.MessagesLibrary;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -141,12 +142,17 @@ public class GetDataFromDatabase {
             Scanner scanner;
             scanner = new Scanner(fileProduct);
             scanner.useDelimiter("\\z");
-            String fileData = scanner.next();
+            //TODO replace readAllBytes with scanner
+            //String fileData = scanner.next();
+            String fileData = "";
+            fileData = new String(Files.readAllBytes(Paths.get(requestPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Request request = gson.fromJson(fileData, Request.class);
             scanner.close();
             return request;
         } catch (FileNotFoundException e) {
+            throw new ExceptionsLibrary.NoRequestException();
+        } catch (IOException e) {
             throw new ExceptionsLibrary.NoRequestException();
         }
     }
@@ -214,7 +220,8 @@ public class GetDataFromDatabase {
                 Scanner scanner;
                 scanner = new Scanner(i);
                 scanner.useDelimiter("\\z");
-                String fileData = scanner.next();
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Seller seller = gson.fromJson(fileData, Seller.class);
                 for (Product j : seller.getSellerProducts()){
@@ -224,6 +231,8 @@ public class GetDataFromDatabase {
                 }
                 scanner.close();
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

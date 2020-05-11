@@ -30,12 +30,12 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void run() {
-                int requestId = Integer.parseInt(Menu.scanner.nextLine());
+                int requestId = Integer.parseInt(Main.scanInput("int"));
                 try {
                     Request request = GetDataFromDatabase.getRequest(requestId);
                     System.out.printf("Request ID : %d\nRequest Type : %s\n",request.getRequestId(),request.getRequestType());
                     System.out.println("Accept it or not? (yes or no)");
-                    String status = Menu.scanner.nextLine();
+                    String status = Main.scanInput("String");
                     if (status.trim().equalsIgnoreCase("yes")) {
                         try {
                             AdminController.processRequest(requestId, true);
@@ -86,7 +86,7 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void run() {
-                int requestId = Integer.parseInt(Menu.scanner.nextLine());
+                int requestId = Integer.parseInt(Main.scanInput("int"));
                 String data = null;
                 try {
                     data = AdminController.showRequest(requestId);Gson gson = new GsonBuilder().serializeNulls().create();
@@ -113,8 +113,13 @@ public class ManageRequestsMenu extends Menu {
                 ArrayList<Request> allRequests = null;
                 try {
                     allRequests = AdminController.showAdminRequests();
-                    for (Request i : allRequests) {
-                        System.out.printf("%-15s%s%20s%s%20s\n", i.getRequestId(), " ".repeat(5), i.getRequestType(), " ".repeat(5), i.getRequestCondition());
+                    if (allRequests.size() != 0) {
+                        for (Request i : allRequests) {
+                            System.out.printf("%-15s%s%20s%s%20s\n", i.getRequestId(), " ".repeat(5), i.getRequestType(), " ".repeat(5), i.getRequestCondition());
+                        }
+                    }
+                    else {
+                        System.out.println("No request left!");
                     }
                 } catch (ExceptionsLibrary.NoRequestException e) {
                     System.out.println(e.getMessage());

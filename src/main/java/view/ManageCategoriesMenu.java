@@ -32,7 +32,7 @@ public class ManageCategoriesMenu extends Menu {
 
             @Override
             public void run() {
-                String categoryName = Menu.scanner.nextLine();
+                String categoryName = Main.scanInput("String");
                 try {
                     AdminController.deleteCategory(categoryName);
                     System.out.println("Removed Category!");
@@ -56,9 +56,9 @@ public class ManageCategoriesMenu extends Menu {
             @Override
             public void run() {
                 System.out.println("Enter category name :");
-                String name = Menu.scanner.nextLine();
+                String name = Main.scanInput("String");
                 System.out.println("Enter category feature : (separate by comma)");
-                String features =  Menu.scanner.nextLine();
+                String features =  Main.scanInput("String");
                 String[] featuresList = features.split("\\s*,\\s*");
                 ArrayList<Feature> categoryFeatures = new ArrayList<>();
                 for (String i : featuresList){
@@ -90,9 +90,9 @@ public class ManageCategoriesMenu extends Menu {
             @Override
             public void run() {
                 System.out.println("Enter Category name :");
-                String categoryName = Menu.scanner.nextLine();
+                String categoryName = Main.scanInput("String");
                 System.out.println("Enter Category fields to edit :");
-                String fields = Menu.scanner.nextLine();
+                String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String, String> editedData = new HashMap<>();
                 for (String i : splitFields) {
@@ -100,7 +100,7 @@ public class ManageCategoriesMenu extends Menu {
                     if (i.equalsIgnoreCase("features")) {
                         System.out.println("(Separate by comma)");
                     }
-                    String newValue = Menu.scanner.nextLine();
+                    String newValue = Main.scanInput("String");
                     editedData.put(i, newValue);
                 }
                 try {
@@ -141,7 +141,7 @@ public class ManageCategoriesMenu extends Menu {
                         System.out.printf("%s\n","-".repeat(30));
                     }
                 } catch (ExceptionsLibrary.NoCategoryException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();

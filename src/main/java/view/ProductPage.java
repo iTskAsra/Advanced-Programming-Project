@@ -34,7 +34,7 @@ public class ProductPage extends Menu {
 
             @Override
             public void run() {
-                int productId = Integer.parseInt(Menu.scanner.nextLine());
+                int productId = Integer.parseInt(Main.scanInput("int"));
                 String[] products = new String[0];
                 try {
                     products = ProductPageController.compare(productId);

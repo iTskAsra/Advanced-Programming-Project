@@ -31,9 +31,49 @@ public class MainMenu extends Menu {
         else {
             submenus.put(4,help());
         }
+        submenus.put(submenus.size()+1,new Cart("Cart",this));
 
         this.setSubmenus(submenus);
     }
+
+    @Override
+    public void show(){
+        System.out.println(this.name + " :");
+
+        for(int i = 1 ; i <= this.submenus.size() ; i++){
+            System.out.println(i + ". " + this.submenus.get(i).getName());
+        }
+
+        if (this.parentMenu != null)
+            System.out.println((submenus.size() + 1) + ". Back");
+        else
+            System.out.println((submenus.size() + 1) + ". Exit");
+    }
+
+    @Override
+    public void run(){
+
+        Menu nextMenu = null;
+        int chosenNum = Integer.parseInt(Main.scanInput("int"));
+        if(chosenNum > this.submenus.size() + 1 || chosenNum < 1){
+            System.out.println("Please select a valid number:");
+            this.run();
+        }
+
+        if(chosenNum == this.submenus.size() + 1){
+            if(this.parentMenu == null){
+                System.exit(1);
+            }
+            else
+                nextMenu = this.parentMenu;
+        }
+        else
+            nextMenu = this.submenus.get(chosenNum);
+        nextMenu.update();
+        nextMenu.show();
+        nextMenu.run();
+    }
+
 
     protected Menu help() {
         return new Menu("Help",this) {
@@ -47,9 +87,8 @@ public class MainMenu extends Menu {
 
             @Override
             public void run() {
-                Menu nextMenu = new MainMenu();
-                nextMenu.show();
-                nextMenu.run();
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }

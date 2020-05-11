@@ -3,7 +3,6 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
-import view.MessagesLibrary;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -42,9 +41,12 @@ public class SellerController {
         return data;
     }
 
-    public static void editSellerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName {
+    public static void editSellerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException {
         Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
         for (String i : dataToEdit.keySet()) {
+            if (i.equals("username")) {
+                throw new ExceptionsLibrary.ChangeUsernameException();
+            }
             try {
                 try {
                     Field field = Seller.class.getSuperclass().getDeclaredField(i);
@@ -76,16 +78,13 @@ public class SellerController {
         return getSeller().getCompanyName();
     }
 
-    public static String showSellerProducts() {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String data = gson.toJson(getSeller().getSellerProducts());
-        return data;
+    public static ArrayList<Product> showSellerProducts() throws ExceptionsLibrary.NoAccountException {
+        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        return seller.getSellerProducts();
     }
 
-    public static String showSellerLogs() {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String data = gson.toJson(getSeller().getSellerLogs());
-        return data;
+    public static ArrayList<SellLog> showSellerLogs() {
+        return getSeller().getSellerLogs();
     }
 
     public static void editProductRequest(int productId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFeatureWithThisName {
@@ -111,13 +110,9 @@ public class SellerController {
             Gson gsonProduct = new GsonBuilder().serializeNulls().create();
             product.setProductCondition(ProductOrOffCondition.PENDING_TO_EDIT);
             String editedProduct = gsonProduct.toJson(product);
-            Request request = new Request(editedProduct, RequestType.EDIT_PODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
+            Request request = new Request(editedProduct, RequestType.EDIT_PODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
             Gson gsonRequest = new GsonBuilder().serializeNulls().create();
             String requestDetails = gsonRequest.toJson(request);
-            if (!Files.exists(Paths.get("Resources/Requests"))) {
-                File folder = new File("Resources/Requests");
-                folder.mkdir();
-            }
             try {
                 String path = "Resources/Requests/" + request.getRequestId() + ".json";
                 FileWriter fileWriter = new FileWriter(path);
@@ -133,34 +128,20 @@ public class SellerController {
 
     public static void removeProduct(int productId) throws ExceptionsLibrary.NoProductException {
         Product product = GetDataFromDatabase.getProduct(productId);
-        if (product != null) {
-            Gson gsonProduct = new GsonBuilder().serializeNulls().create();
-            String path = "Resources/Products/" + product.getProductId() + ".json";
-            getSeller().getSellerProducts().remove(product);
-            File file = new File(path);
-            if (file.delete()) {
-                MessagesLibrary.messagesLibrary(3);
-            }
-            try {
-                String sellerPath = "Resources/Accounts/Seller/" + getSeller().getUsername() + ".json";
-                FileWriter fileWriter = new FileWriter(sellerPath);
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                String editedSeller = gson.toJson(getSeller());
-                fileWriter.write(editedSeller);
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            throw new ExceptionsLibrary.NoProductException();
-        }
+        String path = "Resources/Products/" + product.getProductId() + ".json";
+        getSeller().getSellerProducts().remove(product);
+        File file = new File(path);
+        file.delete();
+        SetDataToDatabase.setAccount(getSeller());
     }
 
-    public static void addProductRequest(String productDetails) {
-        Gson gsonProduct = new GsonBuilder().serializeNulls().create();
-        Product product = gsonProduct.fromJson(productDetails,Product.class);
-        product.setProductCondition(ProductOrOffCondition.PENDING_TO_CREATE);
-        Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
+    public static void addProductRequest(Product product, String category) throws ExceptionsLibrary.NoCategoryException {
+        product.setSeller(getSeller());
+        Category tempCategory = GetDataFromDatabase.getCategory(category);
+        product.setCategory(tempCategory);
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        String productDetails = gson.toJson(product);
+        Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
         Gson gsonRequest = new GsonBuilder().serializeNulls().create();
         if (!Files.exists(Paths.get("Resources/Requests"))) {
             File folder = new File("Resources/Requests");
@@ -186,8 +167,8 @@ public class SellerController {
     public static void editOffRequest(int offId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoFeatureWithThisName {
         Off off = GetDataFromDatabase.getOff(offId);
         if (off != null) {
-            for (Off i : getSeller().getSellerOffs()){
-                if (i.getOffId() == off.getOffId()){
+            for (Off i : getSeller().getSellerOffs()) {
+                if (i.getOffId() == off.getOffId()) {
                     for (String s : dataToEdit.keySet()) {
                         try {
                             Field field = Off.class.getDeclaredField(s);
@@ -205,7 +186,7 @@ public class SellerController {
                     off.setOffCondition(ProductOrOffCondition.PENDING_TO_EDIT);
                     Gson gsonOff = new GsonBuilder().serializeNulls().create();
                     String editedOff = gsonOff.toJson(off);
-                    Request request = new Request(editedOff, RequestType.EDIT_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
+                    Request request = new Request(editedOff, RequestType.EDIT_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
                     Gson gsonRequest = new GsonBuilder().serializeNulls().create();
                     String requestDetails = gsonRequest.toJson(request);
                     if (!Files.exists(Paths.get("Resources/Requests"))) {
@@ -228,12 +209,23 @@ public class SellerController {
         }
     }
 
-    public static void addOffRequest(String newOffDetails) {
+    public static void addOffRequest(Off off, String offProducts) throws ExceptionsLibrary.NoProductException {
         Gson gsonOff = new GsonBuilder().serializeNulls().create();
-        Off off = gsonOff.fromJson(newOffDetails,Off.class);
         off.setOffCondition(ProductOrOffCondition.PENDING_TO_CREATE);
+        ArrayList<Product> offProductsList = new ArrayList<>();
+        String[] productIds = offProducts.split("\\s*,\\s*");
+        for (String i : productIds){
+            try {
+                Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
+                offProductsList.add(temp);
+            }
+            catch (Exception e){
+                throw new ExceptionsLibrary.NoProductException();
+            }
+        }
+        off.setOffProducts(offProductsList);
         String offDetails = gsonOff.toJson(off);
-        Request request = new Request(offDetails, RequestType.ADD_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller());
+        Request request = new Request(offDetails, RequestType.ADD_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
         Gson gsonRequest = new GsonBuilder().serializeNulls().create();
         if (!Files.exists(Paths.get("Resources/Requests"))) {
             File folder = new File("Resources/Requests");
@@ -250,56 +242,53 @@ public class SellerController {
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(requestDetails);
             fileWriter.close();
-            MessagesLibrary.messagesLibrary(5);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static String showOffs() {
-        Gson gsonOffs = new GsonBuilder().serializeNulls().create();
-        String offs = gsonOffs.toJson(getSeller().getSellerOffs());
-        return offs;
+    public static ArrayList<Off> showOffs() throws ExceptionsLibrary.NoAccountException {
+        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        return seller.getSellerOffs();
     }
 
-    public static String showOffDetails(int offId) throws ExceptionsLibrary.NoOffException {
+    public static Off showOffDetails(int offId) throws ExceptionsLibrary.NoOffException {
         for (Off i : getSeller().getSellerOffs()) {
             if (i.getOffId() == offId) {
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                String offDetails = gson.toJson(i);
-                return offDetails;
+                return i;
             }
         }
         throw new ExceptionsLibrary.NoOffException();
     }
 
-    public static String showProductDetails(int productId) throws ExceptionsLibrary.NoProductException {
-        Product product = GetDataFromDatabase.getProduct(productId);
-        if (product != null) {
-            Gson gson = new GsonBuilder().serializeNulls().create();
-            String productDetails = gson.toJson(product);
-            return productDetails;
-        } else {
+    public static Product showProductDetails(int productId) throws ExceptionsLibrary.NoProductException {
+        Product product = null;
+        try {
+            product = GetDataFromDatabase.getProduct(productId);
+        } catch (ExceptionsLibrary.NoProductException e) {
             throw new ExceptionsLibrary.NoProductException();
         }
+        return product;
     }
 
-    public static String showProductBuyers(int productId) throws ExceptionsLibrary.NoProductException {
+    public static ArrayList<SellLog> showProductBuyers(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         Product product = GetDataFromDatabase.getProduct(productId);
-        if (product != null) {
-            Gson gson = new GsonBuilder().serializeNulls().create();
-            String productBuyers = gson.toJson(product.getProductBuyers());
-            return productBuyers;
-        } else {
-            throw new ExceptionsLibrary.NoProductException();
+        ArrayList<SellLog> buyersLogs = new ArrayList<>();
+        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        for (SellLog i : seller.getSellerLogs()) {
+            for (Product j : i.getLogProducts().keySet()) {
+                if (j.getProductId() == productId) {
+                    buyersLogs.add(i);
+                }
+            }
         }
+        return buyersLogs;
     }
 
     public static double showBalance() {
         return getSeller().getCredit();
     }
-
-
 
 
     public static ArrayList<Category> showCategories() throws ExceptionsLibrary.NoCategoryException {

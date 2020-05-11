@@ -15,7 +15,6 @@ public class Cart extends Menu {
     public Cart(String name, Menu parentMenu) {
         super("Cart", parentMenu);
         HashMap<Integer , Menu> submenus = new HashMap<>();
-
         submenus.put(1 , showProducts());
         submenus.put(2 , viewProduct());
         submenus.put(3 , increaseProduct());
@@ -23,7 +22,7 @@ public class Cart extends Menu {
         submenus.put(5 , showTotalPrice());
         submenus.put(6 , purchace());
 
-
+        this.setSubmenus(submenus);
     }
 
     private Menu showProducts() {
@@ -56,7 +55,7 @@ public class Cart extends Menu {
 
             @Override
             public void run(){
-                int productID = Integer.parseInt(Menu.scanner.nextLine());
+                int productID = Integer.parseInt(Main.scanInput("int"));
                 String productDetails = null;
                 try {
                     productDetails = CartController.viewCartProductDetails(productID);
@@ -86,7 +85,7 @@ public class Cart extends Menu {
 
             @Override
             public void run(){
-                int productID = Integer.parseInt(Menu.scanner.nextLine());
+                int productID = Integer.parseInt(Main.scanInput("int"));
                 try {
                     CartController.increaseProduct(productID);
                 } catch (ExceptionsLibrary.NoProductException e) {
@@ -110,7 +109,7 @@ public class Cart extends Menu {
 
         @Override
         public void run(){
-            int productID = Integer.parseInt(Menu.scanner.nextLine());
+            int productID = Integer.parseInt(Main.scanInput("int"));
             try {
                 CartController.decreaseProduct(productID);
             } catch (ExceptionsLibrary.NoProductException e) {

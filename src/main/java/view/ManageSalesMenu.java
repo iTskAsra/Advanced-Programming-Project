@@ -31,7 +31,7 @@ public class ManageSalesMenu extends Menu {
 
             @Override
             public void run() {
-                String saleCode = Menu.scanner.nextLine();
+                String saleCode = Main.scanInput("String");
                 try {
                     AdminController.removeSaleCode(saleCode);
                     System.out.println("Removed!");
@@ -54,13 +54,13 @@ public class ManageSalesMenu extends Menu {
 
             @Override
             public void run() {
-                String saleCode = Menu.scanner.nextLine();
-                String fields = Menu.scanner.nextLine();
+                String saleCode = Main.scanInput("String");
+                String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String,String> editedData = new HashMap<>();
                 for (String i : splitFields){
                     System.out.printf("Enter new %s\n",i.substring(0, 1).toUpperCase() + i.substring(1));
-                    String newValue = Menu.scanner.nextLine();
+                    String newValue = Main.scanInput("String");
                     editedData.put(i,newValue);
                 }
                 try {
@@ -84,7 +84,7 @@ public class ManageSalesMenu extends Menu {
 
             @Override
             public void run() {
-                String saleCode = Menu.scanner.nextLine();
+                String saleCode = Main.scanInput("String");
                 String data = null;
                 try {
                     data = AdminController.viewSaleCodeDetails(saleCode);

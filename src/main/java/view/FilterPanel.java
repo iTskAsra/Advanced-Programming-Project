@@ -26,7 +26,7 @@ public class FilterPanel extends Menu {
 
             @Override
             public void run() {
-                String filterName = Menu.scanner.nextLine();
+                String filterName = Main.scanInput("String");
                 try {
                     AllProductsPanelController.disableFilter(filterName);
                 } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
@@ -72,7 +72,7 @@ public class FilterPanel extends Menu {
 
             @Override
             public void run() {
-                String filterName = Menu.scanner.nextLine();
+                String filterName = Main.scanInput("String");
                 try {
                     AllProductsPanelController.filterAnAvailableFilter(filterName);
                 } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {

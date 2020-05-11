@@ -2,16 +2,84 @@ package view;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import controller.ExceptionsLibrary;
 import controller.SellerController;
-import model.Product;
-import model.SellLog;
+import model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class SellerPanel extends Menu {
     public SellerPanel(Menu parentMenu) {
         super("User Panel", parentMenu);
+        HashMap<Integer, Menu> submenus = new HashMap<>();
+        submenus.put(1,showSellerInfo());
+        submenus.put(2,editSellerInfo());
+        submenus.put(3,showSellerCompany());
+        submenus.put(4,showSellerLogs());
+        submenus.put(5,new ManageSellerProducts("Manage Products",this));
+        submenus.put(6,showCategories());
+        submenus.put(7,new ManageSellerOffs("Manage Offs", this));
+        submenus.put(8,showBalance());
+        this.setSubmenus(submenus);
+    }
+
+    private Menu editSellerInfo() {
+        return new Menu("Edit Info",this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + ":");
+            }
+
+            @Override
+            public void run() {
+                String fields = Main.scanInput("String");
+                String[] splitFields = fields.split("\\s*,\\s*");
+                HashMap<String,String> editedData = new HashMap<>();
+                for (String i : splitFields){
+                    System.out.printf("Enter new %s\n",i.substring(0, 1).toUpperCase() + i.substring(1));
+                    String newValue = Main.scanInput("String");
+                    editedData.put(i,newValue);
+                }
+                try {
+                    SellerController.editSellerInfo(editedData);
+                    System.out.println("Edited info!");
+                } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
+                    System.out.println(noFeatureWithThisName.getMessage());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.ChangeUsernameException e) {
+                    System.out.println(e.getMessage());
+                }
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
+    }
+
+    private Menu showSellerInfo() {
+        return new Menu("Seller Info",this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + ":");
+            }
+
+            @Override
+            public void run() {
+                String sellerData = null;
+                try {
+                    sellerData = SellerController.showSellerInfo();
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    Seller seller = gson.fromJson(sellerData, Seller.class);
+                    System.out.printf("Username : %s\nFirst Name : %s\nLast name : %s\nE-Mail : %s\nPhone Number : %s\n",seller.getUsername(),seller.getFirstName(),seller.getLastName(),seller.getEmail(),seller.getPhoneNumber());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                }
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu showBalance() {
@@ -23,23 +91,9 @@ public class SellerPanel extends Menu {
 
             @Override
             public void run() {
-                System.out.println(SellerController.showBalance());
+                System.out.printf("Balance : %.2f\n",SellerController.showBalance());
                 getParentMenu().show();
                 getParentMenu().run();
-            }
-        };
-    }
-
-    private Menu sell() {
-        return new Menu("Sell", this) {
-            @Override
-            public void show() {
-                super.show();
-            }
-
-            @Override
-            public void run() {
-                super.run();
             }
         };
     }
@@ -53,7 +107,8 @@ public class SellerPanel extends Menu {
 
             @Override
             public void run() {
-                System.out.println(SellerController.showSellerCompany());
+                String company = SellerController.showSellerCompany();
+                System.out.printf("Company : %s\n",company);
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -69,14 +124,16 @@ public class SellerPanel extends Menu {
 
             @Override
             public void run() {
-                String sellerLogsGson = controller.SellerController.showSellerLogs();
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                ArrayList<SellLog> sellerLogs = gson.fromJson(sellerLogsGson, ArrayList.class);
-                for (int i = 1; i <= sellerLogs.size(); i++) {
-                    System.out.println("*".repeat(50));
-                    System.out.printf("%d \nLog ID: %s\nDate: %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s\nDelivery Condition: \n", sellerLogs.get(i).getLogId(), sellerLogs.get(i).getLogDate(), sellerLogs.get(i).getValue(), sellerLogs.get(i).getDiscountApplied(), (sellerLogs.get(i).getBuyerName().getFirstName() + sellerLogs.get(i).getBuyerName().getLastName()), sellerLogs.get(i).getDeliveryCondition());
-                    System.out.printf("List Of Products:\n%d: %s\n", i, sellerLogs.get(i).getLogProducts().get(i).getName());
-                    System.out.println("*".repeat(50));
+                ArrayList<SellLog> sellerLogs = controller.SellerController.showSellerLogs();
+                for (SellLog i : sellerLogs){
+                    System.out.println("-".repeat(50));
+                    System.out.printf("Log ID : %d\nDate : %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s %s\nDelivery Condition: \n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), i.getBuyer().getFirstName() , i.getBuyer().getLastName(), i.getDeliveryCondition());
+                    for (Product j : i.getLogProducts().keySet()){
+                        System.out.println("-".repeat(40));
+                        System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPrice()*i.getLogProducts().get(j));
+                        System.out.println("-".repeat(40));
+                    }
+                    System.out.println("-".repeat(50));
                 }
                 getParentMenu().show();
                 getParentMenu().run();
@@ -84,29 +141,12 @@ public class SellerPanel extends Menu {
         };
     }
 
-    private Menu addProductRequest() {
-        return new Menu("Add Product Request", this) {
-            @Override
-            public void show() {
-                super.show();
-            }
-
-            @Override
-            public void run() {
-                super.run();
-            }
-        };
-    }
 
 
-    private Menu removeProductRequest() {
-        return new Menu("Remove Product Request", this) {
 
-        };
-    }
 
     private Menu showCategories() {
-        return new Menu("Categories", this) {
+        return new Menu("Show all categories",this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
@@ -114,28 +154,26 @@ public class SellerPanel extends Menu {
 
             @Override
             public void run() {
-                //String categoriesGson = SellerController.showCategories();
-                AllProductsPanel allProductPanel = new AllProductsPanel(this);
-                allProductPanel.viewCategories().show();
-                allProductPanel.viewCategories().run();
-            }
-        };
-    }
-
-    private Menu viewAndManageProducts() {
-        return new Menu("Products", this) {
-            String productsGson = controller.SellerController.showSellerProducts();
-            Gson gson = new GsonBuilder().serializeNulls().create();
-            ArrayList<Product> allProducts = gson.fromJson(productsGson, ArrayList.class);
-
-            @Override
-            public void show() {
-                System.out.println("*".repeat(50));
-                for (int i = 0; i < allProducts.size(); i++) {
-                    System.out.printf("Product's ID: %d\nProduct's Name: %s\n", i, allProducts.get(i).getProductId(), allProducts.get(i).getName());
-                    System.out.println("*".repeat(50));
+                ArrayList<Category> allCategories = null;
+                try {
+                    allCategories = SellerController.showCategories();
+                    for (Category i : allCategories){
+                        System.out.printf("%s\n","-".repeat(30));
+                        System.out.printf("Category name : %s\nFeatures:\n",i.getName());
+                        int featureCount = 1;
+                        for (Feature j : i.getFeatures()){
+                            System.out.printf("%d. %s\n",featureCount,j.getParameter());
+                            featureCount++;
+                        }
+                        System.out.printf("%s\n","-".repeat(30));
+                    }
+                } catch (ExceptionsLibrary.NoCategoryException e) {
+                    System.out.println(e.getMessage());
                 }
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
+
 }
