@@ -78,12 +78,15 @@ public class GetDataFromDatabase {
                 Scanner scanner;
                 scanner = new Scanner(fileSeller);
                 scanner.useDelimiter("\\z");
-                String fileData = scanner.next();
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(pathSeller)));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Seller account = gson.fromJson(fileData, Seller.class);
                 scanner.close();
                 return account;
             } catch (FileNotFoundException e) {
+                throw new ExceptionsLibrary.NoAccountException();
+            } catch (IOException e) {
                 throw new ExceptionsLibrary.NoAccountException();
             }
         } else if (!fileCustomer.exists() && !fileAdmin.exists() && !fileSeller.exists()) {
@@ -99,12 +102,15 @@ public class GetDataFromDatabase {
             Scanner scanner;
             scanner = new Scanner(fileProduct);
             scanner.useDelimiter("\\z");
-            String fileData = scanner.next();
+            String fileData = "";
+            fileData = new String(Files.readAllBytes(Paths.get(productPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Product product = gson.fromJson(fileData, Product.class);
             scanner.close();
             return product;
         } catch (FileNotFoundException e) {
+            throw new ExceptionsLibrary.NoProductException();
+        } catch (IOException e) {
             throw new ExceptionsLibrary.NoProductException();
         }
     }
@@ -121,12 +127,15 @@ public class GetDataFromDatabase {
             Scanner scanner;
             scanner = new Scanner(fileProduct);
             scanner.useDelimiter("\\z");
-            String fileData = scanner.next();
+            String fileData = "";
+            fileData = new String(Files.readAllBytes(Paths.get(offPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Off off = gson.fromJson(fileData, Off.class);
             scanner.close();
             return off;
         } catch (FileNotFoundException e) {
+            throw new ExceptionsLibrary.NoOffException();
+        } catch (IOException e) {
             throw new ExceptionsLibrary.NoOffException();
         }
     }

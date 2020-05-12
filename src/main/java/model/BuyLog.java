@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class BuyLog {
@@ -9,19 +10,29 @@ public class BuyLog {
     private String logDate;
     private double value;
     private double discountApplied;
-    private ArrayList<Product> logProducts;
-    private ArrayList<String> sellerName;
+    private HashMap<String,String> receiverInfo;
+    //private ArrayList<Product> logProducts;
+    //private ArrayList<String> sellerName;
+    private HashMap<Product,Integer> logProducts;
     private String deliveryCondition;
 
-    public BuyLog(String logDate, double value, double discountApplied, ArrayList<Product> logProducts, ArrayList<String> sellerName, String deliveryCondition) {
+    public BuyLog(String logDate, double value, double discountApplied, HashMap<Product,Integer> logProducts, String deliveryCondition,HashMap<String,String> receiverInfo) {
         Random random = new Random();
         this.logId = random.nextInt(10000);
         this.logDate = logDate;
         this.value = value;
         this.discountApplied = discountApplied;
         this.logProducts = logProducts;
-        this.sellerName = sellerName;
         this.deliveryCondition = deliveryCondition;
+        this.receiverInfo = receiverInfo;
+    }
+
+    public HashMap<String, String> getReceiverInfo() {
+        return receiverInfo;
+    }
+
+    public void setReceiverInfo(HashMap<String, String> receiverInfo) {
+        this.receiverInfo = receiverInfo;
     }
 
     public int getLogId() {
@@ -56,21 +67,21 @@ public class BuyLog {
         this.discountApplied = discountApplied;
     }
 
-    public ArrayList<Product> getLogProducts() {
+    public HashMap<Product,Integer> getLogProducts() {
         return logProducts;
     }
 
-    public void setLogProducts(ArrayList<Product> logProducts) {
+    public void setLogProducts(HashMap<Product,Integer> logProducts) {
         this.logProducts = logProducts;
     }
 
-    public ArrayList<String> getSellerName() {
+    /*public ArrayList<String> getSellerName() {
         return sellerName;
     }
 
     public void setSellerName(ArrayList<String> sellerName) {
         this.sellerName = sellerName;
-    }
+    }*/
 
     public String getDeliveryCondition() {
         return deliveryCondition;

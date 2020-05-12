@@ -21,6 +21,13 @@ public class RegisterAndLoginPanel extends Menu {
         this.setSubmenus(submenus);
     }
 
+    public static boolean usernameOrPasswordIsValid (String usernameOrPassword){
+        if (usernameOrPassword.matches("\\w*")){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void show(){
         System.out.println(this.name + " :");
@@ -73,13 +80,18 @@ public class RegisterAndLoginPanel extends Menu {
             public void run() {
                 int chosenNumber = Integer.parseInt(Main.scanInput("int"));
                 if (chosenNumber == 1){
-                    //TODO check username and password
-                    //TODO check credit
-
                     System.out.println("Enter Username:");
                     String username = Main.scanInput("String");
+                    while (!usernameOrPasswordIsValid(username)){
+                        System.out.println("Username format invalid try again :");
+                        username = Main.scanInput("String");
+                    }
                     System.out.println("Enter Password:");
                     String password = Main.scanInput("String");
+                    while (!usernameOrPasswordIsValid(password)){
+                        System.out.println("Password format invalid try again :");
+                        password = Main.scanInput("String");
+                    }
                     System.out.println("Enter First Name:");
                     String firstName = Main.scanInput("String");
                     System.out.println("Enter Last Name:");
@@ -105,11 +117,18 @@ public class RegisterAndLoginPanel extends Menu {
 
                 }
                 else if (chosenNumber == 2){
-                    //TODO check username and password
                     System.out.println("Enter Username:");
                     String username = Main.scanInput("String");
+                    while (!usernameOrPasswordIsValid(username)){
+                        System.out.println("Username format invalid try again :");
+                        username = Main.scanInput("String");
+                    }
                     System.out.println("Enter Password:");
                     String password = Main.scanInput("String");
+                    while (!usernameOrPasswordIsValid(password)){
+                        System.out.println("Password format invalid try again :");
+                        password = Main.scanInput("String");
+                    }
                     System.out.println("Enter First Name:");
                     String firstName = Main.scanInput("String");
                     System.out.println("Enter Last Name:");
@@ -135,11 +154,18 @@ public class RegisterAndLoginPanel extends Menu {
                         System.out.println(e.getMessage());
                     }
                 } else if (chosenNumber == 3 && new File("Resources/Accounts/Admin").listFiles().length == 0) {
-                    //TODO check username and password
                     System.out.println("Enter Username:");
                     String username = Main.scanInput("String");
+                    while (!usernameOrPasswordIsValid(username)){
+                        System.out.println("Username format invalid try again :");
+                        username = Main.scanInput("String");
+                    }
                     System.out.println("Enter Password:");
                     String password = Main.scanInput("String");
+                    while (!usernameOrPasswordIsValid(password)){
+                        System.out.println("Password format invalid try again :");
+                        password = Main.scanInput("String");
+                    }
                     System.out.println("Enter First Name:");
                     String firstName = Main.scanInput("String");
                     System.out.println("Enter Last Name:");
@@ -179,11 +205,17 @@ public class RegisterAndLoginPanel extends Menu {
             @Override
             public void show() {
                 System.out.println("Enter Username:");
-                //TODO check if username is valid
                 String username = Main.scanInput("String");
+                while (!usernameOrPasswordIsValid(username)){
+                    System.out.println("Username format invalid try again :");
+                    username = Main.scanInput("String");
+                }
                 System.out.println("Enter Password:");
-                //TODO check if password is valid
                 String password = Main.scanInput("String");
+                while (!usernameOrPasswordIsValid(password)){
+                    System.out.println("Password format invalid try again :");
+                    password = Main.scanInput("String");
+                }
                 dataToSend.put("username",username);
                 dataToSend.put("password", password);
             }

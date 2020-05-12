@@ -24,6 +24,7 @@ public class AllProductsPanelController {
         availableFilters = new ArrayList<>();
         availableSorts = new ArrayList<>();
         currentSort = new ArrayList<>();
+        currentSort.add("name");
         availableSorts.add("name");
         availableSorts.add("price");
         availableSorts.add("availability");
@@ -85,7 +86,7 @@ public class AllProductsPanelController {
     }
 
     public static ArrayList<String> showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
-        ArrayList<String> allAvailabelFilters = new ArrayList();
+        ArrayList<String> allAvailableFilters = new ArrayList();
         String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -100,14 +101,14 @@ public class AllProductsPanelController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String categoryName = fileName.replace(".json", "");
-            allAvailabelFilters.add(categoryName);
+            allAvailableFilters.add(categoryName);
             Category category = GetDataFromDatabase.getCategory(categoryName);
             for (Feature j : category.getFeatures()) {
-                allAvailabelFilters.add(j.getParameter());
+                allAvailableFilters.add(j.getParameter());
             }
         }
-        setAvailableFilters(allAvailabelFilters);
-        return allAvailabelFilters;
+        setAvailableFilters(allAvailableFilters);
+        return allAvailableFilters;
     }
 
     public static void filterAnAvailableFilter(String filter) throws ExceptionsLibrary.NoFilterWithThisName {
@@ -137,7 +138,7 @@ public class AllProductsPanelController {
 
     public static void sortAnAvailableSort(String sort) throws ExceptionsLibrary.NoSortWithThisName {
         for (String i : getAvailableSorts()) {
-            if (i.equals(sort)) {
+            if (i.equalsIgnoreCase(sort)) {
                 currentSort.clear();
                 currentSort.add(i);
                 return;
@@ -188,6 +189,7 @@ public class AllProductsPanelController {
             public int compare(Product o1, Product o2) {
                 try {
                     Field field = Product.class.getDeclaredField(getCurrentSort().get(0));
+                    field.setAccessible(true);
                     if (getCurrentSort().get(0).equals("name")||getCurrentSort().get(0).equals("company")){
                         String o1Name = (String) field.get(o1);
                         String o2Name = (String) field.get(o2);

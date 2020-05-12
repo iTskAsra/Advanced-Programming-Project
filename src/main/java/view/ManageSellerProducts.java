@@ -68,7 +68,7 @@ public class ManageSellerProducts extends Menu {
                 String category = Main.scanInput("String");
                 System.out.println("Enter product description:");
                 String description = Main.scanInput("String");
-                Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE,name,company,price,null,quantity,null,new ArrayList<Feature>(),description,new ArrayList<Rate>(),new ArrayList<Comment>(),Main.localDateTime.format(Main.dateTimeFormatter));
+                Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE,name,company,price,null,quantity,null,new ArrayList<Feature>(),description,new ArrayList<Rate>(),new ArrayList<Comment>(),Main.localDateTime.format(Main.dateTimeFormatter),price);
                 try {
                     SellerController.addProductRequest(product,category);
                     System.out.println("Request sent!");

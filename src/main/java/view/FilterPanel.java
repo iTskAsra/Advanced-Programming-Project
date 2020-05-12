@@ -14,6 +14,8 @@ public class FilterPanel extends Menu {
         submenus.put(2, filterAnAvailableFilter());
         submenus.put(3, showCurrentFilter());
         submenus.put(4, disableFilter());
+
+        this.setSubmenus(submenus);
     }
 
     private Menu disableFilter() {
@@ -100,7 +102,7 @@ public class FilterPanel extends Menu {
                         System.out.println(i.substring(0,1).toUpperCase()+i.substring(1));
                     }
                 } catch (ExceptionsLibrary.NoFilterWithThisName | ExceptionsLibrary.NoCategoryException e) {
-                    System.out.println("No filter found");
+                    System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();

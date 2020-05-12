@@ -31,7 +31,7 @@ public class MainMenu extends Menu {
         else {
             submenus.put(4,help());
         }
-        submenus.put(submenus.size()+1,new Cart("Cart",this));
+        submenus.put(submenus.size()+1,new CartPanel("Cart",this));
 
         this.setSubmenus(submenus);
     }

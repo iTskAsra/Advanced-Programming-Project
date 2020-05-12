@@ -114,6 +114,10 @@ public class AdminController {
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                        for (Product i :off.getOffProducts()){
+                            i.setPriceWithOff(i.getPrice()-off.getOffAmount());
+                            SetDataToDatabase.setProduct(i);
+                        }
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     } catch (IOException e) {

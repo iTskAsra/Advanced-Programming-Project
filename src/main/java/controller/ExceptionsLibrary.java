@@ -56,6 +56,12 @@ public class  ExceptionsLibrary {
         }
     }
 
+    public static class NoLogException extends Exception {
+        public NoLogException() {
+            super("No log found with this log ID!");
+        }
+    }
+
     public static class NotLoggedInException{
 
     }
@@ -109,6 +115,31 @@ public class  ExceptionsLibrary {
             super("You can not change username of your account!");
         }
     }
+
+    public static class SaleNotStartedYetException extends Exception{
+        public SaleNotStartedYetException() {
+            super("Sale not started yet!");
+        }
+    }
+
+    public static class SaleExpiredException extends Exception{
+        public SaleExpiredException() {
+            super("Sale expired!");
+        }
+    }
+
+    public static class UsedAllValidTimesException extends Exception{
+        public UsedAllValidTimesException() {
+            super("You can't use this sale code more than its valid times!");
+        }
+    }
+
+    public static class CreditNotSufficientException extends Exception{
+        public CreditNotSufficientException() {
+            super("You don't have enough credit to proceed payment!");
+        }
+    }
+
 
 
 

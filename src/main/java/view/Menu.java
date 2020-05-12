@@ -64,7 +64,7 @@ public abstract class Menu {
 
         if (this.parentMenu != null)
             System.out.println((submenus.size() + 2) + ". Back");
-        else {
+        else if (this instanceof MainMenu){
             System.out.println((submenus.size() + 2) + ". Exit");
         }
     }

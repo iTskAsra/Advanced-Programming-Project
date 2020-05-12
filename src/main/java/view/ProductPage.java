@@ -29,7 +29,7 @@ public class ProductPage extends Menu {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
-                System.out.println("Enter ProductId to compare :");
+                System.out.println("Enter Product Id to compare :");
             }
 
             @Override

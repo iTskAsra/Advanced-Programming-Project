@@ -14,6 +14,8 @@ public class SortPanel extends Menu {
         submenus.put(2, selectSort());
         submenus.put(3, showCurrentSort());
         submenus.put(4, disableSort());
+
+        this.setSubmenus(submenus);
     }
 
     private Menu disableSort() {
@@ -42,7 +44,7 @@ public class SortPanel extends Menu {
 
             @Override
             public void run() {
-                ArrayList<String> currentSort = AllProductsPanelController.showAvailableSorts();
+                ArrayList<String> currentSort = AllProductsPanelController.currentSort();
                 if (currentSort.size() == 0){
                     System.out.println("Sort is set to default!");
                 }
@@ -59,7 +61,7 @@ public class SortPanel extends Menu {
     }
 
     private Menu selectSort() {
-        return new Menu("Sort Results",this) {
+        return new Menu("Select Sort",this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
@@ -71,8 +73,9 @@ public class SortPanel extends Menu {
                 String sortName = Main.scanInput("String");
                 try {
                     AllProductsPanelController.sortAnAvailableSort(sortName);
+                    System.out.println("Sort selected!");
                 } catch (ExceptionsLibrary.NoSortWithThisName noSortWithThisName) {
-                    noSortWithThisName.printStackTrace();
+                    System.out.println(noSortWithThisName.getMessage());
                 }
 
                 getParentMenu().show();

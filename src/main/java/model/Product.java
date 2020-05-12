@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Product {
-    //public  static ArrayList<Product> allProducts;
     private int productId;
     private ProductOrOffCondition productCondition;
     private String name;
     private String company;
     private double price;
+    private double priceWithOff;
     private transient Seller seller;
     private int availability;
     private Category category;
@@ -19,7 +19,7 @@ public class Product {
     private ArrayList<Rate> rates;
     private ArrayList<Comment> productComments;
 
-    public Product(ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFeatures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, String date) {
+    public Product(ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFeatures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, String date,Double priceWithOff) {
         Random random = new Random();
         this.productId = random.nextInt(10000);
         this.productCondition = productCondition;
@@ -35,8 +35,16 @@ public class Product {
         this.description = description;
         this.rates = new ArrayList<>();
         this.productComments = new ArrayList<>();
-
+        this.priceWithOff = priceWithOff;
         this.date = date;
+    }
+
+    public double getPriceWithOff() {
+        return priceWithOff;
+    }
+
+    public void setPriceWithOff(double priceWithOff) {
+        this.priceWithOff = priceWithOff;
     }
 
     public String getDate() {
