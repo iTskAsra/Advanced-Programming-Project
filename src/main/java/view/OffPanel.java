@@ -8,12 +8,19 @@ import java.util.ArrayList;
 import com.google.gson.*;
 import model.Product;
 import java.lang.String;
+import java.util.HashMap;
+
 import view.ProductPage;
 
 
 public class OffPanel extends Menu {
     public OffPanel(Menu parentMenu) {
         super("Off Menu",parentMenu);
+        HashMap <Integer, Menu> submenus = new HashMap<>();
+        submenus.put(1,goToProductPage());
+        submenus.put(2,listOffs());
+
+        this.setSubmenus(submenus);
     }
 
     //TODO show products
@@ -43,7 +50,7 @@ public class OffPanel extends Menu {
 
 
     public Menu goToProductPage(){
-        return new Menu("Product Page",this){
+        return new Menu("Go To Product Page",this){
             @Override
             public void show(){
                 System.out.println(this.getName() + ":");
