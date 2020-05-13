@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class CartPanel extends Menu {
     public CartPanel(String name, Menu parentMenu) {
-        super("CartPanel", parentMenu);
+        super("Cart", parentMenu);
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1, showProducts());
         submenus.put(2, viewProduct());

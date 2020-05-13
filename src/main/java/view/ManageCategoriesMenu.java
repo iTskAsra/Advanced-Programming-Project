@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.AdminController;
 import controller.ExceptionsLibrary;
+import controller.SortController;
 import model.Admin;
 import model.Category;
 import model.Feature;
+import model.Request;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,6 +141,23 @@ public class ManageCategoriesMenu extends Menu {
                             featureCount++;
                         }
                         System.out.printf("%s\n","-".repeat(30));
+                    }
+
+                    System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                    while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                        SortListPanel.sortCategories();
+                        SortController.sortCategories(allCategories);
+                        for (Category i : allCategories){
+                            System.out.printf("%s\n","-".repeat(30));
+                            System.out.printf("Category name : %s\nFeatures:\n",i.getName());
+                            int featureCount = 1;
+                            for (Feature j : i.getFeatures()){
+                                System.out.printf("%d. %s\n",featureCount,j.getParameter());
+                                featureCount++;
+                            }
+                            System.out.printf("%s\n","-".repeat(30));
+                        }
+                        System.out.println("Sort again? (yes/no)");
                     }
                 } catch (ExceptionsLibrary.NoCategoryException e) {
                     System.out.println(e.getMessage());

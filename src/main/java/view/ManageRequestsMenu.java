@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 import controller.AdminController;
 import controller.ExceptionsLibrary;
 import controller.GetDataFromDatabase;
+import controller.SortController;
 import model.Request;
+import model.Sale;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,6 +118,16 @@ public class ManageRequestsMenu extends Menu {
                     if (allRequests.size() != 0) {
                         for (Request i : allRequests) {
                             System.out.printf("%-15s%s%20s%s%20s\n", i.getRequestId(), " ".repeat(5), i.getRequestType(), " ".repeat(5), i.getRequestCondition());
+                        }
+
+                        System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                        while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                            SortListPanel.sortRequest();
+                            SortController.sortRequest(allRequests);
+                            for (Request i : allRequests) {
+                                System.out.printf("%-15s%s%20s%s%20s\n", i.getRequestId(), " ".repeat(5), i.getRequestType(), " ".repeat(5), i.getRequestCondition());
+                            }
+                            System.out.println("Sort again? (yes/no)");
                         }
                     }
                     else {

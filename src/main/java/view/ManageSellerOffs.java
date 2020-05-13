@@ -2,6 +2,7 @@ package view;
 
 import controller.ExceptionsLibrary;
 import controller.SellerController;
+import controller.SortController;
 import model.*;
 
 import java.util.ArrayList;
@@ -122,6 +123,15 @@ public class ManageSellerOffs extends Menu {
                     ArrayList<Off> sellerOffs = SellerController.showOffs();
                     for (Off i : sellerOffs) {
                         System.out.printf("Off ID : %d   Start Date : %s   End Date : %s   Amount : %.2f   Status : %s\n", i.getOffId(), i.getStartDate(), i.getEndDate(), i.getOffAmount(), i.getOffCondition());
+                    }
+                    System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                    while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                        SortListPanel.sortOffs();
+                        SortController.sortOffs(sellerOffs);
+                        for (Off i : sellerOffs) {
+                            System.out.printf("Off ID : %d   Start Date : %s   End Date : %s   Amount : %.2f   Status : %s\n", i.getOffId(), i.getStartDate(), i.getEndDate(), i.getOffAmount(), i.getOffCondition());
+                        }
+                        System.out.println("Sort again? (yes/no)");
                     }
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());

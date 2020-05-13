@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.AdminController;
 import controller.ExceptionsLibrary;
-import controller.RegisterAndLogin;
+import controller.SortController;
 import model.Account;
 import model.Admin;
 
@@ -16,7 +16,7 @@ public class ManageUsersMenu extends Menu {
     public ManageUsersMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
         HashMap<Integer, Menu> submenus = new HashMap<>();
-        submenus.put(1,showAllUsers());
+        submenus.put(1, showAllUsers());
         submenus.put(2, viewUsername());
         submenus.put(3, deleteUsername());
         submenus.put(4, createManagerProfile());
@@ -25,7 +25,7 @@ public class ManageUsersMenu extends Menu {
     }
 
     private Menu showAllUsers() {
-        return new Menu("Show all users",this) {
+        return new Menu("Show all users", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
@@ -33,15 +33,22 @@ public class ManageUsersMenu extends Menu {
 
             @Override
             public void run() {
-                HashMap<String,ArrayList<Account>> allUsers= null;
+                ArrayList<Account> allUsers = null;
                 try {
                     allUsers = AdminController.showAllUsers();
-                    for (String i :allUsers.keySet()){
-                        System.out.println(i+" :");
-                        for (Account j : allUsers.get(i)){
-                            System.out.printf("%-15s%s%20s\n",j.getUsername()," ".repeat(5),j.getFirstName()+" "+j.getLastName());
-                        }
+                    for (Account i : allUsers) {
+                        System.out.printf("%-15s%s%20s\n", i.getUsername(), " ".repeat(5), i.getFirstName() + " " + i.getLastName());
                     }
+                    System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                    while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                        SortListPanel.sortAccount();
+                        SortController.sortAccounts(allUsers);
+                        for (Account i : allUsers) {
+                            System.out.printf("%-15s%s%20s\n", i.getUsername(), " ".repeat(5), i.getFirstName() + " " + i.getLastName());
+                        }
+                        System.out.println("Sort again? (yes/no)");
+                    }
+
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 }
@@ -130,7 +137,7 @@ public class ManageUsersMenu extends Menu {
                     data = AdminController.showUserDetails(username);
                     Gson gson = new GsonBuilder().serializeNulls().create();
                     Account account = gson.fromJson(data, Account.class);
-                    System.out.printf("%s\n%-20s%10s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%s\n","-".repeat(60), "Username :", " ".repeat(10), account.getUsername(), "First Name :", " ".repeat(10), account.getFirstName(), "Last Name :", " ".repeat(10), account.getLastName(), "Role : ", " ".repeat(10), account.getRole(), "Email", " ".repeat(10), account.getEmail(), "Phone Number", " ".repeat(10), account.getPhoneNumber(),"-".repeat(60));
+                    System.out.printf("%s\n%-20s%10s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%s\n", "-".repeat(60), "Username :", " ".repeat(10), account.getUsername(), "First Name :", " ".repeat(10), account.getFirstName(), "Last Name :", " ".repeat(10), account.getLastName(), "Role : ", " ".repeat(10), account.getRole(), "Email", " ".repeat(10), account.getEmail(), "Phone Number", " ".repeat(10), account.getPhoneNumber(), "-".repeat(60));
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 }

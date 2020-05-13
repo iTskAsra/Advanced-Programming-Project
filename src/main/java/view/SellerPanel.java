@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.ExceptionsLibrary;
 import controller.SellerController;
+import controller.SortController;
 import model.*;
 
 import java.util.ArrayList;
@@ -135,6 +136,22 @@ public class SellerPanel extends Menu {
                     }
                     System.out.println("-".repeat(50));
                 }
+                System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                    SortListPanel.sortSellLogs();
+                    SortController.sortSellLogs(sellerLogs);
+                    for (SellLog i : sellerLogs){
+                        System.out.println("-".repeat(50));
+                        System.out.printf("Log ID : %d\nDate : %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s %s\nDelivery Condition: \n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), i.getBuyer().getFirstName() , i.getBuyer().getLastName(), i.getDeliveryCondition());
+                        for (Product j : i.getLogProducts().keySet()){
+                            System.out.println("-".repeat(40));
+                            System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPrice()*i.getLogProducts().get(j));
+                            System.out.println("-".repeat(40));
+                        }
+                        System.out.println("-".repeat(50));
+                    }
+                    System.out.println("Sort again? (yes/no)");
+                }
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -166,6 +183,23 @@ public class SellerPanel extends Menu {
                             featureCount++;
                         }
                         System.out.printf("%s\n","-".repeat(30));
+                    }
+
+                    System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                    while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                        SortListPanel.sortCategories();
+                        SortController.sortCategories(allCategories);
+                        for (Category i : allCategories){
+                            System.out.printf("%s\n","-".repeat(30));
+                            System.out.printf("Category name : %s\nFeatures:\n",i.getName());
+                            int featureCount = 1;
+                            for (Feature j : i.getFeatures()){
+                                System.out.printf("%d. %s\n",featureCount,j.getParameter());
+                                featureCount++;
+                            }
+                            System.out.printf("%s\n","-".repeat(30));
+                        }
+                        System.out.println("Sort again? (yes/no)");
                     }
                 } catch (ExceptionsLibrary.NoCategoryException e) {
                     System.out.println(e.getMessage());

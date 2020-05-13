@@ -217,7 +217,9 @@ public class SellerController {
         for (String i : productIds){
             try {
                 Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
-                offProductsList.add(temp);
+                if (getSeller().getSellerProducts().contains(temp)) {
+                    offProductsList.add(temp);
+                }
             }
             catch (Exception e){
                 throw new ExceptionsLibrary.NoProductException();

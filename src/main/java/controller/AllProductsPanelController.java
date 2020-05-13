@@ -190,22 +190,22 @@ public class AllProductsPanelController {
                 try {
                     Field field = Product.class.getDeclaredField(getCurrentSort().get(0));
                     field.setAccessible(true);
-                    if (getCurrentSort().get(0).equals("name")||getCurrentSort().get(0).equals("company")){
+                    if (getCurrentSort().get(0).equalsIgnoreCase("name")||getCurrentSort().get(0).equalsIgnoreCase("company")){
                         String o1Name = (String) field.get(o1);
                         String o2Name = (String) field.get(o2);
                         return o1Name.compareTo(o2Name);
                     }
-                    else if (getCurrentSort().get(0).equals("date")){
+                    else if (getCurrentSort().get(0).equalsIgnoreCase("date")){
                         Date o1Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String)field.get(o1));
                         Date o2Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String)field.get(o2));
                         return o1Date.compareTo(o2Date);
                     }
-                    else if (getCurrentSort().get(0).equals("price")){
+                    else if (getCurrentSort().get(0).equalsIgnoreCase("price")){
                         Double o1Price = (Double) field.get(o1);
                         Double o2Price = (Double) field.get(o2);
                         return o1Price.compareTo(o2Price);
                     }
-                    else  if (getCurrentSort().get(0).equals("availability")){
+                    else  if (getCurrentSort().get(0).equalsIgnoreCase("availability")){
                         Integer o1Availability = (Integer) field.get(o1);
                         Integer o2Availability = (Integer) field.get(o2);
                         return o1Availability.compareTo(o2Availability);

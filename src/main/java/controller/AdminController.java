@@ -338,17 +338,11 @@ public class AdminController {
         SetDataToDatabase.setSale(sale);
     }
 
-    public static HashMap<String, ArrayList<Account>> showAllUsers() throws ExceptionsLibrary.NoAccountException {
+    public static ArrayList<Account> showAllUsers() throws ExceptionsLibrary.NoAccountException {
         String customerPath = "Resources/Accounts/Customer";
         String sellerPath = "Resources/Accounts/Seller";
         String adminPath = "Resources/Accounts/Admin";
-        ArrayList<Account> customersList = new ArrayList<>();
-        ArrayList<Account> sellersList = new ArrayList<>();
-        ArrayList<Account> adminsList = new ArrayList<>();
-        HashMap<String, ArrayList<Account>> list = new HashMap<>();
-        list.put("Customers", customersList);
-        list.put("Sellers", sellersList);
-        list.put("Admins", adminsList);
+        ArrayList<Account> list = new ArrayList<>();
         File customerFolder = new File(customerPath);
         File sellerFolder = new File(sellerPath);
         File adminFolder = new File(adminPath);
@@ -365,20 +359,20 @@ public class AdminController {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
             Account account = GetDataFromDatabase.getAccount(username);
-            customersList.add(account);
+            list.add(account);
         }
         for (File i : sellerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
             Account account = GetDataFromDatabase.getAccount(username);
-            sellersList.add(account);
+            list.add(account);
         }
 
         for (File i : adminFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
             Account account = GetDataFromDatabase.getAccount(username);
-            adminsList.add(account);
+            list.add(account);
         }
         return list;
     }

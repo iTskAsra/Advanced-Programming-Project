@@ -1,9 +1,6 @@
 package view;
 
-import controller.AllProductsPanelController;
-import controller.ExceptionsLibrary;
-import controller.ProductPageController;
-import controller.SellerController;
+import controller.*;
 import model.*;
 
 import java.io.File;
@@ -131,6 +128,17 @@ public class ManageSellerProducts extends Menu {
                         System.out.printf("Log ID : %d\nCustomer : %s\nDate : %s\nTotal log price : %.2f",i.getLogId(),i.getBuyer().getUsername(),i.getLogDate(),i.getValue());
                     }
 
+                    System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                    while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                        SortListPanel.sortSellLogs();
+                        SortController.sortSellLogs(buyersLogs);
+                        for (SellLog i : buyersLogs){
+                            System.out.printf("Log ID : %d\nCustomer : %s\nDate : %s\nTotal log price : %.2f",i.getLogId(),i.getBuyer().getUsername(),i.getLogDate(),i.getValue());
+                        }
+                        System.out.println("Sort again? (yes/no)");
+                    }
+
+
                 } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 }
@@ -180,6 +188,15 @@ public class ManageSellerProducts extends Menu {
                     ArrayList<Product> sellerProducts = SellerController.showSellerProducts();
                     for (Product i : sellerProducts){
                         System.out.printf("Product ID : %d\nName : %s\nPrice : %.2f\n",i.getProductId(),i.getName(),i.getPrice());
+                    }
+                    System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                    while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                        SortListPanel.sortProducts();
+                        SortController.sortProducts(sellerProducts);
+                        for (Product i : sellerProducts){
+                            System.out.printf("Product ID : %d\nName : %s\nPrice : %.2f\n",i.getProductId(),i.getName(),i.getPrice());
+                        }
+                        System.out.println("Sort again? (yes/no)");
                     }
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
