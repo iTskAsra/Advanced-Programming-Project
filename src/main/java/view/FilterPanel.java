@@ -14,8 +14,26 @@ public class FilterPanel extends Menu {
         submenus.put(2, filterAnAvailableFilter());
         submenus.put(3, showCurrentFilter());
         submenus.put(4, disableFilter());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Filter Panel\nHere you can see available filters, choose or disable some and check the current applied filters.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu disableFilter() {

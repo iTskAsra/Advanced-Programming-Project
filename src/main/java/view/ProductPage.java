@@ -20,8 +20,26 @@ public class ProductPage extends Menu {
         submenus.put(2, attributes());
         submenus.put(3, compareProducts());
         submenus.put(4, new ProductCommentPanel("Comments",this));
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Product Page\nHere is the Product Page you can see its digest, attributes and comments left for or compare it with other products.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu compareProducts() {

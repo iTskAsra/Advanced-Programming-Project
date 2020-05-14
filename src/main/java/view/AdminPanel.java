@@ -21,6 +21,7 @@ public class AdminPanel extends Menu {
         submenus.put(7, new ManageRequestsMenu("Requests Menu",this));
         submenus.put(8,new ManageCategoriesMenu("Categories Menu",this));
         submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
     }
 

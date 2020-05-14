@@ -12,8 +12,29 @@ public class ManageAllProducts extends Menu {
         super(name,parentMenu);
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1, removeProduct());
+        submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
     }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Manage All Products \nYou can see all the products here and remove them if you want\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
+    }
+
+    //TODO show all products
 
     private Menu removeProduct() {
         return new Menu("Remove Product",this) {
@@ -28,7 +49,7 @@ public class ManageAllProducts extends Menu {
                 try {
                     AdminController.deleteProduct(productId);
                     System.out.println("Removed Product!");
-                } catch (ExceptionsLibrary.NoProductException e) {
+                } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();

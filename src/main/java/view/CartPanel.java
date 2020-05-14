@@ -18,8 +18,27 @@ public class CartPanel extends Menu {
         submenus.put(4, decreaseProduct());
         submenus.put(5, showTotalPrice());
         submenus.put(6, purchase());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Cart Panel\nHere in the Cart panel you can see cart's products, view each product, increase or decrease amount of a product, show the total price of your cart and finally purchase and buy it.\n");
+                System.out.println("------------------------------");
+
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu showProducts() {
@@ -179,8 +198,13 @@ public class CartPanel extends Menu {
 
             @Override
             public void run() {
+                if (Main.checkLoggedIn() == null){
+                    System.out.println("You must first login or register to proceed");
+                    RegisterAndLoginPanel registerAndLoginPanel = new RegisterAndLoginPanel(this);
+                    registerAndLoginPanel.show();
+                    registerAndLoginPanel.run();
+                }
                 HashMap<String, String> receiverInfo = new HashMap<>();
-
                 System.out.println("Receiver Info :");
                 System.out.println("Enter receiver name :");
                 String name = Main.scanInput("String");

@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder;
 import controller.AdminController;
 import controller.ExceptionsLibrary;
 import controller.SortController;
-import model.Admin;
 import model.Category;
 import model.Feature;
-import model.Request;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,26 @@ public class ManageCategoriesMenu extends Menu {
         submenus.put(2, editCategory());
         submenus.put(3, addCategory());
         submenus.put(4, removeCategory());
+        submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Manage Categories\nYou can see all the categories right here and edit or remove them or even add a new category.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu removeCategory() {
@@ -145,7 +162,7 @@ public class ManageCategoriesMenu extends Menu {
 
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                     while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                        SortListPanel.sortCategories();
+                        SortHandler.sortCategories();
                         SortController.sortCategories(allCategories);
                         for (Category i : allCategories){
                             System.out.printf("%s\n","-".repeat(30));

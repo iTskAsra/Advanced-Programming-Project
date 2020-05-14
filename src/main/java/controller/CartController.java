@@ -135,6 +135,7 @@ public class CartController {
     }
 
     public static void receiverProcess(HashMap<String, String> data) {
+
         setReceiverInfo(data);
     }
 

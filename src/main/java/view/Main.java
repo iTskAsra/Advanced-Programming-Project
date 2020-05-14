@@ -16,6 +16,7 @@ public class Main {
         scanner = new Scanner(System.in);
         Menu.setScanner(Main.scanner);
         Menu mainMenu = new MainMenu();
+        //TODO check off and sale dates (remove if expired) (apply to their products (Offs))
         GetDataFromDatabase.setResources();
         try {
             SetPeriodicSales.set();

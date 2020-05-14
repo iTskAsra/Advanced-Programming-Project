@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import controller.AdminController;
 import controller.ExceptionsLibrary;
 import controller.SortController;
-import model.Account;
 import model.Sale;
 
 import java.util.ArrayList;
@@ -20,7 +19,26 @@ public class ManageSalesMenu extends Menu {
         submenus.put(2, showSaleDetails());
         submenus.put(3, editSaleInfo());
         submenus.put(4, removeSaleCode());
+        submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Sales Panel\nHere we have all the existing discount codes and you can see their details, edit or remove them.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu removeSaleCode() {
@@ -120,7 +138,7 @@ public class ManageSalesMenu extends Menu {
 
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                     while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                        SortListPanel.sortSale();
+                        SortHandler.sortSale();
                         SortController.sortSales(allSales);
                         for (Sale i : allSales) {
                             System.out.printf("%-10s%s%20s%s%20s\n", i.getSaleCode(), " ".repeat(5), i.getStartDate() , " ".repeat(5) , i.getEndDate());

@@ -15,9 +15,26 @@ public class ManageSellerProducts extends Menu {
         submenus.put(3, showProductBuyers());
         submenus.put(4, editProductRequest());
         submenus.put(5, addProductRequest());
-        submenus.put(6, removeProduct());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Manage Products Panel\nHere you see all the products you have and you can view each one of them or their buyers and also edit the product.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu removeProduct() {
@@ -34,7 +51,7 @@ public class ManageSellerProducts extends Menu {
                 try {
                     SellerController.removeProduct(productId);
                     System.out.println("Product removed!");
-                } catch (ExceptionsLibrary.NoProductException e) {
+                } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
@@ -143,7 +160,7 @@ public class ManageSellerProducts extends Menu {
 
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                     while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                        SortListPanel.sortSellLogs();
+                        SortHandler.sortSellLogs();
                         SortController.sortSellLogs(buyersLogs);
                         for (SellLog i : buyersLogs) {
                             System.out.printf("Log ID : %d\nCustomer : %s\nDate : %s\nTotal log price : %.2f", i.getLogId(), i.getBuyer().getUsername(), i.getLogDate(), i.getValue());
@@ -204,7 +221,7 @@ public class ManageSellerProducts extends Menu {
                     }
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                     while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                        SortListPanel.sortProducts();
+                        SortHandler.sortProducts();
                         SortController.sortProducts(sellerProducts);
                         for (Product i : sellerProducts) {
                             System.out.printf("Product ID : %d\nName : %s\nPrice : %.2f\n", i.getProductId(), i.getName(), i.getPrice());

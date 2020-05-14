@@ -16,9 +16,26 @@ public class ManageSellerOffs extends Menu {
         submenus.put(2, showSellerOffDetails());
         submenus.put(3, addOffRequest());
         submenus.put(4, editOffRequest());
-
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Seller Offs Panel\nHere are all the Offs the seller has you can view each one of them, edit it or add a new off in this menu.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu editOffRequest() {
@@ -126,7 +143,7 @@ public class ManageSellerOffs extends Menu {
                     }
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                     while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                        SortListPanel.sortOffs();
+                        SortHandler.sortOffs();
                         SortController.sortOffs(sellerOffs);
                         for (Off i : sellerOffs) {
                             System.out.printf("Off ID : %d   Start Date : %s   End Date : %s   Amount : %.2f   Status : %s\n", i.getOffId(), i.getStartDate(), i.getEndDate(), i.getOffAmount(), i.getOffCondition());

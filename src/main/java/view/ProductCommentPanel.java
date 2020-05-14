@@ -11,8 +11,26 @@ public class ProductCommentPanel extends Menu {
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1, showAllComments());
         submenus.put(2, addComment());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Comment Panel\nHere you can Leave a comment separated in title and content section.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu addComment() {

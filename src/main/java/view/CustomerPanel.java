@@ -21,9 +21,27 @@ public class CustomerPanel extends Menu {
         submenus.put(4, new CustomerLogs("Customer Logs", this));
         submenus.put(5, viewBalance());
         submenus.put(6, viewDiscountCodes());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
 
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Customer Panel\\nHere is the Menu for Customers\nYou can see the personal info, cart, orders, balance and discount codes and also you can purchase in this menu.\n");
+                System.out.println("------------------------------");
+
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu showCustomerInfo() {

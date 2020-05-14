@@ -14,8 +14,26 @@ public class SortPanel extends Menu {
         submenus.put(2, selectSort());
         submenus.put(3, showCurrentSort());
         submenus.put(4, disableSort());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Sort Panel\nHere you can see available sorts, choose or disable one and check the current applied sort.");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu disableSort() {

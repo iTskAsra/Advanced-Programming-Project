@@ -23,7 +23,26 @@ public class SellerPanel extends Menu {
         submenus.put(6,showCategories());
         submenus.put(7,new ManageSellerOffs("Manage Offs", this));
         submenus.put(8,showBalance());
+        submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Seller Panel\nHere is the panel for Sellers.\nYou can see the personal or company information, view sales history, manage, add or remove products and also you can see categories, offs or balances.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu editSellerInfo() {
@@ -138,7 +157,7 @@ public class SellerPanel extends Menu {
                 }
                 System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                 while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                    SortListPanel.sortSellLogs();
+                    SortHandler.sortSellLogs();
                     SortController.sortSellLogs(sellerLogs);
                     for (SellLog i : sellerLogs){
                         System.out.println("-".repeat(50));
@@ -187,7 +206,7 @@ public class SellerPanel extends Menu {
 
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                     while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                        SortListPanel.sortCategories();
+                        SortHandler.sortCategories();
                         SortController.sortCategories(allCategories);
                         for (Category i : allCategories){
                             System.out.printf("%s\n","-".repeat(30));

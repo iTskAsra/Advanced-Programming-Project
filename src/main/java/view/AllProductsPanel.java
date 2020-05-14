@@ -17,8 +17,27 @@ public class AllProductsPanel extends Menu {
         submenus.put(3, new SortPanel("Sort",this));
         submenus.put(4, showProducts());
         submenus.put(5,showProductDetails());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("All Products Panel\nHere are All the Products\nYou can see all the existing categories, sort or filter the products, and see each or all the products.\n");
+                System.out.println("------------------------------");
+
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     public Menu viewCategories(){

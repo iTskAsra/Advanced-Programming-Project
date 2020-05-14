@@ -14,7 +14,27 @@ public class Digest extends Menu {
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1, addToCart());
         submenus.put(2,selectSeller());
+        submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Product's Digest\nNow you can select a seller and add this product to your cart.\n");
+                System.out.println("------------------------------");
+
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     @Override

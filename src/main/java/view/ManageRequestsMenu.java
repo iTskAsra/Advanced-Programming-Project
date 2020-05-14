@@ -7,7 +7,6 @@ import controller.ExceptionsLibrary;
 import controller.GetDataFromDatabase;
 import controller.SortController;
 import model.Request;
-import model.Sale;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +18,26 @@ public class ManageRequestsMenu extends Menu {
         submenus.put(1, showAllRequests());
         submenus.put(2, showRequestDetails());
         submenus.put(3, processRequest());
+        submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Manage Requests\nYou can see all the requests sent to you and look at their details.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu processRequest() {
@@ -122,7 +140,7 @@ public class ManageRequestsMenu extends Menu {
 
                         System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                         while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                            SortListPanel.sortRequest();
+                            SortHandler.sortRequest();
                             SortController.sortRequest(allRequests);
                             for (Request i : allRequests) {
                                 System.out.printf("%-15s%s%20s%s%20s\n", i.getRequestId(), " ".repeat(5), i.getRequestType(), " ".repeat(5), i.getRequestCondition());

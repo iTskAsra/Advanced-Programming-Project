@@ -18,7 +18,26 @@ public class RegisterAndLoginPanel extends Menu {
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1,getLoginMenu());
         submenus.put(2,getRegisterMenu());
+        submenus.put(submenus.size()+1,help());
+
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Register and Login Panel\nHere you can create new account or login to your account if you already have One\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     public static boolean usernameOrPasswordIsValid (String usernameOrPassword){

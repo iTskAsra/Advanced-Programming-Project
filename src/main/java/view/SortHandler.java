@@ -9,9 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class SortListPanel {
+public class SortHandler {
 
-    public SortListPanel(String typeToSort) {
+    public SortHandler(String typeToSort) {
     }
 
     public static void sortAccount() {

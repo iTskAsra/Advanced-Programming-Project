@@ -215,6 +215,7 @@ public class AdminController {
                         fileWriter.write(productDetails);
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
+                        SetDataToDatabase.updateSellerAndOffsOfProduct(product,0);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
@@ -398,9 +399,10 @@ public class AdminController {
         }
     }
 
-    public static void deleteProduct(int productId) throws ExceptionsLibrary.NoProductException {
+    public static void deleteProduct(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         Product product = GetDataFromDatabase.getProduct(productId);
         String path = "Resources/Products/" + product.getProductId() + ".json";
+        SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
         File file = new File(path);
         file.delete();
     }
@@ -450,9 +452,12 @@ public class AdminController {
                     Product product = gson.fromJson(fileData, Product.class);
                     scanner.close();
                     if (product.getCategory().getName().equals(categoryName)) {
+                        SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
                         i.delete();
                     }
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ExceptionsLibrary.NoAccountException e) {
                     e.printStackTrace();
                 }
             }
@@ -534,12 +539,14 @@ public class AdminController {
                 Scanner scanner;
                 scanner = new Scanner(i);
                 scanner.useDelimiter("\\z");
+                //TODO allbytes
                 String fileData = scanner.next();
                 Product product = gson1.fromJson(fileData, Product.class);
                 scanner.close();
                 product.setCategory(category);
                 SetDataToDatabase.setProduct(product);
-            } catch (FileNotFoundException e) {
+                SetDataToDatabase.updateSellerAndOffsOfProduct(product,0);
+            } catch (FileNotFoundException | ExceptionsLibrary.NoAccountException e) {
                 e.printStackTrace();
             }
         }

@@ -20,8 +20,26 @@ public class ManageUsersMenu extends Menu {
         submenus.put(2, viewUsername());
         submenus.put(3, deleteUsername());
         submenus.put(4, createManagerProfile());
-        this.setSubmenus(submenus);
+        submenus.put(submenus.size()+1,help());
 
+        this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Manage Users Panel\nHere you can view users info, remove them or create a manager profile.\n");
+                System.out.println("------------------------------");
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu showAllUsers() {
@@ -41,7 +59,7 @@ public class ManageUsersMenu extends Menu {
                     }
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                     while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                        SortListPanel.sortAccount();
+                        SortHandler.sortAccount();
                         SortController.sortAccounts(allUsers);
                         for (Account i : allUsers) {
                             System.out.printf("%-15s%s%20s\n", i.getUsername(), " ".repeat(5), i.getFirstName() + " " + i.getLastName());

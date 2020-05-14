@@ -126,10 +126,10 @@ public class SellerController {
         }
     }
 
-    public static void removeProduct(int productId) throws ExceptionsLibrary.NoProductException {
+    public static void removeProduct(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         Product product = GetDataFromDatabase.getProduct(productId);
         String path = "Resources/Products/" + product.getProductId() + ".json";
-        getSeller().getSellerProducts().remove(product);
+        SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
         File file = new File(path);
         file.delete();
         SetDataToDatabase.setAccount(getSeller());

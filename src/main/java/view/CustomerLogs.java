@@ -15,8 +15,27 @@ public class CustomerLogs extends Menu {
         submenus.put(1, showCustomerLogs());
         submenus.put(2, showLogDetail());
         submenus.put(3, rateProduct());
+        submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    protected Menu help() {
+        return new Menu("Help",this) {
+            @Override
+            public void show() {
+                System.out.println("------------------------------");
+                System.out.printf("Customer Orders\nHere is the Customer Orders history, you can see each order and rate each bought product on the scale of 1 to 5.\n");
+                System.out.println("------------------------------");
+
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     private Menu showCustomerLogs() {
