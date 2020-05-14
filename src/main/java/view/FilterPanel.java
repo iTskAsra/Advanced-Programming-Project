@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class FilterPanel extends Menu {
     public FilterPanel(String name, Menu parentMenu) {
-        super(name,parentMenu);
+        super(name, parentMenu);
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1, showAvailableFilters());
         submenus.put(2, filterAnAvailableFilter());
@@ -19,21 +19,31 @@ public class FilterPanel extends Menu {
     }
 
     private Menu disableFilter() {
-        return new Menu("Disable A Filter",this) {
+        return new Menu("Disable A Filter", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
-                System.out.println("Enter filter name :");
             }
 
             @Override
             public void run() {
-                String filterName = Main.scanInput("String");
-                try {
-                    AllProductsPanelController.disableFilter(filterName);
-                } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
-                    noFilterWithThisName.printStackTrace();
+                int count = 1;
+                for (String i : AllProductsPanelController.showCurrentFilters()){
+                    String[] splitFilters = i.split("--");
+                    if (splitFilters.length == 2){
+                        System.out.printf("%d. %s : %s\n",count,splitFilters[0],splitFilters[1]);
+                    }
+                    else {
+                        System.out.printf("%d. %s : %s - %s\n",count,splitFilters[0],splitFilters[1],splitFilters[2]);
+                    }
+                    count++;
                 }
+                System.out.println("Enter filter number :");
+                int filterNumber = Integer.parseInt(Main.scanInput("int"));
+                while (filterNumber>AllProductsPanelController.getCurrentFilters().size()||filterNumber<1){
+                    System.out.println("Invalid number, try again:");
+                }
+                AllProductsPanelController.disableFilter(filterNumber);
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -41,7 +51,7 @@ public class FilterPanel extends Menu {
     }
 
     private Menu showCurrentFilter() {
-        return new Menu("Current Filters",this) {
+        return new Menu("Current Filters", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
@@ -49,14 +59,16 @@ public class FilterPanel extends Menu {
 
             @Override
             public void run() {
-                ArrayList<String> currentFilters = AllProductsPanelController.showCurrentFilters();
-                if (currentFilters.size() == 0){
-                    System.out.println("No filter selected!");
-                }
-                else {
-                    for (String i : currentFilters) {
-                        System.out.println(i.substring(0, 1).toUpperCase() + i.substring(1));
+                int count = 1;
+                for (String i : AllProductsPanelController.showCurrentFilters()){
+                    String[] splitFilters = i.split("--");
+                    if (splitFilters.length == 2){
+                        System.out.printf("%d. %s : %s\n",count,splitFilters[0],splitFilters[1]);
                     }
+                    else {
+                        System.out.printf("%d. %s : %s - %s\n",count,splitFilters[0],splitFilters[1],splitFilters[2]);
+                    }
+                    count++;
                 }
                 getParentMenu().show();
                 getParentMenu().run();
@@ -65,20 +77,99 @@ public class FilterPanel extends Menu {
     }
 
     private Menu filterAnAvailableFilter() {
-        return new Menu("Filter Results",this) {
+        return new Menu("Filter A Filter", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
-                System.out.println("Enter filter name :");
+
             }
 
             @Override
             public void run() {
-                String filterName = Main.scanInput("String");
                 try {
-                    AllProductsPanelController.filterAnAvailableFilter(filterName);
-                } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
-                    System.out.println(noFilterWithThisName.getMessage());
+                    HashMap<Integer, String> filters = new HashMap<>();
+                    filters.put(1, "Name (Search)");
+                    filters.put(2, "Category");
+                    filters.put(3, "Price");
+                    filters.put(4, "Brand");
+                    filters.put(5, "Seller");
+                    filters.put(6, "Availability");
+                    filters.put(7,"Back");
+                    for (int i : filters.keySet()) {
+                        System.out.println(i + ". " + filters.get(i));
+                    }
+                    System.out.println("Enter the number of filter:");
+                    int chosenNumber = Integer.parseInt(Main.scanInput("int"));
+                    while (chosenNumber>7||chosenNumber<1){
+                        System.out.println("Invalid number, try again");
+                        chosenNumber = Integer.parseInt(Main.scanInput("int"));
+                    }
+                    switch (chosenNumber) {
+                        case 1:
+                            System.out.println("Enter name of the product:");
+                            String name = Main.scanInput("String");
+                            AllProductsPanelController.getCurrentFilters().add("Search--" + name);
+                            System.out.println("Filter applied!");
+                            break;
+                        case 2:
+                            ArrayList<String> availableCategories = AllProductsPanelController.showAvailableFilters();
+                            int count = 1;
+                            for (String i : availableCategories) {
+                                System.out.println(count + ". " + i);
+                                count++;
+                            }
+                            System.out.println("Enter number of the category:");
+                            int chosenNumberCategory = Integer.parseInt(Main.scanInput("int"));
+                            AllProductsPanelController.getCurrentFilters().add("Category--" + availableCategories.get(chosenNumberCategory - 1));
+                            System.out.println("Filter applied!");
+                            break;
+                        case 3:
+                            System.out.println("Enter min price:");
+                            String minPrice = Main.scanInput("double");
+                            System.out.println("Enter max price:");
+                            String maxPrice = Main.scanInput("double");
+                            AllProductsPanelController.getCurrentFilters().add("Price--" + minPrice + "--" + maxPrice);
+                            System.out.println("Filter applied!");
+                            break;
+                        case 4:
+                            System.out.println("Enter name of the brand:");
+                            String brandName = Main.scanInput("String");
+                            AllProductsPanelController.getCurrentFilters().add("Brand--" + brandName);
+                            System.out.println("Filter applied!");
+                            break;
+                        case 5:
+                            System.out.println("Enter name of the Seller:");
+                            String sellerName = Main.scanInput("String");
+                            AllProductsPanelController.getCurrentFilters().add("Seller--" + sellerName);
+                            System.out.println("Filter applied!");
+                            break;
+                        case 6:
+                            System.out.println("Only available? (yes/no)");
+                            String input = Main.scanInput("String");
+                            while (!input.equalsIgnoreCase("yes")&&!input.equalsIgnoreCase("no")){
+                                System.out.println("Invalid input, try again: (yes/no)");
+                                input = Main.scanInput("String");
+                            }
+                            if (input.equalsIgnoreCase("yes")){
+                                AllProductsPanelController.getCurrentFilters().add("Availability--" + input.toLowerCase());
+                            }
+                            else {
+                                if (AllProductsPanelController.getCurrentFilters().contains("Availability--yes")){
+                                    AllProductsPanelController.getCurrentFilters().remove("Availability--yes");
+                                }
+                            }
+
+                            System.out.println("Filter applied!");
+                            break;
+                    }
+                    AllProductsPanelController.filterAnAvailableFilter();
+
+                } catch (ExceptionsLibrary.NoFilterWithThisName | ExceptionsLibrary.NoCategoryException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();
@@ -87,7 +178,7 @@ public class FilterPanel extends Menu {
     }
 
     private Menu showAvailableFilters() {
-        return new Menu("Available Filters",this) {
+        return new Menu("Available Filters", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
@@ -95,14 +186,16 @@ public class FilterPanel extends Menu {
 
             @Override
             public void run() {
-                ArrayList<String> availableFilters = null;
-                try {
-                    availableFilters = AllProductsPanelController.showAvailableFilters();
-                    for (String i : availableFilters){
-                        System.out.println(i.substring(0,1).toUpperCase()+i.substring(1));
-                    }
-                } catch (ExceptionsLibrary.NoFilterWithThisName | ExceptionsLibrary.NoCategoryException e) {
-                    System.out.println(e.getMessage());
+
+                HashMap<Integer, String> filters = new HashMap<>();
+                filters.put(1, "Name (Search)");
+                filters.put(2, "Category");
+                filters.put(3, "Price");
+                filters.put(4, "Brand");
+                filters.put(5, "Seller");
+                filters.put(6, "Availability");
+                for (int i : filters.keySet()) {
+                    System.out.println(i + ". " + filters.get(i));
                 }
                 getParentMenu().show();
                 getParentMenu().run();

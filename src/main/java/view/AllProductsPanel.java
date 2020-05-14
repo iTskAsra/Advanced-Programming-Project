@@ -73,6 +73,10 @@ public class AllProductsPanel extends Menu {
                     getParentMenu().run();
                 } catch (ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
+                    System.out.println(noFilterWithThisName.getMessage());
                 }
             }
         };
