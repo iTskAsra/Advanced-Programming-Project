@@ -135,10 +135,8 @@ public class SellerController {
         SetDataToDatabase.setAccount(getSeller());
     }
 
-    public static void addProductRequest(Product product, String category) throws ExceptionsLibrary.NoCategoryException {
+    public static void addProductRequest(Product product, String category) {
         product.setSeller(getSeller());
-        Category tempCategory = GetDataFromDatabase.getCategory(category);
-        product.setCategory(tempCategory);
         Gson gson = new GsonBuilder().serializeNulls().create();
         String productDetails = gson.toJson(product);
         Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
@@ -313,6 +311,28 @@ public class SellerController {
             allCategories.add(category);
         }
         return allCategories;
+    }
+
+    public static boolean checkIfCategoryExists(String categoryName) {
+        String path = "Resources/Category";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String fileCategoryName = fileName.replace(".json", "");
+            if (categoryName.equals(fileCategoryName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -1,13 +1,12 @@
 package view;
 
-import controller.CartController;
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
-import controller.ProductPageController;
+import controller.*;
 import model.Product;
+import model.Sale;
 import model.Seller;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class CartPanel extends Menu {
     public CartPanel(String name, Menu parentMenu) {
@@ -197,7 +196,15 @@ public class CartPanel extends Menu {
                 System.out.println("Enter sale code to apply : (If you don't have or don't want to use it enter \"skip\")");
                 String saleCode = Main.scanInput("String");
                 if (saleCode.trim().equalsIgnoreCase("skip")) {
-                    saleCode = null;
+                    if (CartController.getTotalPriceWithoutSale() >= 1000000){
+                        Double saleAmount = SetPeriodicSales.randomOff();
+                        int saleAmountRounded = (int) Math.round(saleAmount);
+                        System.out.printf("Your cart value is greater or equal to 1,000,000 so you will get a %d off!",saleAmountRounded);
+                        saleCode="Off:"+saleAmountRounded;
+                    }
+                    else {
+                        saleCode = null;
+                    }
                 }
                 try {
                     CartController.discountApply(saleCode);

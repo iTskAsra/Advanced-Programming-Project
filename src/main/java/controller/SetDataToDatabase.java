@@ -48,6 +48,9 @@ public class SetDataToDatabase {
         String path = "Resources/Sales/"+ sale.getSaleCode() + ".json";
         File file = new File(path);
         try {
+            if (!file.exists()){
+                file.createNewFile();
+            }
             FileWriter fileWriter = new FileWriter(file);
             Gson gson = new GsonBuilder().serializeNulls().create();
             String data = gson.toJson(sale);

@@ -61,8 +61,8 @@ public class ProductPage extends Menu {
                     System.out.printf("Name : %-20s%s%20s\n",product1.getName()," ".repeat(10),product2.getName());
                     System.out.printf("Rates : %.2f%s%.2f\n",product1Rate," ".repeat(5),product2Rate);
                     System.out.printf("Company : %-20s%s%20s\n",product1.getCompany()," ".repeat(10),product2.getCompany());
-                    for (Feature i : product1.getCategory().getFeatures()){
-                        System.out.printf("%s : %s%s%s\n",i.getParameter(),product1.getCategoryFeatures().get(product1.getCategoryFeatures().indexOf(i)).getParameterValue()," ".repeat(5),product2.getCategoryFeatures().get(product2.getCategoryFeatures().indexOf(i)).getParameterValue());
+                    for (Feature i : product1.getCategoryFeatures()){
+                        System.out.printf("%s : %s%s%s\n",i.getParameter(),i.getParameterValue()," ".repeat(5),getFeatureOfProduct2(product2,i));
                     }
                     System.out.printf("Description : %-20s%s%20s\n",product1.getDescription()," ".repeat(10),product2.getDescription());
                     System.out.println("-".repeat(80));
@@ -73,6 +73,15 @@ public class ProductPage extends Menu {
                 getParentMenu().run();
             }
         };
+    }
+
+    private String getFeatureOfProduct2(Product product,Feature i) {
+        for (Feature j : product.getCategoryFeatures()){
+            if (j.getParameter().equals(i)){
+                return j.getParameterValue();
+            }
+        }
+        return null;
     }
 
     private Menu attributes() {

@@ -1,9 +1,7 @@
 package view;
 
-import controller.AdminController;
-import controller.CustomerController;
-import controller.GetDataFromDatabase;
-import controller.SellerController;
+import controller.*;
+import model.Sale;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +17,11 @@ public class Main {
         Menu.setScanner(Main.scanner);
         Menu mainMenu = new MainMenu();
         GetDataFromDatabase.setResources();
+        try {
+            SetPeriodicSales.set();
+        } catch (ExceptionsLibrary.NoAccountException e) {
+            e.printStackTrace();
+        }
         mainMenu.show();
         mainMenu.run();
     }

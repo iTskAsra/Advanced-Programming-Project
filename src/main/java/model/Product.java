@@ -29,9 +29,7 @@ public class Product {
         this.seller = seller;
         this.availability = availability;
         this.category = category;
-        //specify category features
-        this.categoryFeatures = new ArrayList<>();
-        //categoryFeatures.addAll(this.category.getFeatures());
+        this.categoryFeatures = categoryFeatures;
         this.description = description;
         this.rates = new ArrayList<>();
         this.productComments = new ArrayList<>();
