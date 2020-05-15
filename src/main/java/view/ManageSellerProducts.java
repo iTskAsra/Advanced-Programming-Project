@@ -69,41 +69,52 @@ public class ManageSellerProducts extends Menu {
 
             @Override
             public void run() {
-                System.out.println("Enter product name:");
-                String name = Main.scanInput("String");
-                System.out.println("Enter product company:");
-                String company = Main.scanInput("String");
-                System.out.println("Enter product price:");
-                double price = Double.parseDouble(Main.scanInput("double"));
-                System.out.println("Enter product quantity:");
-                int quantity = Integer.parseInt(Main.scanInput("int"));
-                System.out.println("Enter product category:");
-                String category = Main.scanInput("String");
-                while (!SellerController.checkIfCategoryExists(category)) {
-                    System.out.println("No category with this name, try again:");
-                    category = Main.scanInput("String");
-                }
-                Category category1 = null;
-                try {
-                    category1 = GetDataFromDatabase.getCategory(category);
-                    ArrayList<Feature> productFeatures = new ArrayList<>();
-                    for (Feature i : category1.getFeatures()){
-                        System.out.printf("Enter value of feature %s:\n",i.getParameter());
-                        String value = Main.scanInput("String");
-                        Feature feature = new Feature(i.getParameter(),value);
-                        productFeatures.add(feature);
+                /*System.out.println("Enter the way to add product:");
+                System.out.println("1. Add a new product");
+                System.out.println("2. Add an existing product");
+                int chosenNumber = Integer.parseInt(Main.scanInput("int"));
+                if (chosenNumber == 1) {*/
+                    System.out.println("Enter product name:");
+                    String name = Main.scanInput("String");
+                    System.out.println("Enter product company:");
+                    String company = Main.scanInput("String");
+                    System.out.println("Enter product price:");
+                    double price = Double.parseDouble(Main.scanInput("double"));
+                    System.out.println("Enter product quantity:");
+                    int quantity = Integer.parseInt(Main.scanInput("int"));
+                    System.out.println("Enter product category:");
+                    String category = Main.scanInput("String");
+                    while (!SellerController.checkIfCategoryExists(category)) {
+                        System.out.println("No category with this name, try again:");
+                        category = Main.scanInput("String");
                     }
-                    System.out.println("Enter product description:");
-                    String description = Main.scanInput("String");
-                    Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE, name, company, price, null, quantity, category1, productFeatures, description, new ArrayList<Rate>(), new ArrayList<Comment>(), Main.localDateTime.format(Main.dateTimeFormatter), price);
-                    SellerController.addProductRequest(product, category);
-                    System.out.println("Request sent!");
-                } catch (ExceptionsLibrary.NoCategoryException e) {
-                    e.printStackTrace();
-                }
+                    Category category1 = null;
+                    try {
+                        category1 = GetDataFromDatabase.getCategory(category);
+                        ArrayList<Feature> productFeatures = new ArrayList<>();
+                        for (Feature i : category1.getFeatures()) {
+                            System.out.printf("Enter value of feature %s:\n", i.getParameter());
+                            String value = Main.scanInput("String");
+                            Feature feature = new Feature(i.getParameter(), value);
+                            productFeatures.add(feature);
+                        }
+                        System.out.println("Enter product description:");
+                        String description = Main.scanInput("String");
+                        Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE, name, company, price, null, quantity, category1, productFeatures, description, new ArrayList<Rate>(), new ArrayList<Comment>(), Main.localDateTime.format(Main.dateTimeFormatter), price);
+                        SellerController.addProductRequest(product, category);
+                        System.out.println("Request sent!");
+                    } catch (ExceptionsLibrary.NoCategoryException e) {
+                        e.printStackTrace();
+                    }
                 getParentMenu().show();
                 getParentMenu().run();
-            }
+                }
+                /*else {
+                    System.out.println("Enter product ID:");
+                    int productId = Integer.parseInt(Main.scanInput("int"));
+                    SellerController.addExistingProductRequest(productId);
+                }*/
+            //}
         };
     }
 

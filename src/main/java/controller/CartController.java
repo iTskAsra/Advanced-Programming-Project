@@ -59,6 +59,9 @@ public class CartController {
     }
 
     public static HashMap<Product, Integer> getCartProducts() {
+        if (cartProducts == null){
+            cartProducts = new HashMap<>();
+        }
         return cartProducts;
     }
 
@@ -127,6 +130,7 @@ public class CartController {
 
     public static double showTotalPrice() {
         Double totalPrice = 0.00;
+        getCartProducts();
         for (Product i : cartProducts.keySet()) {
             totalPrice += (i.getPriceWithOff() * cartProducts.get(i));
         }

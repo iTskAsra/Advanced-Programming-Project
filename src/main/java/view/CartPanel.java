@@ -42,7 +42,7 @@ public class CartPanel extends Menu {
     }
 
     private Menu showProducts() {
-        return new Menu("Products", this) {
+        return new Menu("Cart Products", this) {
 
             @Override
             public void show() {
