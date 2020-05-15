@@ -116,84 +116,84 @@ public abstract class Menu {
     protected Menu getMenuAfterLogout() {
         if (this instanceof MainMenu){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
+
         }
         else if (this instanceof AdminPanel){
             MainMenu mainMenu = new MainMenu();
-            mainMenu.setSubmenus(mainMenu.getSubmenus());
             return mainMenu;
         }
         else if (this instanceof AllProductsPanel){
-            AllProductsPanel allProductsPanel = new AllProductsPanel(null);
-            this.setSubmenus(allProductsPanel.getSubmenus());
+            AllProductsPanel allProductsPanel = new AllProductsPanel(this.getParentMenu());
+            return allProductsPanel;
         }
         else if (this instanceof CartPanel){
-            CartPanel cartPanel = new CartPanel("",null);
-            this.setSubmenus(cartPanel.getSubmenus());
+            CartPanel cartPanel = new CartPanel("",this.getParentMenu());
+            return cartPanel;
         }
         else if (this instanceof CustomerLogs){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof CustomerPanel){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof Digest){
-            Digest digest = new Digest("",null);
-            this.setSubmenus(digest.getSubmenus());
+            Digest digest = new Digest("",this.getParentMenu());
+            return digest;
         }
         else if (this instanceof FilterPanel){
-            FilterPanel filterPanel = new FilterPanel("",null);
-            this.setSubmenus(filterPanel.getSubmenus());
+            FilterPanel filterPanel = new FilterPanel("",this.getParentMenu());
+            return filterPanel;
         }
         else if (this instanceof ManageAllProducts){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof ManageCategoriesMenu){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof ManageRequestsMenu){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof ManageSalesMenu){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof ManageSellerOffs){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof ManageSellerProducts){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof ManageUsersMenu){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof OffPanel){
-            OffPanel offPanel = new OffPanel(null);
-            this.setSubmenus(offPanel.getSubmenus());
+            OffPanel offPanel = new OffPanel(this.getParentMenu());
+            return offPanel;
         }
         else if (this instanceof ProductCommentPanel){
-            ProductPage productPage = new ProductPage("",null);
-            this.setSubmenus(productPage.getSubmenus());
+            ProductPage productPage = new ProductPage("",this.getParentMenu());
+            return productPage;
         }
         else if (this instanceof ProductPage){
-            ProductPage productPage = new ProductPage("",null);
-            this.setSubmenus(productPage.getSubmenus());
+            ProductPage productPage = new ProductPage("",this.getParentMenu());
+            return productPage;
         }
         else if (this instanceof SellerPanel){
             MainMenu mainMenu = new MainMenu();
-            this.setSubmenus(mainMenu.getSubmenus());
+            return mainMenu;
         }
         else if (this instanceof SortPanel){
-            SortPanel sortPanel = new SortPanel("",null);
-            this.setSubmenus(sortPanel.getSubmenus());
+            SortPanel sortPanel = new SortPanel("",this.getParentMenu());
+            return sortPanel;
         }
         return this;
     }

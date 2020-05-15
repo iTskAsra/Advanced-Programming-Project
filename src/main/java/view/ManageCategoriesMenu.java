@@ -130,6 +130,8 @@ public class ManageCategoriesMenu extends Menu {
                     System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
                     System.out.println(noFeatureWithThisName.getMessage());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();
