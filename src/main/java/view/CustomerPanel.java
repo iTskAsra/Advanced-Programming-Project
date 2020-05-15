@@ -45,7 +45,7 @@ public class CustomerPanel extends Menu {
     }
 
     private Menu showCustomerInfo() {
-        return new Menu("Show Personal Info", this) {
+        return new Menu("Show Customer Info", this) {
 
             @Override
             public void show() {
@@ -76,6 +76,7 @@ public class CustomerPanel extends Menu {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
+                System.out.println("Enter fields you want to change (password, firstName, lastName, email, phoneNumber): (separate by comma)");
             }
 
             @Override
@@ -84,12 +85,18 @@ public class CustomerPanel extends Menu {
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String, String> editedData = new HashMap<>();
                 for (String i : splitFields) {
-                    System.out.printf("Enter new %s\n", i.substring(0, 1).toUpperCase() + i.substring(1));
-                    String newValue = Main.scanInput("String");
-                    editedData.put(i, newValue);
+                    if (!i.equalsIgnoreCase("username")) {
+                        System.out.printf("Enter new %s\n", i.substring(0, 1).toUpperCase() + i.substring(1));
+                        String newValue = Main.scanInput("String");
+                        editedData.put(i, newValue);
+                    }
+                    else {
+                        System.out.println("You can't change your username!");
+                    }
                 }
                 try {
                     CustomerController.editCustomerInfo(editedData);
+                    System.out.println("Edited info!");
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
@@ -132,7 +139,7 @@ public class CustomerPanel extends Menu {
             public void run() {
                 ArrayList<Sale> discountCodes = CustomerController.showDiscountCodes();
                 for (Sale i : discountCodes){
-                    System.out.printf("Sale Code : %s     Sales Start Date : %s     Sale End Date : %s   Sale Percent : %.2f%     Sale Max Amount : %s     Sale Remaining Valid Times : %d",i.getSaleCode(),i.getStartDate(),i.getEndDate(),i.getSalePercent(),i.getSaleMaxAmount(),i.getValidTimes());
+                    System.out.printf("Sale Code : %s     Sales Start Date : %s     Sale End Date : %s   Sale Percent : %.2f     Sale Max Amount : %.2f     Sale Remaining Valid Times : %d\n",i.getSaleCode(),i.getStartDate(),i.getEndDate(),i.getSalePercent(),i.getSaleMaxAmount(),i.getValidTimes());
                 }
                 getParentMenu().show();
                 getParentMenu().run();

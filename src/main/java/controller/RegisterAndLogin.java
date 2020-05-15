@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class RegisterAndLogin {
-    public static void register(String dataToRegister) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.AdminExist {
+    public static void register(String dataToRegister) throws ExceptionsLibrary.AdminExist, ExceptionsLibrary.UsernameAlreadyExists {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Account account = gson.fromJson(dataToRegister, Account.class);
         String username = account.getUsername();
@@ -40,7 +40,7 @@ public class RegisterAndLogin {
         String accountPath = "Resources/Accounts/" + role + "/" + username + ".json";
         File file = new File(accountPath);
         if (!checkUsername(username)) {
-            throw new ExceptionsLibrary.NoAccountException();
+            throw new ExceptionsLibrary.UsernameAlreadyExists();
         } else {
             if (role.equals("Admin")) {
                 if (new File("Resources/Accounts/Admin").listFiles().length != 0) {
@@ -100,9 +100,9 @@ public class RegisterAndLogin {
     }
 
     public static boolean checkUsername(String username) {
-        File folder1 = new File("Resources/Accounts/Customer");
-        File folder2 = new File("Resources/Accounts/Admin");
-        File folder3 = new File("Resources/Accounts/Seller");
+        File folder1 = new File("Resources/Accounts/Customer/");
+        File folder2 = new File("Resources/Accounts/Admin/");
+        File folder3 = new File("Resources/Accounts/Seller/");
         if (new File(folder1, username + ".json").exists()) {
             return false;
         } else if (new File(folder2, username + ".json").exists()) {

@@ -109,7 +109,8 @@ public class ManageRequestsMenu extends Menu {
                 int requestId = Integer.parseInt(Main.scanInput("int"));
                 String data = null;
                 try {
-                    data = AdminController.showRequest(requestId);Gson gson = new GsonBuilder().serializeNulls().create();
+                    data = AdminController.showRequest(requestId);
+                    Gson gson = new GsonBuilder().serializeNulls().create();
                     Request request = gson.fromJson(data, Request.class);
                     System.out.printf("%s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%-20s%s%30s\n%s\n", "-".repeat(60), "Request ID :", " ".repeat(10), request.getRequestId(), "Type :", " ".repeat(10), request.getRequestType(), "Condition :", " ".repeat(10), request.getRequestCondition(), "Requester :", " ".repeat(10), request.getRequestSeller().getUsername(), "-".repeat(60));
                 } catch (ExceptionsLibrary.NoRequestException e) {

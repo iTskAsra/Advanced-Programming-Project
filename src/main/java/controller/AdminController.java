@@ -330,6 +330,86 @@ public class AdminController {
                 throw new ExceptionsLibrary.NoFeatureWithThisName();
             }
         }
+        File customerFolder = new File("Resources/Accounts/Customer");
+        File sellerFolder = new File("Resources/Accounts/Seller");
+        File adminFolder = new File("Resources/Accounts/Admin");
+
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        for (File i : customerFolder.listFiles(fileFilter)) {
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            try {
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
+                Customer customer = gson.fromJson(fileData, Customer.class);
+                Iterator<Sale> iterator = customer.getSaleCodes().iterator();
+                while (iterator.hasNext()) {
+                    Sale tempSale = iterator.next();
+                    if (tempSale.getSaleCode().equalsIgnoreCase(sale.getSaleCode())) {
+                        iterator.remove();
+                    }
+                }
+                customer.getSaleCodes().add(sale);
+                SetDataToDatabase.setAccount(customer);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (File i : sellerFolder.listFiles(fileFilter)) {
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            try {
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
+                Seller seller = gson.fromJson(fileData, Seller.class);
+
+                Iterator<Sale> iterator = seller.getSaleCodes().iterator();
+                while (iterator.hasNext()) {
+                    Sale tempSale = iterator.next();
+                    if (tempSale.getSaleCode().equalsIgnoreCase(sale.getSaleCode())) {
+                        iterator.remove();
+                    }
+                }
+                seller.getSaleCodes().add(sale);
+                SetDataToDatabase.setAccount(seller);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (File i : adminFolder.listFiles(fileFilter)) {
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            try {
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
+                Admin admin = gson.fromJson(fileData, Admin.class);
+                Iterator<Sale> iterator = admin.getSaleCodes().iterator();
+                while (iterator.hasNext()) {
+                    Sale tempSale = iterator.next();
+                    if (tempSale.getSaleCode().equalsIgnoreCase(sale.getSaleCode())) {
+                        iterator.remove();
+                    }
+                }
+                admin.getSaleCodes().add(sale);
+                SetDataToDatabase.setAccount(admin);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         Gson gson = new GsonBuilder().serializeNulls().create();
         String editedDetails = gson.toJson(sale);
         try {
@@ -409,7 +489,9 @@ public class AdminController {
     }
 
     public static void addAdminAccount(String newAdminDetails) throws ExceptionsLibrary.UsernameAlreadyExists {
-        if (RegisterAndLogin.checkUsername(admin.getUsername())) {
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        Admin admin1 = gson.fromJson(newAdminDetails,Admin.class);
+        if (RegisterAndLogin.checkUsername(admin1.getUsername())) {
             RegisterAndLogin.registerAdmin(newAdminDetails);
         } else {
             throw new ExceptionsLibrary.UsernameAlreadyExists();
@@ -612,10 +694,14 @@ public class AdminController {
                     String fileData = "";
                     fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Customer customer = gson.fromJson(fileData, Customer.class);
-                    if (customer.getSaleCodes().contains(sale)) {
-                        customer.getSaleCodes().remove(sale);
-                        SetDataToDatabase.setAccount(customer);
+                    Iterator<Sale> iterator = customer.getSaleCodes().iterator();
+                    while (iterator.hasNext()) {
+                        Sale tempSale = iterator.next();
+                        if (tempSale.getSaleCode().equalsIgnoreCase(sale.getSaleCode())) {
+                            iterator.remove();
+                        }
                     }
+                    SetDataToDatabase.setAccount(customer);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -629,11 +715,14 @@ public class AdminController {
                     String fileData = "";
                     fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Seller seller = gson.fromJson(fileData, Seller.class);
-
-                    if (seller.getSaleCodes().contains(sale)) {
-                        seller.getSaleCodes().remove(sale);
-                        SetDataToDatabase.setAccount(seller);
+                    Iterator<Sale> iterator = seller.getSaleCodes().iterator();
+                    while (iterator.hasNext()) {
+                        Sale tempSale = iterator.next();
+                        if (tempSale.getSaleCode().equalsIgnoreCase(sale.getSaleCode())) {
+                            iterator.remove();
+                        }
                     }
+                    SetDataToDatabase.setAccount(seller);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -647,10 +736,14 @@ public class AdminController {
                     String fileData = "";
                     fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Admin admin = gson.fromJson(fileData, Admin.class);
-                    if (admin.getSaleCodes().contains(sale)) {
-                        admin.getSaleCodes().remove(sale);
-                        SetDataToDatabase.setAccount(admin);
+                    Iterator<Sale> iterator = admin.getSaleCodes().iterator();
+                    while (iterator.hasNext()) {
+                        Sale tempSale = iterator.next();
+                        if (tempSale.getSaleCode().equalsIgnoreCase(sale.getSaleCode())) {
+                            iterator.remove();
+                        }
                     }
+                    SetDataToDatabase.setAccount(admin);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

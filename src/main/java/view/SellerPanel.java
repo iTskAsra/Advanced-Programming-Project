@@ -50,6 +50,7 @@ public class SellerPanel extends Menu {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
+                System.out.println("Enter fields you want to change (password, firstName, lastName, email, phoneNumber): (separate by comma)");
             }
 
             @Override

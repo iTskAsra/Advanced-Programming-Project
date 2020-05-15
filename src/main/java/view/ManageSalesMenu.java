@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.AdminController;
 import controller.ExceptionsLibrary;
+import controller.GetDataFromDatabase;
 import controller.SortController;
 import model.Sale;
 
@@ -66,26 +67,35 @@ public class ManageSalesMenu extends Menu {
     }
 
     private Menu editSaleInfo() {
-        return new Menu("Edit Info",this) {
+        return new Menu("Edit Sale Info",this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
+                System.out.println("Enter sale code :");
             }
-
+            //TODO unable to change productID , offID, requestID, saleID
             @Override
             public void run() {
                 String saleCode = Main.scanInput("String");
-                String fields = Main.scanInput("String");
-                String[] splitFields = fields.split("\\s*,\\s*");
-                HashMap<String,String> editedData = new HashMap<>();
-                for (String i : splitFields){
-                    System.out.printf("Enter new %s\n",i.substring(0, 1).toUpperCase() + i.substring(1));
-                    String newValue = Main.scanInput("String");
-                    editedData.put(i,newValue);
-                }
                 try {
-                    AdminController.editSaleInfo(saleCode,editedData);
-                } catch (ExceptionsLibrary.NoSaleException | ExceptionsLibrary.NoFeatureWithThisName e) {
+                    Sale sale = GetDataFromDatabase.getSale(saleCode);
+                    System.out.println("Enter fields to edit : (separate by comma) (startDate, endDate, salePercent, saleMaxAmount, validTimes) :");
+                    String fields = Main.scanInput("String");
+                    String[] splitFields = fields.split("\\s*,\\s*");
+                    HashMap<String, String> editedData = new HashMap<>();
+                    for (String i : splitFields) {
+                        System.out.printf("Enter new %s\n", i.substring(0, 1).toUpperCase() + i.substring(1));
+                        String newValue = Main.scanInput("String");
+                        editedData.put(i, newValue);
+                    }
+                    try {
+                        AdminController.editSaleInfo(saleCode, editedData);
+                        System.out.println("Edited sale details!");
+                    } catch (ExceptionsLibrary.NoSaleException | ExceptionsLibrary.NoFeatureWithThisName e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                catch (ExceptionsLibrary.NoSaleException e){
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();

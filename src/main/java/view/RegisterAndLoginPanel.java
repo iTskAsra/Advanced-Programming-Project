@@ -130,7 +130,7 @@ public class RegisterAndLoginPanel extends Menu {
                         getParentMenu().show();
                         getParentMenu().run();
                     }
-                    catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.AdminExist e ){
+                    catch (ExceptionsLibrary.AdminExist | ExceptionsLibrary.UsernameAlreadyExists e ){
                         System.out.println(e.getMessage());
                     }
 
@@ -169,7 +169,7 @@ public class RegisterAndLoginPanel extends Menu {
                         getParentMenu().show();
                         getParentMenu().run();
                     }
-                    catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.AdminExist e ){
+                    catch (ExceptionsLibrary.AdminExist | ExceptionsLibrary.UsernameAlreadyExists e ){
                         System.out.println(e.getMessage());
                     }
                 } else if (chosenNumber == 3 && new File("Resources/Accounts/Admin").listFiles().length == 0) {
@@ -198,21 +198,18 @@ public class RegisterAndLoginPanel extends Menu {
                     Admin admin = new Admin(username,password,"Admin",firstName,lastName,email,phoneNumber,null,credit,null);
                     Gson gson = new GsonBuilder().serializeNulls().create();
                     String data = gson.toJson(admin);
-                    try {
-                        RegisterAndLogin.register(data);
-                        System.out.println("Registered!");
-                        getParentMenu().show();
-                        getParentMenu().run();
-                    }
-                    catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.AdminExist e ){
-                        System.out.println(e.getMessage());
-                    }
+                    RegisterAndLogin.registerAdmin(data);
+                    System.out.println("Registered!");
+                    getParentMenu().show();
+                    getParentMenu().run();
                 }
                 else {
                     System.out.println("Enter a valid number!");
                     this.show();
                     this.run();
                 }
+                getParentMenu().show();
+                getParentMenu().run();
 
             }
         };
