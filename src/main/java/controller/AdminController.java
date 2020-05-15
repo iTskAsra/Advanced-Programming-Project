@@ -6,6 +6,8 @@ import model.*;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class AdminController {
@@ -121,6 +123,9 @@ public class AdminController {
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     } catch (IOException e) {
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                        File fileRequest = new File(requestPath);
+                        fileRequest.delete();
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
@@ -155,6 +160,9 @@ public class AdminController {
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     } catch (IOException e) {
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                        File fileRequest = new File(requestPath);
+                        fileRequest.delete();
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
@@ -186,6 +194,9 @@ public class AdminController {
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     } catch (IOException e) {
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                        File fileRequest = new File(requestPath);
+                        fileRequest.delete();
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
@@ -220,6 +231,9 @@ public class AdminController {
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
                     } catch (IOException e) {
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                        File fileRequest = new File(requestPath);
+                        fileRequest.delete();
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
@@ -248,6 +262,9 @@ public class AdminController {
                             throw new ExceptionsLibrary.NoAccountException();
                         }
                     } else {
+                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
+                        File fileRequest = new File(requestPath);
+                        fileRequest.delete();
                         throw new ExceptionsLibrary.UsernameAlreadyExists();
                     }
                 } else {
@@ -445,12 +462,9 @@ public class AdminController {
             for (File i : productsFolder.listFiles(fileFilter)) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 try {
-                    Scanner scanner;
-                    scanner = new Scanner(i);
-                    scanner.useDelimiter("\\z");
-                    String fileData = scanner.next();
+                    String fileData = "";
+                    fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Product product = gson.fromJson(fileData, Product.class);
-                    scanner.close();
                     if (product.getCategory().getName().equals(categoryName)) {
                         SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
                         i.delete();
@@ -458,6 +472,8 @@ public class AdminController {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (ExceptionsLibrary.NoAccountException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -470,7 +486,7 @@ public class AdminController {
 
     }
 
-    public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoFeatureWithThisName {
+    public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException {
         Category category = GetDataFromDatabase.getCategory(categoryName);
         String oldName = category.getName();
         for (String i : dataToEdit.keySet()) {
@@ -536,18 +552,14 @@ public class AdminController {
         for (File i : folder.listFiles(fileFilter)) {
             Gson gson1 = new GsonBuilder().serializeNulls().create();
             try {
-                Scanner scanner;
-                scanner = new Scanner(i);
-                scanner.useDelimiter("\\z");
-                //TODO allbytes
-                String fileData = scanner.next();
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                 Product product = gson1.fromJson(fileData, Product.class);
-                scanner.close();
                 product.setCategory(category);
                 SetDataToDatabase.setProduct(product);
                 SetDataToDatabase.updateSellerAndOffsOfProduct(product,0);
-            } catch (FileNotFoundException | ExceptionsLibrary.NoAccountException e) {
-                e.printStackTrace();
+            } catch (ExceptionsLibrary.NoAccountException | IOException e) {
+                throw new ExceptionsLibrary.NoAccountException();
             }
         }
     }
@@ -597,17 +609,16 @@ public class AdminController {
             for (File i : customerFolder.listFiles(fileFilter)) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 try {
-                    Scanner scanner;
-                    scanner = new Scanner(i);
-                    scanner.useDelimiter("\\z");
-                    String fileData = scanner.next();
+                    String fileData = "";
+                    fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Customer customer = gson.fromJson(fileData, Customer.class);
-                    scanner.close();
                     if (customer.getSaleCodes().contains(sale)) {
                         customer.getSaleCodes().remove(sale);
                         SetDataToDatabase.setAccount(customer);
                     }
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -615,17 +626,17 @@ public class AdminController {
             for (File i : sellerFolder.listFiles(fileFilter)) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 try {
-                    Scanner scanner;
-                    scanner = new Scanner(i);
-                    scanner.useDelimiter("\\z");
-                    String fileData = scanner.next();
+                    String fileData = "";
+                    fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Seller seller = gson.fromJson(fileData, Seller.class);
-                    scanner.close();
+
                     if (seller.getSaleCodes().contains(sale)) {
                         seller.getSaleCodes().remove(sale);
                         SetDataToDatabase.setAccount(seller);
                     }
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -633,17 +644,16 @@ public class AdminController {
             for (File i : adminFolder.listFiles(fileFilter)) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 try {
-                    Scanner scanner;
-                    scanner = new Scanner(i);
-                    scanner.useDelimiter("\\z");
-                    String fileData = scanner.next();
+                    String fileData = "";
+                    fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Admin admin = gson.fromJson(fileData, Admin.class);
-                    scanner.close();
                     if (admin.getSaleCodes().contains(sale)) {
                         admin.getSaleCodes().remove(sale);
                         SetDataToDatabase.setAccount(admin);
                     }
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

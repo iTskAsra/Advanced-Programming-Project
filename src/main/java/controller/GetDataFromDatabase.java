@@ -48,41 +48,33 @@ public class GetDataFromDatabase {
         File fileSeller = new File(pathSeller);
         if (fileCustomer.exists() && !fileAdmin.exists() && !fileSeller.exists()) {
             try {
-                Scanner scanner;
-                scanner = new Scanner(fileCustomer);
-                scanner.useDelimiter("\\z");
-                String fileData = scanner.next();
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(pathCustomer)));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Customer account = gson.fromJson(fileData, Customer.class);
-                scanner.close();
                 return account;
             } catch (FileNotFoundException e) {
+                throw new ExceptionsLibrary.NoAccountException();
+            } catch (IOException e) {
                 throw new ExceptionsLibrary.NoAccountException();
             }
 
         } else if (!fileCustomer.exists() && fileAdmin.exists() && !fileSeller.exists()) {
             try {
-                Scanner scanner;
-                scanner = new Scanner(fileAdmin);
-                scanner.useDelimiter("\\z");
-                String fileData = scanner.next();
+                String fileData = "";
+                fileData = new String(Files.readAllBytes(Paths.get(pathAdmin)));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Admin account = gson.fromJson(fileData, Admin.class);
-                scanner.close();
                 return account;
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 throw new ExceptionsLibrary.NoAccountException();
             }
         } else if (!fileCustomer.exists() && !fileAdmin.exists() && fileSeller.exists()) {
             try {
-                Scanner scanner;
-                scanner = new Scanner(fileSeller);
-                scanner.useDelimiter("\\z");
                 String fileData = "";
                 fileData = new String(Files.readAllBytes(Paths.get(pathSeller)));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Seller account = gson.fromJson(fileData, Seller.class);
-                scanner.close();
                 return account;
             } catch (FileNotFoundException e) {
                 throw new ExceptionsLibrary.NoAccountException();
@@ -99,14 +91,10 @@ public class GetDataFromDatabase {
         String productPath = "Resources/Products/" + (productId) + ".json";
         File fileProduct = new File(productPath);
         try {
-            Scanner scanner;
-            scanner = new Scanner(fileProduct);
-            scanner.useDelimiter("\\z");
             String fileData = "";
             fileData = new String(Files.readAllBytes(Paths.get(productPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Product product = gson.fromJson(fileData, Product.class);
-            scanner.close();
             return product;
         } catch (FileNotFoundException e) {
             throw new ExceptionsLibrary.NoProductException();
@@ -124,14 +112,10 @@ public class GetDataFromDatabase {
         String offPath = "Resources/Offs/" + (offId) + ".json";
         File fileProduct = new File(offPath);
         try {
-            Scanner scanner;
-            scanner = new Scanner(fileProduct);
-            scanner.useDelimiter("\\z");
             String fileData = "";
             fileData = new String(Files.readAllBytes(Paths.get(offPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Off off = gson.fromJson(fileData, Off.class);
-            scanner.close();
             return off;
         } catch (FileNotFoundException e) {
             throw new ExceptionsLibrary.NoOffException();
@@ -148,16 +132,11 @@ public class GetDataFromDatabase {
         String requestPath = "Resources/Requests/" + (requestId) + ".json";
         File fileProduct = new File(requestPath);
         try {
-            Scanner scanner;
-            scanner = new Scanner(fileProduct);
-            scanner.useDelimiter("\\z");
-            //TODO replace readAllBytes with scanner
-            //String fileData = scanner.next();
             String fileData = "";
             fileData = new String(Files.readAllBytes(Paths.get(requestPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Request request = gson.fromJson(fileData, Request.class);
-            scanner.close();
+
             return request;
         } catch (FileNotFoundException e) {
             throw new ExceptionsLibrary.NoRequestException();
@@ -174,15 +153,12 @@ public class GetDataFromDatabase {
         String salePath = "Resources/Sales/" + (saleCode) + ".json";
         File fileProduct = new File(salePath);
         try {
-            Scanner scanner;
-            scanner = new Scanner(fileProduct);
-            scanner.useDelimiter("\\z");
-            String fileData = scanner.next();
+            String fileData = "";
+            fileData = new String(Files.readAllBytes(Paths.get(salePath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Sale sale = gson.fromJson(fileData, Sale.class);
-            scanner.close();
             return sale;
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new ExceptionsLibrary.NoSaleException();
         }
     }
@@ -195,15 +171,12 @@ public class GetDataFromDatabase {
         String categoryPath = "Resources/Category/" + (categoryName) + ".json";
         File fileCategory = new File(categoryPath);
         try {
-            Scanner scanner;
-            scanner = new Scanner(fileCategory);
-            scanner.useDelimiter("\\z");
-            String fileData = scanner.next();
+            String fileData = "";
+            fileData = new String(Files.readAllBytes(Paths.get(categoryPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Category category = gson.fromJson(fileData, Category.class);
-            scanner.close();
             return category;
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new ExceptionsLibrary.NoCategoryException();
         }
     }
@@ -226,9 +199,6 @@ public class GetDataFromDatabase {
         };
         for (File i : folder.listFiles(fileFilter)) {
             try {
-                Scanner scanner;
-                scanner = new Scanner(i);
-                scanner.useDelimiter("\\z");
                 String fileData = "";
                 fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                 Gson gson = new GsonBuilder().serializeNulls().create();
@@ -238,7 +208,6 @@ public class GetDataFromDatabase {
                         sellers.add(seller);
                     }
                 }
-                scanner.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {

@@ -34,12 +34,13 @@ public class CustomerController {
         return data;
     }
 
-    //TODO can't edit username (To all accounts)
-
-    public static void editCustomerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName {
+    public static void editCustomerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException {
         Customer customer = (Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
+                if (i.equals("username")){
+                    throw new ExceptionsLibrary.ChangeUsernameException();
+                }
                 Field field = Customer.class.getSuperclass().getDeclaredField(i);
                 field.setAccessible(true);
                 field.set(customer, dataToEdit.get(i));

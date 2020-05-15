@@ -105,11 +105,10 @@ public class CartController {
             if (i.getProductId() == productId) {
                 if (cartProducts.get(i) == 1) {
                     cartProducts.remove(i);
-                    return;
                 } else {
                     cartProducts.put(i, cartProducts.get(i) - 1);
-                    return;
                 }
+                return;
             }
         }
         throw new ExceptionsLibrary.NoProductException();
