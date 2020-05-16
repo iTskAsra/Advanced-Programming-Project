@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.CustomerController;
 import controller.ExceptionsLibrary;
+import controller.SortController;
 import model.Customer;
 import model.Sale;
 
@@ -140,6 +141,15 @@ public class CustomerPanel extends Menu {
                 ArrayList<Sale> discountCodes = CustomerController.showDiscountCodes();
                 for (Sale i : discountCodes){
                     System.out.printf("Sale Code : %s     Sales Start Date : %s     Sale End Date : %s   Sale Percent : %.2f     Sale Max Amount : %.2f     Sale Remaining Valid Times : %d\n",i.getSaleCode(),i.getStartDate(),i.getEndDate(),i.getSalePercent(),i.getSaleMaxAmount(),i.getValidTimes());
+                }
+                System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                    SortHandler.sortSale();
+                    SortController.sortSales(discountCodes);
+                    for (Sale i : discountCodes){
+                        System.out.printf("Sale Code : %s     Sales Start Date : %s     Sale End Date : %s   Sale Percent : %.2f     Sale Max Amount : %.2f     Sale Remaining Valid Times : %d\n",i.getSaleCode(),i.getStartDate(),i.getEndDate(),i.getSalePercent(),i.getSaleMaxAmount(),i.getValidTimes());
+                    }
+                    System.out.println("Sort again? (yes/no)");
                 }
                 getParentMenu().show();
                 getParentMenu().run();

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Off {
-    public static ArrayList<Off> allOffs;
     private int offId;
     private ArrayList<Product> offProducts;
     private ProductOrOffCondition offCondition;

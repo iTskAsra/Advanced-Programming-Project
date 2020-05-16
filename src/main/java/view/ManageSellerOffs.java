@@ -49,6 +49,7 @@ public class ManageSellerOffs extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Main.scanInput("int"));
+                System.out.println("Enter fields to edit : (startDate, endDate, offAmount) (separate by comma)");
                 String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String,String> editedData = new HashMap<>();
@@ -120,6 +121,8 @@ public class ManageSellerOffs extends Menu {
                         System.out.printf("Product ID : %d   Name : %s   Price : %.2f\n",j.getProductId(),j.getName(),j.getPrice());
                     }
                     System.out.println("-".repeat(50));
+                    getParentMenu().show();
+                    getParentMenu().run();
                 } catch (ExceptionsLibrary.NoOffException noOffException) {
                     noOffException.printStackTrace();
                 }
@@ -150,6 +153,8 @@ public class ManageSellerOffs extends Menu {
                         }
                         System.out.println("Sort again? (yes/no)");
                     }
+                    getParentMenu().show();
+                    getParentMenu().run();
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 }

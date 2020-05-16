@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 public class SellerController {
@@ -132,15 +133,14 @@ public class SellerController {
         SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
         File file = new File(path);
         file.delete();
-        SetDataToDatabase.setAccount(getSeller());
     }
 
     public static void addProductRequest(Product product, String category) {
         product.setSeller(getSeller());
-        Gson gson = new GsonBuilder().serializeNulls().create();
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         String productDetails = gson.toJson(product);
         Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
-        Gson gsonRequest = new GsonBuilder().serializeNulls().create();
+        Gson gsonRequest = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         if (!Files.exists(Paths.get("Resources/Requests"))) {
             File folder = new File("Resources/Requests");
             folder.mkdir();
@@ -187,10 +187,6 @@ public class SellerController {
                     Request request = new Request(editedOff, RequestType.EDIT_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
                     Gson gsonRequest = new GsonBuilder().serializeNulls().create();
                     String requestDetails = gsonRequest.toJson(request);
-                    if (!Files.exists(Paths.get("Resources/Requests"))) {
-                        File folder = new File("Resources/Requests");
-                        folder.mkdir();
-                    }
                     try {
                         String path = "Resources/Requests/" + request.getRequestId() + ".json";
                         FileWriter fileWriter = new FileWriter(path);
@@ -215,8 +211,12 @@ public class SellerController {
         for (String i : productIds){
             try {
                 Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
-                if (getSeller().getSellerProducts().contains(temp)) {
-                    offProductsList.add(temp);
+                Iterator<Product> iterator = getSeller().getSellerProducts().iterator();
+                while (iterator.hasNext()) {
+                    Product tempProduct = iterator.next();
+                    if (tempProduct.getProductId() == temp.getProductId()) {
+                        offProductsList.add(temp);
+                    }
                 }
             }
             catch (Exception e){

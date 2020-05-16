@@ -43,6 +43,7 @@ public class CartController {
     }
 
     public static double getTotalPriceWithoutSale() {
+        setTotalPriceWithoutSale(showTotalPrice());
         return totalPriceWithoutSale;
     }
 
@@ -59,7 +60,7 @@ public class CartController {
     }
 
     public static HashMap<Product, Integer> getCartProducts() {
-        if (cartProducts == null){
+        if (cartProducts == null) {
             cartProducts = new HashMap<>();
         }
         return cartProducts;
@@ -137,17 +138,23 @@ public class CartController {
         return totalPrice;
     }
 
-    public static void receiverProcess(HashMap<String, String> data) {
-
+    public static void receiverProcess(HashMap<String, String> data) throws ExceptionsLibrary.NotLoggedInException {
+        if (getCartCustomer() == null && CustomerController.getCustomer() == null) {
+            throw new ExceptionsLibrary.NotLoggedInException();
+        } else if (getCartCustomer() == null && CustomerController.getCustomer() != null) {
+            setCartCustomer(CustomerController.getCustomer());
+        }
         setReceiverInfo(data);
     }
 
     public static void discountApply(String saleCode) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException {
         if (saleCode == null) {
+            setTotalPriceWithoutSale(showTotalPrice());
+            setTotalPriceWithSale(getTotalPriceWithoutSale());
+            setSaleDiscount(0.00);
             return;
         } else if (saleCode.startsWith("Off:")) {
-            saleCode.replace("Off:","");
-            Double amount = Double.parseDouble(saleCode);
+            Double amount = Double.parseDouble(saleCode.replace("Off:", ""));
             setSaleDiscount(amount);
             setTotalPriceWithSale(getTotalPriceWithoutSale() - getSaleDiscount());
         } else {
@@ -162,10 +169,10 @@ public class CartController {
                         for (Sale j : cartCustomer.getSaleCodes()) {
                             if (j.getSaleCode().equals(saleCode)) {
                                 if (j.getValidTimes() >= 1) {
-                                    if (sale.getSaleMaxAmount() <= (sale.getSalePercent() * showTotalPrice())) {
+                                    if (sale.getSaleMaxAmount() <= (sale.getSalePercent() * showTotalPrice() / 100)) {
                                         setSaleDiscount(sale.getSaleMaxAmount());
                                     } else {
-                                        setSaleDiscount(sale.getSalePercent() * showTotalPrice());
+                                        setSaleDiscount(sale.getSalePercent() * showTotalPrice() / 100);
                                     }
                                     j.setValidTimes(j.getValidTimes() - 1);
                                     setTotalPriceWithSale(getTotalPriceWithoutSale() - getSaleDiscount());
@@ -190,7 +197,7 @@ public class CartController {
     public static double getOffFromHashMap(HashMap<Product, Integer> products) {
         Double offAmount = 0.00;
         for (Product i : products.keySet()) {
-            offAmount += (i.getPrice() - i.getPriceWithOff());
+            offAmount += ((i.getPrice() - i.getPriceWithOff())*products.get(i));
         }
         return offAmount;
     }
@@ -198,32 +205,38 @@ public class CartController {
     public static double amountOfMoneyFromSell(HashMap<Product, Integer> products) {
         Double amount = 0.00;
         for (Product i : products.keySet()) {
-            amount += (i.getPrice() - i.getPriceWithOff());
+            amount += (i.getPriceWithOff()*products.get(i));
         }
         return amount;
     }
 
-    public static void purchase() throws ExceptionsLibrary.CreditNotSufficientException {
+    public static void purchase() throws ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoAccountException {
         if (getTotalPriceWithSale() <= getCartCustomer().getCredit()) {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String dateNow = dateFormat.format(date);
             BuyLog buyLog = new BuyLog(dateNow, getTotalPriceWithSale(), getSaleDiscount(), getCartProducts(), "Delivered", getReceiverInfo());
-            cartCustomer.getCustomerLog().add(buyLog);
-            cartCustomer.setCredit(cartCustomer.getCredit() - getTotalPriceWithSale());
-            SetDataToDatabase.setAccount(cartCustomer);
+            getCartCustomer().getCustomerLog().add(buyLog);
+            getCartCustomer().setCredit(getCartCustomer().getCredit() - getTotalPriceWithSale());
+            SetDataToDatabase.setAccount(getCartCustomer());
             HashMap<Seller, HashMap<Product, Integer>> productSellers = new HashMap<>();
             for (Product i : getCartProducts().keySet()) {
                 if (productSellers.containsKey(i.getSeller())) {
                     productSellers.get(i.getSeller()).put(i, getCartProducts().get(i));
                 } else {
                     HashMap<Product, Integer> products = new HashMap<>();
-                    productSellers.get(i.getSeller()).put(i, getCartProducts().get(i));
+                    products.put(i, getCartProducts().get(i));
                     productSellers.put(i.getSeller(), products);
                 }
             }
+
             for (Seller i : productSellers.keySet()) {
-                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(i)), getOffFromHashMap(productSellers.get(i)), productSellers.get(i), getCartCustomer(), "Sent");
+                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(i)), getOffFromHashMap(productSellers.get(i)), productSellers.get(i), getCartCustomer().getUsername(), "Sent");
+                for (Product j : productSellers.get(i).keySet()) {
+                    j.setAvailability(j.getAvailability() - productSellers.get(i).get(j));
+                    SetDataToDatabase.setProduct(j);
+                    SetDataToDatabase.updateSellerAndOffsOfProduct(j, 0);
+                }
                 i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i)));
                 i.getSellerLogs().add(sellLog);
                 SetDataToDatabase.setAccount(i);

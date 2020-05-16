@@ -15,6 +15,7 @@ public class ManageSellerProducts extends Menu {
         submenus.put(3, showProductBuyers());
         submenus.put(4, editProductRequest());
         submenus.put(5, addProductRequest());
+        submenus.put(6, removeProduct());
         submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
@@ -130,6 +131,7 @@ public class ManageSellerProducts extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Main.scanInput("int"));
+                System.out.println("Enter fields to edit : (name, company, price, availability, description) (separate by comma)");
                 String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String, String> editedData = new HashMap<>();
@@ -166,7 +168,8 @@ public class ManageSellerProducts extends Menu {
                 try {
                     ArrayList<SellLog> buyersLogs = SellerController.showProductBuyers(productId);
                     for (SellLog i : buyersLogs) {
-                        System.out.printf("Log ID : %d\nCustomer : %s\nDate : %s\nTotal log price : %.2f", i.getLogId(), i.getBuyer().getUsername(), i.getLogDate(), i.getValue());
+                        Customer customer = (Customer) GetDataFromDatabase.getAccount(i.getBuyer());
+                        System.out.printf("Log ID : %d\nCustomer : %s\nDate : %s\nTotal log price : %.2f\n", i.getLogId(), customer.getUsername(), i.getLogDate(), i.getValue());
                     }
 
                     System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
@@ -174,7 +177,8 @@ public class ManageSellerProducts extends Menu {
                         SortHandler.sortSellLogs();
                         SortController.sortSellLogs(buyersLogs);
                         for (SellLog i : buyersLogs) {
-                            System.out.printf("Log ID : %d\nCustomer : %s\nDate : %s\nTotal log price : %.2f", i.getLogId(), i.getBuyer().getUsername(), i.getLogDate(), i.getValue());
+                            Customer customer = (Customer) GetDataFromDatabase.getAccount(i.getBuyer());
+                            System.out.printf("Log ID : %d\nCustomer : %s\nDate : %s\nTotal log price : %.2f", i.getLogId(), customer.getUsername(), i.getLogDate(), i.getValue());
                         }
                         System.out.println("Sort again? (yes/no)");
                     }
@@ -239,6 +243,8 @@ public class ManageSellerProducts extends Menu {
                         }
                         System.out.println("Sort again? (yes/no)");
                     }
+                    getParentMenu().show();
+                    getParentMenu().run();
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
                 }

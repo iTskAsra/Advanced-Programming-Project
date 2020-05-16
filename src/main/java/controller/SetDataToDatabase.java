@@ -9,11 +9,11 @@ import java.util.Iterator;
 
 public class SetDataToDatabase {
     public static void setProduct(Product product) {
-        String path = "Resources/Products"+ product.getProductId() + ".json";
+        String path = "Resources/Products/" + product.getProductId() + ".json";
         File file = new File(path);
         try {
             FileWriter fileWriter = new FileWriter(file);
-            Gson gson = new GsonBuilder().serializeNulls().create();
+            Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
             String data = gson.toJson(product);
             fileWriter.write(data);
             fileWriter.close();
@@ -29,7 +29,7 @@ public class SetDataToDatabase {
         File file = new File(path);
         try {
             FileWriter fileWriter = new FileWriter(file);
-            Gson gson = new GsonBuilder().serializeNulls().create();
+            Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
             String data = gson.toJson(account);
             fileWriter.write(data);
             fileWriter.close();
@@ -41,10 +41,10 @@ public class SetDataToDatabase {
     }
 
     public static void setSale(Sale sale) {
-        String path = "Resources/Sales/"+ sale.getSaleCode() + ".json";
+        String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
         File file = new File(path);
         try {
-            if (!file.exists()){
+            if (!file.exists()) {
                 file.createNewFile();
             }
             FileWriter fileWriter = new FileWriter(file);
@@ -60,10 +60,10 @@ public class SetDataToDatabase {
     }
 
     public static void setOff(Off off) {
-        String path = "Resources/Offs/"+ off.getOffId() + ".json";
+        String path = "Resources/Offs/" + off.getOffId() + ".json";
         File file = new File(path);
         try {
-            if (!file.exists()){
+            if (!file.exists()) {
                 file.createNewFile();
             }
             FileWriter fileWriter = new FileWriter(file);
@@ -78,7 +78,7 @@ public class SetDataToDatabase {
         }
     }
 
-    public static void updateSellerAndOffsOfProduct(Product product,int code) throws ExceptionsLibrary.NoAccountException {
+    public static void updateSellerAndOffsOfProduct(Product product, int code) throws ExceptionsLibrary.NoAccountException {
         File sellers = new File("Resources/Accounts/Seller");
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -104,10 +104,18 @@ public class SetDataToDatabase {
                     j.getOffProducts().add(product);
                     SetDataToDatabase.setOff(j);
                 }
+
+                Iterator iterator = seller.getSellerProducts().iterator();
+                while (iterator.hasNext()) {
+                    Product tempProduct = (Product) iterator.next();
+                    if (tempProduct.getProductId() == product.getProductId()) {
+                        iterator.remove();
+                    }
+                }
+                seller.getSellerProducts().add(product);
                 SetDataToDatabase.setAccount(seller);
             }
-        }
-        else if (code == 1){
+        } else if (code == 1) {
             for (File i : sellers.listFiles(fileFilter)) {
                 String sellerName = i.getName().replace(".json", "");
                 Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerName);

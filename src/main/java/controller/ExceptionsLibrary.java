@@ -62,8 +62,10 @@ public class  ExceptionsLibrary {
         }
     }
 
-    public static class NotLoggedInException{
-
+    public static class NotLoggedInException extends Exception{
+        public NotLoggedInException() {
+            super("You should first login to proceed!");
+        }
     }
 
     public static class CategoryExistsWithThisName extends Exception{
@@ -106,7 +108,7 @@ public class  ExceptionsLibrary {
 
     public static class NotEnoughNumberAvailableException extends Exception{
         public NotEnoughNumberAvailableException() {
-            super("Not enough number of this product to proceed!");
+            super("Not enough number of this product to increase!");
         }
     }
 

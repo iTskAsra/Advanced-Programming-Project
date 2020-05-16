@@ -119,6 +119,7 @@ public class AdminController {
                         for (Product i :off.getOffProducts()){
                             i.setPriceWithOff(i.getPrice()-off.getOffAmount());
                             SetDataToDatabase.setProduct(i);
+                            SetDataToDatabase.updateSellerAndOffsOfProduct(i,0);
                         }
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
@@ -147,6 +148,11 @@ public class AdminController {
                         if (tempOff.getOffId() == off.getOffId()) {
                             iterator.remove();
                         }
+                    }
+                    for (Product i : off.getOffProducts()){
+                        i.setPriceWithOff(i.getPrice()-off.getOffAmount());
+                        SetDataToDatabase.setProduct(i);
+                        SetDataToDatabase.updateSellerAndOffsOfProduct(i,0);
                     }
                     seller.getSellerOffs().add(off);
                     try {

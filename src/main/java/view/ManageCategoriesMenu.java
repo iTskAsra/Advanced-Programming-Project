@@ -110,7 +110,7 @@ public class ManageCategoriesMenu extends Menu {
             public void run() {
                 System.out.println("Enter Category name :");
                 String categoryName = Main.scanInput("String");
-                System.out.println("Enter Category fields to edit :");
+                System.out.println("Enter Category fields to edit : (name,features) (separate by comma)");
                 String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String, String> editedData = new HashMap<>();
@@ -124,6 +124,7 @@ public class ManageCategoriesMenu extends Menu {
                 }
                 try {
                     AdminController.editCategory(categoryName, editedData);
+                    System.out.println("Edited category!");
                 } catch (ExceptionsLibrary.CategoryExistsWithThisName categoryExistsWithThisName) {
                     System.out.println(categoryExistsWithThisName.getMessage());
                 } catch (ExceptionsLibrary.NoCategoryException e) {

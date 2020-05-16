@@ -3,6 +3,7 @@ package view;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.ExceptionsLibrary;
+import controller.GetDataFromDatabase;
 import controller.SellerController;
 import controller.SortController;
 import model.*;
@@ -59,7 +60,7 @@ public class SellerPanel extends Menu {
                 String[] splitFields = fields.split("\\s*,\\s*");
                 HashMap<String,String> editedData = new HashMap<>();
                 for (String i : splitFields){
-                    System.out.printf("Enter new %s\n",i.substring(0, 1).toUpperCase() + i.substring(1));
+                    System.out.printf("Enter new %s:\n",i.substring(0, 1).toUpperCase() + i.substring(1));
                     String newValue = Main.scanInput("String");
                     editedData.put(i,newValue);
                 }
@@ -107,12 +108,11 @@ public class SellerPanel extends Menu {
         return new Menu("Balance", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + ":");
+                System.out.printf("Balance : %.2f\n",SellerController.showBalance());
             }
 
             @Override
             public void run() {
-                System.out.printf("Balance : %.2f\n",SellerController.showBalance());
                 getParentMenu().show();
                 getParentMenu().run();
             }
@@ -148,13 +148,18 @@ public class SellerPanel extends Menu {
                 ArrayList<SellLog> sellerLogs = controller.SellerController.showSellerLogs();
                 for (SellLog i : sellerLogs){
                     System.out.println("-".repeat(50));
-                    System.out.printf("Log ID : %d\nDate : %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s %s\nDelivery Condition: \n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), i.getBuyer().getFirstName() , i.getBuyer().getLastName(), i.getDeliveryCondition());
-                    for (Product j : i.getLogProducts().keySet()){
-                        System.out.println("-".repeat(40));
-                        System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPrice()*i.getLogProducts().get(j));
-                        System.out.println("-".repeat(40));
+                    try {
+                        Customer customer = (Customer) GetDataFromDatabase.getAccount(i.getBuyer());
+                        System.out.printf("Log ID : %d\nDate : %s\nValue: %.2f\nDiscount Applied: %.2f\nBuyer's Name: %s %s\nDelivery Condition: %s\n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), customer.getFirstName() , customer.getLastName(), i.getDeliveryCondition());
+                        for (Product j : i.getLogProducts().keySet()){
+                            System.out.println("-".repeat(40));
+                            System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPrice()*i.getLogProducts().get(j));
+                            System.out.println("-".repeat(40));
+                        }
+                        System.out.println("-".repeat(50));
+                    } catch (ExceptionsLibrary.NoAccountException e) {
+                        System.out.println(e.getMessage());
                     }
-                    System.out.println("-".repeat(50));
                 }
                 System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
                 while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
@@ -162,13 +167,18 @@ public class SellerPanel extends Menu {
                     SortController.sortSellLogs(sellerLogs);
                     for (SellLog i : sellerLogs){
                         System.out.println("-".repeat(50));
-                        System.out.printf("Log ID : %d\nDate : %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s %s\nDelivery Condition: \n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), i.getBuyer().getFirstName() , i.getBuyer().getLastName(), i.getDeliveryCondition());
-                        for (Product j : i.getLogProducts().keySet()){
-                            System.out.println("-".repeat(40));
-                            System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPrice()*i.getLogProducts().get(j));
-                            System.out.println("-".repeat(40));
+                        try {
+                            Customer customer = (Customer) GetDataFromDatabase.getAccount(i.getBuyer());
+                            System.out.printf("Log ID : %d\nDate : %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s %s\nDelivery Condition: \n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), customer.getFirstName() , customer.getLastName(), i.getDeliveryCondition());
+                            for (Product j : i.getLogProducts().keySet()){
+                                System.out.println("-".repeat(40));
+                                System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPrice()*i.getLogProducts().get(j));
+                                System.out.println("-".repeat(40));
+                            }
+                            System.out.println("-".repeat(50));
+                        } catch (ExceptionsLibrary.NoAccountException e) {
+                            System.out.println(e.getMessage());
                         }
-                        System.out.println("-".repeat(50));
                     }
                     System.out.println("Sort again? (yes/no)");
                 }

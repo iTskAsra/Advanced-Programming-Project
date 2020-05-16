@@ -34,8 +34,6 @@ public class ManageAllProducts extends Menu {
         };
     }
 
-    //TODO show all products
-
     private Menu removeProduct() {
         return new Menu("Remove Product",this) {
             @Override

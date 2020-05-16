@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class BuyLog {
-    public static ArrayList<BuyLog> allBuyLogs;
     private int logId;
     private String logDate;
     private double value;

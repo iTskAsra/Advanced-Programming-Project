@@ -39,7 +39,7 @@ public class CustomerLogs extends Menu {
     }
 
     private Menu showCustomerLogs() {
-        return new Menu("Customer Logs :",this) {
+        return new Menu("Customer Logs",this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
@@ -75,7 +75,7 @@ public class CustomerLogs extends Menu {
                     System.out.println("-".repeat(40));
                     System.out.printf("Log ID : %d\nLog Date : %s\nLog Value : %.2f\nDiscount Applied : %.2f\nProducts :\n",buyLog.getLogId(),buyLog.getLogDate(),buyLog.getValue(),buyLog.getDiscountApplied());
                     for (Product i :buyLog.getLogProducts().keySet()){
-                        System.out.printf("Product ID : %d     Product Name : %s     Product Seller : %s     Product Price : %.2f   Quantity : %d\n",i.getProductId(),i.getName(),i.getSeller().getUsername(),i.getPriceWithOff(),buyLog.getLogProducts().get(i));
+                        System.out.printf("Product ID : %d     Product Name : %s     Product Price : %.2f   Quantity : %d\n",i.getProductId(),i.getName(),i.getPriceWithOff(),buyLog.getLogProducts().get(i));
                     }
                     System.out.println("-".repeat(40));
                 } catch (ExceptionsLibrary.NoLogException e) {
@@ -103,6 +103,7 @@ public class CustomerLogs extends Menu {
                 double productRate = Integer.parseInt(Main.scanInput("double"));
                 try {
                     CustomerController.rateProduct(productID, productRate);
+                    System.out.println("Rated!");
                 } catch (ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
                 }

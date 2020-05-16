@@ -23,12 +23,7 @@ public class Account {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        if (saleCodes == null){
-            this.saleCodes = new ArrayList<>();
-        }
-        else {
-            this.saleCodes = saleCodes;
-        }
+        this.saleCodes = new ArrayList<>();
         this.credit = credit;
     }
 

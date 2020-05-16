@@ -120,7 +120,7 @@ public class ProductPage extends Menu {
                 System.out.printf("Price : %.2f\n",ProductPageController.attributes().getPrice());
                 System.out.printf("Category : %s\n",ProductPageController.attributes().getCategory().getName());
                 for (Feature i : ProductPageController.attributes().getCategoryFeatures()){
-                    System.out.printf("%s : %s",i.getParameter(),i.getParameterValue());
+                    System.out.printf("%s : %s\n",i.getParameter(),i.getParameterValue());
                 }
                 System.out.printf("Description : %s\n",ProductPageController.attributes().getDescription());
                 System.out.printf("ProductID : %d\n",ProductPageController.attributes().getProductId());

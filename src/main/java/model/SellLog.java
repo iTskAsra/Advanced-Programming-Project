@@ -11,10 +11,10 @@ public class SellLog {
     private double value;
     private double discountApplied;
     private HashMap<Product,Integer> logProducts;
-    private Customer buyer;
+    private String buyer;
     private String deliveryCondition;
 
-    public SellLog(String logDate, double value, double discountApplied, HashMap<Product,Integer> logProducts, Customer buyer, String deliveryCondition) {
+    public SellLog(String logDate, double value, double discountApplied, HashMap<Product,Integer> logProducts, String buyer, String deliveryCondition) {
         Random random = new Random();
         this.logId = random.nextInt(10000);
         this.logDate = logDate;
@@ -65,11 +65,11 @@ public class SellLog {
         this.logProducts = logProducts;
     }
 
-    public Customer getBuyer() {
+    public String getBuyer() {
         return buyer;
     }
 
-    public void setBuyer(Customer buyer) {
+    public void setBuyer(String buyer) {
         this.buyer = buyer;
     }
 

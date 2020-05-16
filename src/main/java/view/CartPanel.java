@@ -2,11 +2,10 @@ package view;
 
 import controller.*;
 import model.Product;
-import model.Sale;
+import model.SellLog;
 import model.Seller;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class CartPanel extends Menu {
     public CartPanel(String name, Menu parentMenu) {
@@ -18,13 +17,13 @@ public class CartPanel extends Menu {
         submenus.put(4, decreaseProduct());
         submenus.put(5, showTotalPrice());
         submenus.put(6, purchase());
-        submenus.put(submenus.size()+1,help());
+        submenus.put(submenus.size() + 1, help());
 
         this.setSubmenus(submenus);
     }
 
     protected Menu help() {
-        return new Menu("Help",this) {
+        return new Menu("Help", this) {
             @Override
             public void show() {
                 System.out.println("------------------------------");
@@ -102,6 +101,7 @@ public class CartPanel extends Menu {
                 try {
                     Menu menu = new Menu("Select Seller", this) {
                         HashMap<Integer, Seller> sellerList = new HashMap<>();
+
                         @Override
                         public void show() {
                             try {
@@ -140,6 +140,7 @@ public class CartPanel extends Menu {
                     menu.run();
                     product = ProductPageController.getProduct();
                     CartController.increaseProduct(product);
+                    System.out.println("Product quantity increased by 1!");
                 } catch (ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.NotEnoughNumberAvailableException e) {
@@ -164,6 +165,7 @@ public class CartPanel extends Menu {
                 int productID = Integer.parseInt(Main.scanInput("int"));
                 try {
                     CartController.decreaseProduct(productID);
+                    System.out.println("Product quantity decreased by 1!");
                 } catch (ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
                 }
@@ -182,7 +184,7 @@ public class CartPanel extends Menu {
 
             @Override
             public void run() {
-                double totalPrice = CartController.getTotalPriceWithoutSale();
+                double totalPrice = CartController.showTotalPrice();
                 System.out.println("Total Price: " + totalPrice);
                 getParentMenu().show();
                 getParentMenu().run();
@@ -198,9 +200,9 @@ public class CartPanel extends Menu {
 
             @Override
             public void run() {
-                if (Main.checkLoggedIn() == null){
-                    System.out.println("You must first login or register to proceed");
-                    RegisterAndLoginPanel registerAndLoginPanel = new RegisterAndLoginPanel(this);
+                if (Main.checkLoggedIn() == null) {
+                    System.out.println("You must first login or register to proceed!");
+                    RegisterAndLoginPanel registerAndLoginPanel = new RegisterAndLoginPanel(this.getParentMenu());
                     registerAndLoginPanel.show();
                     registerAndLoginPanel.run();
                 }
@@ -215,38 +217,39 @@ public class CartPanel extends Menu {
                 receiverInfo.put("name", name);
                 receiverInfo.put("address", address);
                 receiverInfo.put("phone", phoneNumber);
-                CartController.receiverProcess(receiverInfo);
-                System.out.println("Receiver Info Set!");
-                System.out.println("Enter sale code to apply : (If you don't have or don't want to use it enter \"skip\")");
-                String saleCode = Main.scanInput("String");
-                if (saleCode.trim().equalsIgnoreCase("skip")) {
-                    if (CartController.getTotalPriceWithoutSale() >= 1000000){
-                        Double saleAmount = SetPeriodicSales.randomOff();
-                        int saleAmountRounded = (int) Math.round(saleAmount);
-                        System.out.printf("Your cart value is greater or equal to 1,000,000 so you will get a %d off!",saleAmountRounded);
-                        saleCode="Off:"+saleAmountRounded;
-                    }
-                    else {
-                        saleCode = null;
-                    }
-                }
                 try {
+                    CartController.receiverProcess(receiverInfo);
+                    System.out.println("Receiver Info Set!");
+                    System.out.println("Enter sale code to apply : (If you don't have or don't want to use it enter \"skip\")");
+                    String saleCode = Main.scanInput("String");
+                    if (saleCode.trim().equalsIgnoreCase("skip")) {
+                        if (CartController.getTotalPriceWithoutSale() >= 1000000) {
+                            Double saleAmount = SetPeriodicSales.randomOff();
+                            int saleAmountRounded = (int) Math.round(saleAmount);
+                            System.out.printf("Your cart value is greater or equal to 1,000,000 so you will get a %d off!", saleAmountRounded);
+                            saleCode = "Off:" + saleAmountRounded;
+                        } else {
+                            saleCode = null;
+                        }
+                    }
                     CartController.discountApply(saleCode);
+                    System.out.println("Total Price With Sale : "+CartController.getTotalPriceWithSale());
+                    System.out.println("Total Price Without Sale : "+CartController.getTotalPriceWithoutSale());
+                    System.out.println("Sale Discount : "+CartController.getSaleDiscount());
                     System.out.println("Payment :");
-                    System.out.println("Enter \"pay\" to proceed payment:");
+                    System.out.println("Enter \"pay\" to proceed payment or \"cancel\" to cancel payment:");
                     String input = Main.scanInput("String");
                     if (input.trim().equalsIgnoreCase("pay")) {
-                        try {
-                            CartController.purchase();
-                            System.out.println("Cart bought!");
-                        } catch (ExceptionsLibrary.CreditNotSufficientException e) {
-                            System.out.println(e.getMessage());
-                        }
-                    } else {
+                        CartController.purchase();
+                        System.out.println("Cart bought!");
+
+                    } else if (input.trim().equalsIgnoreCase("cancel")) {
                         System.out.println("Payment cancelled!");
                     }
-                    getParentMenu().show();
-                    getParentMenu().run();
+                } catch (ExceptionsLibrary.CreditNotSufficientException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.NoSaleException e) {
                     System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.UsedAllValidTimesException e) {
@@ -255,11 +258,15 @@ public class CartPanel extends Menu {
                     System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.SaleNotStartedYetException e) {
                     System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NotLoggedInException e) {
+                    e.printStackTrace();
                 }
-
-
+                getParentMenu().show();
+                getParentMenu().run();
             }
-        };
+        }
+
+                ;
     }
 
 
