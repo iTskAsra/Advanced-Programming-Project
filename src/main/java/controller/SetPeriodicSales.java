@@ -2,11 +2,13 @@ package controller;
 
 import model.Account;
 import model.Customer;
+import model.Off;
 import model.Sale;
 import view.Main;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +19,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class SetPeriodicSales {
-    public static void set() throws ExceptionsLibrary.NoAccountException {
+    public static void setPeriodicSales() throws ExceptionsLibrary.NoAccountException {
         if (isOkToRun()) {
             Main.localDateTime = LocalDateTime.now();
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM");
@@ -45,7 +47,7 @@ public class SetPeriodicSales {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 String startDate = Main.localDateTime.format(Main.dateTimeFormatter);
                 String endDate = simpleDateFormat.format(date1);
-                ArrayList<Integer> usernamesNumbers = random.ints(0, numberOfCustomers()).limit(numberOfCustomers() / 5).boxed().collect(Collectors.toCollection(ArrayList::new));
+                ArrayList<Integer> usernamesNumbers = random.ints(0, numberOfCustomers()).limit(numberOfCustomers() / 6).boxed().collect(Collectors.toCollection(ArrayList::new));
                 ArrayList<Account> saleAccounts = new ArrayList<>();
                 String customerPath = "Resources/Accounts/Customer";
                 File customerFolder = new File(customerPath);
@@ -76,7 +78,7 @@ public class SetPeriodicSales {
     }
 
     private static boolean isOkToRun() {
-        if (numberOfCustomers() == 0){
+        if (numberOfCustomers() == 0) {
             return false;
         }
         return true;
@@ -104,5 +106,33 @@ public class SetPeriodicSales {
         Random random = new Random();
         double amount = minRangeAmount + (maxRangeAmount - minRangeAmount + 1) * random.nextDouble();
         return amount;
+    }
+
+    public static void removeExpiredOff() throws ExceptionsLibrary.NoOffException, ParseException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
+        if (isOkToRun()) {
+            Main.localDateTime = LocalDateTime.now();
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM");
+            String offsPath = "Resources/Offs";
+            File offsFolder = new File(offsPath);
+            FileFilter fileFilter = new FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    if (file.getName().endsWith(".json")) {
+                        return true;
+                    }
+                    return false;
+                }
+            };
+            for (File i : offsFolder.listFiles(fileFilter)) {
+                String offId = i.getName().replace(".json", "");
+                Off off = GetDataFromDatabase.getOff(Integer.parseInt(offId));
+                Date offEndDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(off.getEndDate());
+                Date date = new Date();
+                if (date.compareTo(offEndDate) >= 0){
+                    SetDataToDatabase.removeOff(off.getOffId());
+                    i.delete();
+                }
+            }
+        }
     }
 }

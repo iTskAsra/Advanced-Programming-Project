@@ -18,24 +18,6 @@ public class RegisterAndLogin {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Account account = gson.fromJson(dataToRegister, Account.class);
         String username = account.getUsername();
-        if (!Files.exists(Paths.get("Resources/Accounts"))) {
-            File folder = new File("Resources/Accounts");
-            folder.mkdir();
-        }
-        if (Files.exists(Paths.get("Resources/Accounts"))) {
-            if (!Files.exists(Paths.get("Resources/Accounts/Customer"))) {
-                File folder1 = new File("Resources/Accounts/Customer");
-                folder1.mkdir();
-            }
-            if (!Files.exists(Paths.get("Resources/Accounts/Admin"))) {
-                File folder1 = new File("Resources/Accounts/Admin");
-                folder1.mkdir();
-            }
-            if (!Files.exists(Paths.get("Resources/Accounts/Seller"))) {
-                File folder1 = new File("Resources/Accounts/Seller");
-                folder1.mkdir();
-            }
-        }
         String role = account.getRole();
         String accountPath = "Resources/Accounts/" + role + "/" + username + ".json";
         File file = new File(accountPath);
@@ -60,7 +42,7 @@ public class RegisterAndLogin {
             } else if (role.equals("Seller")) {
                 Gson gsonSeller = new GsonBuilder().serializeNulls().create();
                 Seller seller = gsonSeller.fromJson(dataToRegister, Seller.class);
-                Request request = new Request(dataToRegister, RequestType.REGISTER_SELLER, RequestOrCommentCondition.PENDING_TO_ACCEPT, seller);
+                Request request = new Request(dataToRegister, RequestType.REGISTER_SELLER, RequestOrCommentCondition.PENDING_TO_ACCEPT, seller.getUsername());
                 String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                 while (Files.exists(Paths.get(requestPath))) {
                     Random random = new Random();

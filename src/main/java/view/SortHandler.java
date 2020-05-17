@@ -154,7 +154,6 @@ public class SortHandler {
         fields.put(3, "Start Date");
         fields.put(4, "End Date");
         fields.put(5, "Off Amount");
-        fields.put(6, "Availability");
         for (int i : fields.keySet()) {
             System.out.println(i + ". " + fields.get(i));
         }

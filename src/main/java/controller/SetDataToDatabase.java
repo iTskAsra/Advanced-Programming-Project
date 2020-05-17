@@ -6,6 +6,7 @@ import model.*;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.Set;
 
 public class SetDataToDatabase {
     public static void setProduct(Product product) {
@@ -139,5 +140,40 @@ public class SetDataToDatabase {
                 SetDataToDatabase.setAccount(seller);
             }
         }
+    }
+
+    public static void removeOff(int offId) throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
+        Off off = GetDataFromDatabase.getOff(offId);
+        for (Product i : off.getOffProducts()){
+            Product product = GetDataFromDatabase.getProduct(i.getProductId());
+            product.setPriceWithOff(product.getPrice());
+            SetDataToDatabase.setProduct(product);
+            SetDataToDatabase.updateSellerAndOffsOfProduct(product,0);
+        }
+        String sellerPath = "Resources/Accounts/Seller";
+        File sellerFolder = new File(sellerPath);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : sellerFolder.listFiles(fileFilter)){
+            String sellerUsername = i.getName().replace(".json","");
+            Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerUsername);
+            Iterator iterator = seller.getSellerOffs().iterator();
+            while (iterator.hasNext()){
+                Off tempOff = (Off) iterator.next();
+                if (tempOff.getOffId() == offId){
+                    iterator.remove();
+                }
+            }
+            SetDataToDatabase.setAccount(seller);
+        }
+
+
     }
 }

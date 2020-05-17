@@ -84,8 +84,13 @@ public class AllProductsPanel extends Menu {
                 try {
                     products = AllProductsPanelController.showProducts();
                     System.out.printf("Results :\n%s\n","-".repeat(60));
-                    for (Product i : products){
-                        System.out.printf("%-20s%s%d%s%s%s%d\n",i.getName()," ".repeat(10),i.getAvailability()," ".repeat(10),String.valueOf(i.getPrice())," ".repeat(10),i.getProductId());
+                    if (products.size() != 0) {
+                        for (Product i : products) {
+                            System.out.printf("%-20s%s%d%s%s%s%d\n", i.getName(), " ".repeat(10), i.getAvailability(), " ".repeat(10), String.valueOf(i.getPrice()), " ".repeat(10), i.getProductId());
+                        }
+                    }
+                    else {
+                        System.out.println("No product found!");
                     }
                     System.out.printf("%s\n","-".repeat(60));
                     getParentMenu().show();
@@ -97,6 +102,8 @@ public class AllProductsPanel extends Menu {
                 } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
                     System.out.println(noFilterWithThisName.getMessage());
                 }
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }

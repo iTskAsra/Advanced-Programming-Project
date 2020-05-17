@@ -15,10 +15,48 @@ public class OffPanel extends Menu {
         super("Off Menu",parentMenu);
         HashMap <Integer, Menu> submenus = new HashMap<>();
         submenus.put(1, showOffs());
-        submenus.put(2,goToProductPage());
+        submenus.put(2, new FilterPanel("Filter Panel", this));
+        submenus.put(3, new SortPanel("Sort Panel",this));
+        submenus.put(4, showProducts());
+        submenus.put(5,goToProductPage());
         submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    public Menu showProducts(){
+        return new Menu("Show Products",this) {
+            @Override
+            public void show() {
+                System.out.println(this.getName() + ":");
+            }
+
+            @Override
+            public void run() {
+                ArrayList<Product> products = null;
+                try {
+                    products = AllProductsPanelController.showProducts();
+                    System.out.printf("Results :\n%s\n","-".repeat(60));
+                    if (products.size() != 0) {
+                        for (Product i : products) {
+                            System.out.printf("%-20s%s%d%s%s%s%d\n", i.getName(), " ".repeat(10), i.getAvailability(), " ".repeat(10), String.valueOf(i.getPrice()), " ".repeat(10), i.getProductId());
+                        }
+                    }
+                    else {
+                        System.out.println("No product found!");
+                    }
+                    System.out.printf("%s\n","-".repeat(60));
+                    getParentMenu().show();
+                    getParentMenu().run();
+                } catch (ExceptionsLibrary.NoProductException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
+                    System.out.println(noFilterWithThisName.getMessage());
+                }
+            }
+        };
     }
 
     protected Menu help() {
@@ -56,6 +94,15 @@ public class OffPanel extends Menu {
                             System.out.printf("Product ID : %d  -  Product Name : %s  -  Product Original Price : %.2f  -  Product Price With Off : %.2f\n",j.getProductId(),j.getName(),j.getPrice(),j.getPriceWithOff());
                         }
                         System.out.println("-".repeat(50));
+                        System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                        while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                            SortHandler.sortOffs();
+                            SortController.sortOffs(offsList);
+                            for (Product j : i.getOffProducts()){
+                                System.out.printf("Product ID : %d  -  Product Name : %s  -  Product Original Price : %.2f  -  Product Price With Off : %.2f\n",j.getProductId(),j.getName(),j.getPrice(),j.getPriceWithOff());
+                            }
+                            System.out.println("Sort again? (yes/no)");
+                        }
                     }
                 } catch (ExceptionsLibrary.NoOffException e) {
                     System.out.println(e.getMessage());
@@ -81,7 +128,7 @@ public class OffPanel extends Menu {
                 int productId = Integer.parseInt(Main.scanInput("int"));
                 Product product = null;
                 try {
-                    product = AllProductsPanelController.goToProductPage(productId);
+                    product = OffPageController.goToProductPage(productId);
                     ProductPageController productPageController = new ProductPageController(product);
                     ProductPage productPage =new ProductPage(product.getName(),this);
                     productPage.show();

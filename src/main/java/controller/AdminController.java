@@ -105,7 +105,7 @@ public class AdminController {
                         off.setOffId(random.nextInt(10000));
                     }
                     String offDetails = gson.toJson(off);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
                     seller.getSellerOffs().add(off);
                     try {
                         String offPath = "Resources/Offs/" + off.getOffId() + ".json";
@@ -141,7 +141,7 @@ public class AdminController {
                     Off off = gson.fromJson(request.getRequestDescription(), Off.class);
                     off.setOffCondition(ProductOrOffCondition.ACCEPTED);
                     String offDetails = gson.toJson(off);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
                     Iterator iterator = seller.getSellerOffs().iterator();
                     while (iterator.hasNext()) {
                         Off tempOff = (Off) iterator.next();
@@ -186,7 +186,7 @@ public class AdminController {
                         product.setProductId(random.nextInt(10000));
                     }
                     String productDetails = gson.toJson(product);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
                     seller.getSellerProducts().add(product);
                     try {
                         String productPath = "Resources/Products/" + product.getProductId() + ".json";
@@ -216,7 +216,7 @@ public class AdminController {
                     Product product = gson.fromJson(request.getRequestDescription(), Product.class);
                     product.setProductCondition(ProductOrOffCondition.ACCEPTED);
                     String productDetails = gson.toJson(product);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller().getUsername());
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
                     Iterator iterator = seller.getSellerProducts().iterator();
                     while (iterator.hasNext()) {
                         Product tempProduct = (Product) iterator.next();
@@ -250,7 +250,7 @@ public class AdminController {
                 break;
             case REGISTER_SELLER:
                 if (acceptStatus) {
-                    Seller seller = request.getRequestSeller();
+                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
                     if (RegisterAndLogin.checkUsername(seller.getUsername())) {
                         try {
                             String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
@@ -314,10 +314,13 @@ public class AdminController {
         return allSales;
     }
 
-    public static void editSaleInfo(String saleCode, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFeatureWithThisName {
+    public static void editSaleInfo(String saleCode, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.CannotChangeThisFeature {
         Sale sale = GetDataFromDatabase.getSale(saleCode);
         for (String i : dataToEdit.keySet()) {
             try {
+                if (i.equalsIgnoreCase("saleId")){
+                    throw new ExceptionsLibrary.CannotChangeThisFeature();
+                }
                 Field field = Sale.class.getDeclaredField(i);
                 if (i.equals("salePercent")) {
                     field.setAccessible(true);

@@ -1,7 +1,9 @@
 package view;
 
+import controller.ExceptionsLibrary;
 import controller.ProductPageController;
 import model.Comment;
+import model.Rate;
 
 import java.util.HashMap;
 
@@ -10,10 +12,31 @@ public class ProductCommentPanel extends Menu {
         super(name, parentMenu);
         HashMap<Integer, Menu> submenus = new HashMap<>();
         submenus.put(1, showAllComments());
-        submenus.put(2, addComment());
+        submenus.put(2,showRate());
+        submenus.put(3, addComment());
         submenus.put(submenus.size()+1,help());
 
         this.setSubmenus(submenus);
+    }
+
+    private Menu showRate() {
+        return new Menu("Rate",this) {
+            @Override
+            public void show() {
+                Double productRate = 0.00;
+                for (Rate i : ProductPageController.attributes().getRates()){
+                    productRate+=i.getRateScore();
+                }
+                productRate = productRate /ProductPageController.attributes().getRates().size();
+                System.out.printf("%s : %.2f\n",this.getName(),productRate);
+            }
+
+            @Override
+            public void run() {
+                getParentMenu().show();
+                getParentMenu().run();
+            }
+        };
     }
 
     protected Menu help() {
@@ -33,6 +56,7 @@ public class ProductCommentPanel extends Menu {
         };
     }
 
+
     private Menu addComment() {
         return new Menu("Add Comment",this) {
             @Override
@@ -46,7 +70,14 @@ public class ProductCommentPanel extends Menu {
                 String title =Main.scanInput("String");
                 System.out.println("Enter text :");
                 String text =Main.scanInput("String");
-                ProductPageController.addComment(title,text);
+                try {
+                    ProductPageController.addComment(title,text);
+                    System.out.println("Added comment!");
+                } catch (ExceptionsLibrary.NotLoggedInException | ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                }
+                getParentMenu().show();
+                getParentMenu().run();
             }
         };
     }
@@ -59,7 +90,7 @@ public class ProductCommentPanel extends Menu {
                 for (Comment i : ProductPageController.getProduct().getProductComments()){
                     System.out.println("-".repeat(50));
                     System.out.printf("Title : %s\n",i.getCommentTitle());
-                    System.out.printf("Sender : %s    Bought : %s\n",i.getCommenterAccount().getUsername(),i.isBoughtByCommenter() ? "Yes":"No");
+                    System.out.printf("Sender : %s    Bought : %s\n",i.getCommenterAccount(),i.isBoughtByCommenter() ? "Yes":"No");
                     System.out.printf("Comment : %s\n",i.getCommentText());
                     System.out.println("-".repeat(50));
                 }

@@ -1,8 +1,8 @@
 package view;
 
 import controller.*;
-import model.Sale;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -16,11 +16,17 @@ public class Main {
         scanner = new Scanner(System.in);
         Menu.setScanner(Main.scanner);
         Menu mainMenu = new MainMenu();
-        //TODO check off dates (remove if expired) apply to their products
         GetDataFromDatabase.setResources();
         try {
-            SetPeriodicSales.set();
+            SetPeriodicSales.setPeriodicSales();
+            SetPeriodicSales.removeExpiredOff();
         } catch (ExceptionsLibrary.NoAccountException e) {
+            e.printStackTrace();
+        } catch (ExceptionsLibrary.NoOffException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (ExceptionsLibrary.NoProductException e) {
             e.printStackTrace();
         }
         mainMenu.show();

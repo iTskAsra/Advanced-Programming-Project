@@ -104,7 +104,6 @@ public class CartController {
     }
 
     public static void decreaseProduct(int productId) throws ExceptionsLibrary.NoProductException {
-        //TODO check decrease
         for (Product i : getCartProducts().keySet()) {
             if (i.getProductId() == productId) {
                 if (cartProducts.get(i) == 1) {

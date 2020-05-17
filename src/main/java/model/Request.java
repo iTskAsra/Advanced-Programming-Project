@@ -8,9 +8,9 @@ public class Request {
     private String requestDescription;
     private RequestType requestType;
     private RequestOrCommentCondition requestCondition;
-    private Seller requestSeller;
+    private String requestSeller;
 
-    public Request(String requestDescription, RequestType requestType, RequestOrCommentCondition requestCondition,Seller requestSeller) {
+    public Request(String requestDescription, RequestType requestType, RequestOrCommentCondition requestCondition,String requestSeller) {
         this.requestDescription = requestDescription;
         this.requestType = requestType;
         this.requestCondition = requestCondition;
@@ -19,11 +19,11 @@ public class Request {
         this.requestSeller = requestSeller;
     }
 
-    public Seller getRequestSeller() {
+    public String getRequestSeller() {
         return requestSeller;
     }
 
-    public void setRequestSeller(Seller requestSeller) {
+    public void setRequestSeller(String requestSeller) {
         this.requestSeller = requestSeller;
     }
 

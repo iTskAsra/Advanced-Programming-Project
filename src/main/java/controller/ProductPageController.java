@@ -3,6 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
+import view.Main;
 
 import java.util.ArrayList;
 
@@ -64,11 +65,17 @@ public class ProductPageController {
         return getProduct().getProductComments();
     }
 
-    public static void addComment(String title, String commentText) {
-        Comment comment = new Comment(CustomerController.getCustomer(), getProduct(), commentText, RequestOrCommentCondition.PENDING_TO_ACCEPT, isBoughtByCommenter(CustomerController.getCustomer(), getProduct()), title);
-        comment.setBoughtByCommenter(isBoughtByCommenter(CustomerController.getCustomer(),getProduct()));
-        getProduct().getProductComments().add(comment);
-        SetDataToDatabase.setProduct(getProduct());
+    public static void addComment(String title, String commentText) throws ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.NoAccountException {
+        if (Main.checkLoggedIn() != null) {
+            Comment comment = new Comment(CustomerController.getCustomer().getUsername(), getProduct(), commentText, RequestOrCommentCondition.PENDING_TO_ACCEPT, isBoughtByCommenter(CustomerController.getCustomer(), getProduct()), title);
+            comment.setBoughtByCommenter(isBoughtByCommenter(CustomerController.getCustomer(), getProduct()));
+            getProduct().getProductComments().add(comment);
+            SetDataToDatabase.setProduct(getProduct());
+            SetDataToDatabase.updateSellerAndOffsOfProduct(getProduct(),0);
+        }
+        else {
+            throw new ExceptionsLibrary.NotLoggedInException();
+        }
 
     }
 

@@ -88,11 +88,14 @@ public class SellerController {
         return getSeller().getSellerLogs();
     }
 
-    public static void editProductRequest(int productId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFeatureWithThisName {
+    public static void editProductRequest(int productId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.CannotChangeThisFeature {
         Product product = GetDataFromDatabase.getProduct(productId);
         if (product != null) {
             for (String i : dataToEdit.keySet()) {
                 try {
+                    if (i.equalsIgnoreCase("productId")){
+                        throw new ExceptionsLibrary.CannotChangeThisFeature();
+                    }
                     Field field = Product.class.getDeclaredField(i);
                     if (i.equals("price")) {
                         field.setAccessible(true);
@@ -111,7 +114,7 @@ public class SellerController {
             Gson gsonProduct = new GsonBuilder().serializeNulls().create();
             product.setProductCondition(ProductOrOffCondition.PENDING_TO_EDIT);
             String editedProduct = gsonProduct.toJson(product);
-            Request request = new Request(editedProduct, RequestType.EDIT_PODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
+            Request request = new Request(editedProduct, RequestType.EDIT_PODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller().getUsername());
             Gson gsonRequest = new GsonBuilder().serializeNulls().create();
             String requestDetails = gsonRequest.toJson(request);
             try {
@@ -139,7 +142,7 @@ public class SellerController {
         product.setSeller(getSeller());
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         String productDetails = gson.toJson(product);
-        Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
+        Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller().getUsername());
         Gson gsonRequest = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         if (!Files.exists(Paths.get("Resources/Requests"))) {
             File folder = new File("Resources/Requests");
@@ -162,13 +165,16 @@ public class SellerController {
 
     }
 
-    public static void editOffRequest(int offId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoFeatureWithThisName {
+    public static void editOffRequest(int offId, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.CannotChangeThisFeature {
         Off off = GetDataFromDatabase.getOff(offId);
         if (off != null) {
             for (Off i : getSeller().getSellerOffs()) {
                 if (i.getOffId() == off.getOffId()) {
                     for (String s : dataToEdit.keySet()) {
                         try {
+                            if (s.equalsIgnoreCase("offId")){
+                                throw new ExceptionsLibrary.CannotChangeThisFeature();
+                            }
                             Field field = Off.class.getDeclaredField(s);
                             if (s.equals("offAmount")) {
                                 field.setAccessible(true);
@@ -184,7 +190,7 @@ public class SellerController {
                     off.setOffCondition(ProductOrOffCondition.PENDING_TO_EDIT);
                     Gson gsonOff = new GsonBuilder().serializeNulls().create();
                     String editedOff = gsonOff.toJson(off);
-                    Request request = new Request(editedOff, RequestType.EDIT_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
+                    Request request = new Request(editedOff, RequestType.EDIT_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller().getUsername());
                     Gson gsonRequest = new GsonBuilder().serializeNulls().create();
                     String requestDetails = gsonRequest.toJson(request);
                     try {
@@ -225,7 +231,7 @@ public class SellerController {
         }
         off.setOffProducts(offProductsList);
         String offDetails = gsonOff.toJson(off);
-        Request request = new Request(offDetails, RequestType.ADD_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller());
+        Request request = new Request(offDetails, RequestType.ADD_OFF, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller().getUsername());
         Gson gsonRequest = new GsonBuilder().serializeNulls().create();
         if (!Files.exists(Paths.get("Resources/Requests"))) {
             File folder = new File("Resources/Requests");

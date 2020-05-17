@@ -142,6 +142,12 @@ public class  ExceptionsLibrary {
         }
     }
 
+    public static class CannotChangeThisFeature extends Exception{
+        public CannotChangeThisFeature() {
+            super("You can't change this feature!");
+        }
+    }
+
 
 
 

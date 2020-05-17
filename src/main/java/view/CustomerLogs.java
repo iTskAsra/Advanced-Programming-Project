@@ -2,8 +2,12 @@ package view;
 
 import controller.CustomerController;
 import controller.ExceptionsLibrary;
+import controller.GetDataFromDatabase;
+import controller.SortController;
 import model.BuyLog;
+import model.Customer;
 import model.Product;
+import model.SellLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +54,15 @@ public class CustomerLogs extends Menu {
                 ArrayList<BuyLog> logs = CustomerController.showCustomerLogs();
                 for (BuyLog i : logs){
                     System.out.printf("Log ID : %d     Log Date : %s     Log Value : %.2f\n",i.getLogId(),i.getLogDate(),i.getValue());
+                }
+                System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                    SortHandler.sortBuyLogs();
+                    SortController.sortBuyLogs(logs);
+                    for (BuyLog i : logs){
+                        System.out.printf("Log ID : %d     Log Date : %s     Log Value : %.2f\n",i.getLogId(),i.getLogDate(),i.getValue());
+                    }
+                    System.out.println("Sort again? (yes/no)");
                 }
                 getParentMenu().show();
                 getParentMenu().run();

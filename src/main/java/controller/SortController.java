@@ -114,10 +114,6 @@ public class SortController {
                         RequestOrCommentCondition o1SortElement = (RequestOrCommentCondition) field.get(o1);
                         RequestOrCommentCondition o2SortElement = (RequestOrCommentCondition) field.get(o2);
                         return o1SortElement.compareTo(o2SortElement);
-                    } else if (getSortElement().equalsIgnoreCase("requestSeller")) {
-                        Seller o1SortElement = (Seller) field.get(o1);
-                        Seller o2SortElement = (Seller) field.get(o2);
-                        return o1SortElement.getUsername().compareTo(o2SortElement.getUsername());
                     } else {
                         String o1SortElement = (String) field.get(o1);
                         String o2SortElement = (String) field.get(o2);
@@ -166,7 +162,7 @@ public class SortController {
             public int compare(SellLog o1, SellLog o2) {
                 try {
                     Field field = null;
-                    for (Field i : Sale.class.getDeclaredFields()) {
+                    for (Field i : SellLog.class.getDeclaredFields()) {
                         if (i.getName().equalsIgnoreCase(getSortElement())) {
                             field = i;
                         }
@@ -208,7 +204,7 @@ public class SortController {
             public int compare(BuyLog o1, BuyLog o2) {
                 try {
                     Field field = null;
-                    for (Field i : Sale.class.getDeclaredFields()) {
+                    for (Field i : BuyLog.class.getDeclaredFields()) {
                         if (i.getName().equalsIgnoreCase(getSortElement())) {
                             field = i;
                         }
@@ -263,7 +259,7 @@ public class SortController {
                         Double o1Price = (Double) field.get(o1);
                         Double o2Price = (Double) field.get(o2);
                         return o1Price.compareTo(o2Price);
-                    } else if (getSortElement().equalsIgnoreCase("availability")) {
+                    } else if (getSortElement().equalsIgnoreCase("availability")||getSortElement().equalsIgnoreCase("productId")) {
                         Integer o1Availability = (Integer) field.get(o1);
                         Integer o2Availability = (Integer) field.get(o2);
                         return o1Availability.compareTo(o2Availability);

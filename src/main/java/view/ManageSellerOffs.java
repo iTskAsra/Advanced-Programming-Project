@@ -65,6 +65,8 @@ public class ManageSellerOffs extends Menu {
                     System.out.println(noFeatureWithThisName.getMessage());
                 } catch (ExceptionsLibrary.NoOffException e) {
                     System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.CannotChangeThisFeature cannotChangeThisFeature) {
+                    System.out.println(cannotChangeThisFeature.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();

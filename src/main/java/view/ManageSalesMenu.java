@@ -73,7 +73,6 @@ public class ManageSalesMenu extends Menu {
                 System.out.println(this.getName() + ":");
                 System.out.println("Enter sale code :");
             }
-            //TODO unable to change productID , offID, requestID, saleID
             @Override
             public void run() {
                 String saleCode = Main.scanInput("String");
@@ -93,6 +92,8 @@ public class ManageSalesMenu extends Menu {
                         System.out.println("Edited sale details!");
                     } catch (ExceptionsLibrary.NoSaleException | ExceptionsLibrary.NoFeatureWithThisName e) {
                         System.out.println(e.getMessage());
+                    } catch (ExceptionsLibrary.CannotChangeThisFeature cannotChangeThisFeature) {
+                        System.out.println(cannotChangeThisFeature.getMessage());
                     }
                 }
                 catch (ExceptionsLibrary.NoSaleException e){
