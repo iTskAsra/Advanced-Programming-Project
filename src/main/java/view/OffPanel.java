@@ -5,58 +5,39 @@ import model.Off;
 import controller.ProductPageController;
 import java.util.ArrayList;
 
+import com.google.gson.*;
 import model.Product;
-
+import java.lang.String;
 import java.util.HashMap;
+
+import view.ProductPage;
 
 
 public class OffPanel extends Menu {
     public OffPanel(Menu parentMenu) {
         super("Off Menu",parentMenu);
         HashMap <Integer, Menu> submenus = new HashMap<>();
-        submenus.put(1, showOffs());
-        submenus.put(2,goToProductPage());
-        submenus.put(submenus.size()+1,help());
+        submenus.put(1,goToProductPage());
+        submenus.put(2,listOffs());
 
         this.setSubmenus(submenus);
     }
 
-    protected Menu help() {
-        return new Menu("Help",this) {
-            @Override
-            public void show() {
-                System.out.println("------------------------------");
-                System.out.printf("Off Panel\nHere you see all the products that is in an off and you can see their previous price and their price with off and you can go to their product page.\n");
-                System.out.println("------------------------------");
-            }
+    //TODO show products
 
-            @Override
-            public void run() {
-                getParentMenu().show();
-                getParentMenu().run();
-            }
-        };
-    }
-
-    public Menu showOffs(){
-        return new Menu("Show Offs",this){
+    public Menu listOffs(){
+        return new Menu("List of Offs",this){
             @Override
             public void show(){
-                System.out.println("Offs :");
+                System.out.println("a List of The Offerings");
             }
             @Override
             public void run(){
                 ArrayList<Off> offsList = null;
                 try {
                     offsList = OffPageController.listOffs();
-                    for (Off i : offsList){
-                        System.out.println("-".repeat(50));
-                        System.out.printf("Off ID : %d\nOff Start Date : %s     Off End Date : %s\nProducts :\n",i.getOffId(),i.getStartDate(),i.getEndDate());
-                        for (Product j : i.getOffProducts()){
-                            System.out.printf("Product ID : %d  -  Product Name : %s  -  Product Original Price : %.2f  -  Product Price With Off : %.2f\n",j.getProductId(),j.getName(),j.getPrice(),j.getPriceWithOff());
-                        }
-                        System.out.println("-".repeat(50));
-                    }
+                    for (int i=0;i<offsList.size();i++)
+                        System.out.printf("%d. %s\n",i,offsList.get(i));
                 } catch (ExceptionsLibrary.NoOffException e) {
                     System.out.println(e.getMessage());
                 }
