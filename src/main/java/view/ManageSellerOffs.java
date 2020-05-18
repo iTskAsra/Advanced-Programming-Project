@@ -1,6 +1,7 @@
 package view;
 
 import controller.ExceptionsLibrary;
+import controller.GetDataFromDatabase;
 import controller.SellerController;
 import controller.SortController;
 import model.*;
@@ -43,7 +44,7 @@ public class ManageSellerOffs extends Menu {
             @Override
             public void show() {
                 System.out.println(this.getName() + ":");
-                System.out.println("Enter product ID :");
+                System.out.println("Enter off ID :");
             }
 
             @Override
@@ -119,14 +120,15 @@ public class ManageSellerOffs extends Menu {
                     Off off = SellerController.showOffDetails(offId);
                     System.out.println("-".repeat(50));
                     System.out.printf("Off ID : %d\nStart Date : %s\nEnd Date : %s\nAmount : %.2f\nStatus : %s\nProducts : \n",off.getOffId(),off.getStartDate(),off.getEndDate(),off.getOffAmount(),off.getOffCondition());
-                    for (Product j : off.getOffProducts()){
+                    for (String k : off.getOffProducts()){
+                        Product j = GetDataFromDatabase.getProduct(Integer.parseInt(k));
                         System.out.printf("Product ID : %d   Name : %s   Price : %.2f\n",j.getProductId(),j.getName(),j.getPrice());
                     }
                     System.out.println("-".repeat(50));
                     getParentMenu().show();
                     getParentMenu().run();
-                } catch (ExceptionsLibrary.NoOffException noOffException) {
-                    noOffException.printStackTrace();
+                } catch (ExceptionsLibrary.NoOffException | ExceptionsLibrary.NoProductException noOffException) {
+                    System.out.println(noOffException.getMessage());
                 }
             }
         };

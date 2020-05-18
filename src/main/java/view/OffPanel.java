@@ -94,21 +94,28 @@ public class OffPanel extends Menu {
                     for (Off i : offsList){
                         System.out.println("-".repeat(50));
                         System.out.printf("Off ID : %d\nOff Start Date : %s     Off End Date : %s\nProducts :\n",i.getOffId(),i.getStartDate(),i.getEndDate());
-                        for (Product j : i.getOffProducts()){
+                        for (String k : i.getOffProducts()){
+                            Product j = GetDataFromDatabase.getProduct(Integer.parseInt(k));
                             System.out.printf("Product ID : %d  -  Product Name : %s  -  Product Original Price : %.2f  -  Product Price With Off : %.2f\n",j.getProductId(),j.getName(),j.getPrice(),j.getPriceWithOff());
                         }
                         System.out.println("-".repeat(50));
-                        System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
-                        while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
-                            SortHandler.sortOffs();
-                            SortController.sortOffs(offsList);
-                            for (Product j : i.getOffProducts()){
+                    }
+                    System.out.println("Do you want to sort? (yes/no each time you (want/don't want) to sort)");
+                    while (Main.scanInput("String").trim().equalsIgnoreCase("yes")) {
+                        SortHandler.sortOffs();
+                        SortController.sortOffs(offsList);
+                        for (Off i : offsList){
+                            System.out.println("-".repeat(50));
+                            System.out.printf("Off ID : %d\nOff Start Date : %s     Off End Date : %s\nProducts :\n",i.getOffId(),i.getStartDate(),i.getEndDate());
+                            for (String k : i.getOffProducts()){
+                                Product j = GetDataFromDatabase.getProduct(Integer.parseInt(k));
                                 System.out.printf("Product ID : %d  -  Product Name : %s  -  Product Original Price : %.2f  -  Product Price With Off : %.2f\n",j.getProductId(),j.getName(),j.getPrice(),j.getPriceWithOff());
                             }
-                            System.out.println("Sort again? (yes/no)");
+                            System.out.println("-".repeat(50));
                         }
+                        System.out.println("Sort again? (yes/no)");
                     }
-                } catch (ExceptionsLibrary.NoOffException e) {
+                } catch (ExceptionsLibrary.NoOffException | ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
@@ -134,7 +141,7 @@ public class OffPanel extends Menu {
                 try {
                     product = OffPageController.goToProductPage(productId);
                     ProductPageController productPageController = new ProductPageController(product);
-                    ProductPage productPage =new ProductPage(product.getName(),this);
+                    ProductPage productPage =new ProductPage(product.getName(),this.getParentMenu());
                     productPage.show();
                     productPage.run();
                 } catch (ExceptionsLibrary.NoProductException e) {

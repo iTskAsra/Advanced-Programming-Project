@@ -73,7 +73,7 @@ public class ProductCommentPanel extends Menu {
                 try {
                     ProductPageController.addComment(title,text);
                     System.out.println("Added comment!");
-                } catch (ExceptionsLibrary.NotLoggedInException | ExceptionsLibrary.NoAccountException e) {
+                } catch (ExceptionsLibrary.NotLoggedInException | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();

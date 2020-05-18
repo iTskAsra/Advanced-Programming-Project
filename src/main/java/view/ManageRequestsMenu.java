@@ -68,6 +68,8 @@ public class ManageRequestsMenu extends Menu {
                             System.out.println(e.getMessage());
                         } catch (ExceptionsLibrary.UsernameAlreadyExists usernameAlreadyExists) {
                             System.out.println(usernameAlreadyExists.getMessage());
+                        } catch (ExceptionsLibrary.NoProductException e) {
+                            System.out.println(e.getMessage());
                         }
                         System.out.println("Processed!");
                         getParentMenu().show();
@@ -81,6 +83,8 @@ public class ManageRequestsMenu extends Menu {
                             System.out.println(e.getMessage());
                         } catch (ExceptionsLibrary.UsernameAlreadyExists usernameAlreadyExists) {
                             System.out.println(usernameAlreadyExists.getMessage());
+                        } catch (ExceptionsLibrary.NoProductException e) {
+                            System.out.println(e.getMessage());
                         }
                         System.out.println("Processed!");
                         getParentMenu().show();

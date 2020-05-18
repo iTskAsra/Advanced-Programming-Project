@@ -6,7 +6,6 @@ import model.*;
 
 import java.io.*;
 import java.util.Iterator;
-import java.util.Set;
 
 public class SetDataToDatabase {
     public static void setProduct(Product product) {
@@ -79,7 +78,7 @@ public class SetDataToDatabase {
         }
     }
 
-    public static void updateSellerAndOffsOfProduct(Product product, int code) throws ExceptionsLibrary.NoAccountException {
+    public static void updateSellerOfProduct(Product product, int code) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
         File sellers = new File("Resources/Accounts/Seller");
         FileFilter fileFilter = new FileFilter() {
             @Override
@@ -94,26 +93,18 @@ public class SetDataToDatabase {
             for (File i : sellers.listFiles(fileFilter)) {
                 String sellerName = i.getName().replace(".json", "");
                 Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerName);
-                for (Off j : seller.getSellerOffs()) {
-                    Iterator iterator = j.getOffProducts().iterator();
-                    while (iterator.hasNext()) {
-                        Product tempProduct = (Product) iterator.next();
-                        if (tempProduct.getProductId() == product.getProductId()) {
-                            iterator.remove();
-                        }
-                    }
-                    j.getOffProducts().add(product);
-                    SetDataToDatabase.setOff(j);
-                }
-
                 Iterator iterator = seller.getSellerProducts().iterator();
+                boolean isAdd = false;
                 while (iterator.hasNext()) {
                     Product tempProduct = (Product) iterator.next();
                     if (tempProduct.getProductId() == product.getProductId()) {
                         iterator.remove();
+                        isAdd = true;
                     }
                 }
-                seller.getSellerProducts().add(product);
+                if (isAdd){
+                    seller.getSellerProducts().add(product);
+                }
                 SetDataToDatabase.setAccount(seller);
             }
         } else if (code == 1) {
@@ -130,7 +121,8 @@ public class SetDataToDatabase {
                 for (Off j : seller.getSellerOffs()) {
                     iterator = j.getOffProducts().iterator();
                     while (iterator.hasNext()) {
-                        Product tempProduct = (Product) iterator.next();
+                        String tempProductID = (String) iterator.next();
+                        Product tempProduct = GetDataFromDatabase.getProduct(Integer.parseInt(tempProductID));
                         if (tempProduct.getProductId() == product.getProductId()) {
                             iterator.remove();
                         }
@@ -144,11 +136,11 @@ public class SetDataToDatabase {
 
     public static void removeOff(int offId) throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         Off off = GetDataFromDatabase.getOff(offId);
-        for (Product i : off.getOffProducts()){
-            Product product = GetDataFromDatabase.getProduct(i.getProductId());
+        for (String i : off.getOffProducts()){
+            Product product = GetDataFromDatabase.getProduct(Integer.parseInt(i));
             product.setPriceWithOff(product.getPrice());
             SetDataToDatabase.setProduct(product);
-            SetDataToDatabase.updateSellerAndOffsOfProduct(product,0);
+            SetDataToDatabase.updateSellerOfProduct(product,0);
         }
         String sellerPath = "Resources/Accounts/Seller";
         File sellerFolder = new File(sellerPath);

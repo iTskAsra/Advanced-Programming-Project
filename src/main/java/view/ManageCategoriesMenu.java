@@ -55,7 +55,7 @@ public class ManageCategoriesMenu extends Menu {
                 try {
                     AdminController.deleteCategory(categoryName);
                     System.out.println("Removed Category!");
-                } catch (ExceptionsLibrary.NoCategoryException e) {
+                } catch (ExceptionsLibrary.NoCategoryException | ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
                 }
 
@@ -132,6 +132,8 @@ public class ManageCategoriesMenu extends Menu {
                 } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
                     System.out.println(noFeatureWithThisName.getMessage());
                 } catch (ExceptionsLibrary.NoAccountException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();

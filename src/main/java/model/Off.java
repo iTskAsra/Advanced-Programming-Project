@@ -5,13 +5,13 @@ import java.util.Random;
 
 public class Off {
     private int offId;
-    private ArrayList<Product> offProducts;
+    private ArrayList<String> offProducts;
     private ProductOrOffCondition offCondition;
     private String startDate;
     private String endDate;
     private double offAmount;
 
-    public Off(ArrayList<Product> offProducts, ProductOrOffCondition offCondition, String startDate, String endDate, double offAmount) {
+    public Off(ArrayList<String> offProducts, ProductOrOffCondition offCondition, String startDate, String endDate, double offAmount) {
         Random random = new Random();
         this.offId = random.nextInt(10000);
         this.offProducts = offProducts;
@@ -29,11 +29,11 @@ public class Off {
         this.offId = offId;
     }
 
-    public ArrayList<Product> getOffProducts() {
+    public ArrayList<String> getOffProducts() {
         return offProducts;
     }
 
-    public void setOffProducts(ArrayList<Product> offProducts) {
+    public void setOffProducts(ArrayList<String> offProducts) {
         this.offProducts = offProducts;
     }
 

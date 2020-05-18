@@ -43,8 +43,8 @@ public class CartController {
     }
 
     public static double getTotalPriceWithoutSale() {
-        setTotalPriceWithoutSale(showTotalPrice());
-        return totalPriceWithoutSale;
+        //setTotalPriceWithoutSale(showTotalPrice());
+        return showTotalPrice();
     }
 
     public static void setTotalPriceWithoutSale(double totalPriceWithoutSale) {
@@ -149,7 +149,7 @@ public class CartController {
     public static void discountApply(String saleCode) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException {
         if (saleCode == null) {
             setTotalPriceWithoutSale(showTotalPrice());
-            setTotalPriceWithSale(getTotalPriceWithoutSale());
+            setTotalPriceWithSale(showTotalPrice());
             setSaleDiscount(0.00);
             return;
         } else if (saleCode.startsWith("Off:")) {
@@ -209,7 +209,7 @@ public class CartController {
         return amount;
     }
 
-    public static void purchase() throws ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoAccountException {
+    public static void purchase() throws ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
         if (getTotalPriceWithSale() <= getCartCustomer().getCredit()) {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -234,12 +234,14 @@ public class CartController {
                 for (Product j : productSellers.get(i).keySet()) {
                     j.setAvailability(j.getAvailability() - productSellers.get(i).get(j));
                     SetDataToDatabase.setProduct(j);
-                    SetDataToDatabase.updateSellerAndOffsOfProduct(j, 0);
+                    SetDataToDatabase.updateSellerOfProduct(j, 0);
                 }
                 i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i)));
                 i.getSellerLogs().add(sellLog);
                 SetDataToDatabase.setAccount(i);
             }
+
+            cartProducts.clear();
 
         } else {
             throw new ExceptionsLibrary.CreditNotSufficientException();

@@ -177,11 +177,6 @@ public class SortController {
                         Integer o2SortElement = (Integer) field.get(o2);
                         return o1SortElement.compareTo(o2SortElement);
                     }
-                    else if (getSortElement().equalsIgnoreCase("buyer")){
-                        Customer o1SortElement = (Customer) field.get(o1);
-                        Customer o2SortElement = (Customer) field.get(o2);
-                        return o1SortElement.getUsername().compareToIgnoreCase(o2SortElement.getUsername());
-                    }
                     else {
                         String o1SortElement = (String) field.get(o1);
                         String o2SortElement = (String) field.get(o2);

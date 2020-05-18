@@ -169,10 +169,10 @@ public class SellerPanel extends Menu {
                         System.out.println("-".repeat(50));
                         try {
                             Customer customer = (Customer) GetDataFromDatabase.getAccount(i.getBuyer());
-                            System.out.printf("Log ID : %d\nDate : %s\nValue: %lf\nDiscount Applied: %d%\nBuyer's Name: %s %s\nDelivery Condition: \n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), customer.getFirstName() , customer.getLastName(), i.getDeliveryCondition());
+                            System.out.printf("Log ID : %d\nDate : %s\nValue: %.2f\nDiscount Applied: %.2f\nBuyer's Name: %s %s\nDelivery Condition: %s\n", i.getLogId(), i.getLogDate(), i.getValue(), i.getDiscountApplied(), customer.getFirstName() , customer.getLastName(), i.getDeliveryCondition());
                             for (Product j : i.getLogProducts().keySet()){
                                 System.out.println("-".repeat(40));
-                                System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPrice()*i.getLogProducts().get(j));
+                                System.out.printf("Product name : %s\nProduct ID : %d\nQuantity : %d\nPrice for each : %.2f\nTotal price for this product : %.2f\nMoney received : %.2f\n", j.getName(),j.getProductId(),i.getLogProducts().get(j),j.getPrice(),j.getPrice()*i.getLogProducts().get(j),j.getPriceWithOff()*i.getLogProducts().get(j));
                                 System.out.println("-".repeat(40));
                             }
                             System.out.println("-".repeat(50));

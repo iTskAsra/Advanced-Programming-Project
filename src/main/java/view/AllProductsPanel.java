@@ -86,7 +86,7 @@ public class AllProductsPanel extends Menu {
                     System.out.printf("Results :\n%s\n","-".repeat(60));
                     if (products.size() != 0) {
                         for (Product i : products) {
-                            System.out.printf("%-20s%s%d%s%s%s%d\n", i.getName(), " ".repeat(10), i.getAvailability(), " ".repeat(10), String.valueOf(i.getPrice()), " ".repeat(10), i.getProductId());
+                            System.out.printf("Name : %-20s %s Quantity : %-5d %s Price : %-10s %s Product ID : %d\n", i.getName(), " ".repeat(10), i.getAvailability(), " ".repeat(10), String.valueOf(i.getPrice()), " ".repeat(10), i.getProductId());
                         }
                     }
                     else {

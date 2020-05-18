@@ -91,7 +91,7 @@ public class AdminController {
 
     }
 
-    public static void processRequest(int requestId, boolean acceptStatus) throws ExceptionsLibrary.NoRequestException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.UsernameAlreadyExists {
+    public static void processRequest(int requestId, boolean acceptStatus) throws ExceptionsLibrary.NoRequestException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException {
         //TODO check exceptions and messages in process request
         Request request = GetDataFromDatabase.getRequest(requestId);
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -116,10 +116,11 @@ public class AdminController {
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        for (Product i :off.getOffProducts()){
-                            i.setPriceWithOff(i.getPrice()-off.getOffAmount());
-                            SetDataToDatabase.setProduct(i);
-                            SetDataToDatabase.updateSellerAndOffsOfProduct(i,0);
+                        for (String i :off.getOffProducts()){
+                            Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
+                            temp.setPriceWithOff(temp.getPrice()-off.getOffAmount());
+                            SetDataToDatabase.setProduct(temp);
+                            SetDataToDatabase.updateSellerOfProduct(temp,0);
                         }
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
@@ -149,19 +150,20 @@ public class AdminController {
                             iterator.remove();
                         }
                     }
-                    for (Product i : off.getOffProducts()){
-                        i.setPriceWithOff(i.getPrice()-off.getOffAmount());
-                        SetDataToDatabase.setProduct(i);
-                        SetDataToDatabase.updateSellerAndOffsOfProduct(i,0);
-                    }
                     seller.getSellerOffs().add(off);
+                    SetDataToDatabase.setAccount(seller);
+                    for (String i :off.getOffProducts()){
+                        Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
+                        temp.setPriceWithOff(temp.getPrice()-off.getOffAmount());
+                        SetDataToDatabase.setProduct(temp);
+                        SetDataToDatabase.updateSellerOfProduct(temp,0);
+                    }
                     try {
                         String offPath = "Resources/Offs/" + off.getOffId() + ".json";
                         String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";
                         FileWriter fileWriter = new FileWriter(offPath);
                         fileWriter.write(offDetails);
                         fileWriter.close();
-                        SetDataToDatabase.setAccount(seller);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
@@ -232,7 +234,7 @@ public class AdminController {
                         fileWriter.write(productDetails);
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
-                        SetDataToDatabase.updateSellerAndOffsOfProduct(product,0);
+                        SetDataToDatabase.updateSellerOfProduct(product,0);
                         String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         File fileRequest = new File(requestPath);
                         fileRequest.delete();
@@ -510,7 +512,7 @@ public class AdminController {
     public static void deleteProduct(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         Product product = GetDataFromDatabase.getProduct(productId);
         String path = "Resources/Products/" + product.getProductId() + ".json";
-        SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
+        SetDataToDatabase.updateSellerOfProduct(product,1);
         File file = new File(path);
         file.delete();
     }
@@ -537,7 +539,7 @@ public class AdminController {
         return allCategories;
     }
 
-    public static void deleteCategory(String categoryName) throws ExceptionsLibrary.NoCategoryException {
+    public static void deleteCategory(String categoryName) throws ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoProductException {
         try {
             Category category = GetDataFromDatabase.getCategory(categoryName);
             FileFilter fileFilter = new FileFilter() {
@@ -557,7 +559,7 @@ public class AdminController {
                     fileData = new String(Files.readAllBytes(Paths.get(i.getPath())));
                     Product product = gson.fromJson(fileData, Product.class);
                     if (product.getCategory().getName().equals(categoryName)) {
-                        SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
+                        SetDataToDatabase.updateSellerOfProduct(product,1);
                         i.delete();
                     }
                 } catch (FileNotFoundException e) {
@@ -577,7 +579,7 @@ public class AdminController {
 
     }
 
-    public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException {
+    public static void editCategory(String categoryName, HashMap<String, String> dataToEdit) throws ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
         Category category = GetDataFromDatabase.getCategory(categoryName);
         String oldName = category.getName();
         for (String i : dataToEdit.keySet()) {
@@ -648,7 +650,7 @@ public class AdminController {
                 Product product = gson1.fromJson(fileData, Product.class);
                 product.setCategory(category);
                 SetDataToDatabase.setProduct(product);
-                SetDataToDatabase.updateSellerAndOffsOfProduct(product,0);
+                SetDataToDatabase.updateSellerOfProduct(product,0);
             } catch (ExceptionsLibrary.NoAccountException | IOException e) {
                 throw new ExceptionsLibrary.NoAccountException();
             }

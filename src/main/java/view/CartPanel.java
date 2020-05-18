@@ -226,7 +226,7 @@ public class CartPanel extends Menu {
                         if (CartController.getTotalPriceWithoutSale() >= 1000000) {
                             Double saleAmount = SetPeriodicSales.randomOff();
                             int saleAmountRounded = (int) Math.round(saleAmount);
-                            System.out.printf("Your cart value is greater or equal to 1,000,000 so you will get a %d off!", saleAmountRounded);
+                            System.out.printf("Your cart value is greater or equal to 1,000,000 so you will get a %d off!\n", saleAmountRounded);
                             saleCode = "Off:" + saleAmountRounded;
                         } else {
                             saleCode = null;
@@ -246,20 +246,8 @@ public class CartPanel extends Menu {
                     } else if (input.trim().equalsIgnoreCase("cancel")) {
                         System.out.println("Payment cancelled!");
                     }
-                } catch (ExceptionsLibrary.CreditNotSufficientException e) {
+                } catch (ExceptionsLibrary.CreditNotSufficientException | ExceptionsLibrary.NoSaleException | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.UsedAllValidTimesException | ExceptionsLibrary.SaleExpiredException | ExceptionsLibrary.SaleNotStartedYetException | ExceptionsLibrary.NotLoggedInException | ExceptionsLibrary.NoProductException e) {
                     System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.NoAccountException e) {
-                    System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.NoSaleException e) {
-                    System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.UsedAllValidTimesException e) {
-                    System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.SaleExpiredException e) {
-                    System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.SaleNotStartedYetException e) {
-                    System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.NotLoggedInException e) {
-                    e.printStackTrace();
                 }
                 getParentMenu().show();
                 getParentMenu().run();

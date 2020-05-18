@@ -64,13 +64,13 @@ public class ProductPageController {
         return getProduct().getProductComments();
     }
 
-    public static void addComment(String title, String commentText) throws ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.NoAccountException {
+    public static void addComment(String title, String commentText) throws ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
         if (Main.checkLoggedIn() != null) {
             Comment comment = new Comment(CustomerController.getCustomer().getUsername(), getProduct(), commentText, RequestOrCommentCondition.PENDING_TO_ACCEPT, isBoughtByCommenter(CustomerController.getCustomer(), getProduct()), title);
             comment.setBoughtByCommenter(isBoughtByCommenter(CustomerController.getCustomer(), getProduct()));
             getProduct().getProductComments().add(comment);
             SetDataToDatabase.setProduct(getProduct());
-            SetDataToDatabase.updateSellerAndOffsOfProduct(getProduct(),0);
+            SetDataToDatabase.updateSellerOfProduct(getProduct(),0);
         }
         else {
             throw new ExceptionsLibrary.NotLoggedInException();

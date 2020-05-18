@@ -133,7 +133,7 @@ public class SellerController {
     public static void removeProduct(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         Product product = GetDataFromDatabase.getProduct(productId);
         String path = "Resources/Products/" + product.getProductId() + ".json";
-        SetDataToDatabase.updateSellerAndOffsOfProduct(product,1);
+        SetDataToDatabase.updateSellerOfProduct(product,1);
         File file = new File(path);
         file.delete();
     }
@@ -208,7 +208,7 @@ public class SellerController {
     public static void addOffRequest(Off off, String offProducts) throws ExceptionsLibrary.NoProductException {
         Gson gsonOff = new GsonBuilder().serializeNulls().create();
         off.setOffCondition(ProductOrOffCondition.PENDING_TO_CREATE);
-        ArrayList<Product> offProductsList = new ArrayList<>();
+        ArrayList<String> offProductsList = new ArrayList<>();
         String[] productIds = offProducts.split("\\s*,\\s*");
         for (String i : productIds){
             try {
@@ -217,7 +217,7 @@ public class SellerController {
                 while (iterator.hasNext()) {
                     Product tempProduct = iterator.next();
                     if (tempProduct.getProductId() == temp.getProductId()) {
-                        offProductsList.add(temp);
+                        offProductsList.add(i);
                     }
                 }
             }
