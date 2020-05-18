@@ -144,10 +144,6 @@ public class SellerController {
         String productDetails = gson.toJson(product);
         Request request = new Request(productDetails, RequestType.ADD_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller().getUsername());
         Gson gsonRequest = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
-        if (!Files.exists(Paths.get("Resources/Requests"))) {
-            File folder = new File("Resources/Requests");
-            folder.mkdir();
-        }
         try {
             String path = "Resources/Requests/" + request.getRequestId() + ".json";
             while (Files.exists(Paths.get(path))) {

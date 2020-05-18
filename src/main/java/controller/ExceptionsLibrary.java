@@ -148,6 +148,11 @@ public class  ExceptionsLibrary {
         }
     }
 
+    public static class CategoriesNotMatch extends Exception{
+        public CategoriesNotMatch() {
+            super("Categories of these products do not match so they can't be compared!");
+        }
+    }
 
 
 

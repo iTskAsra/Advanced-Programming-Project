@@ -250,7 +250,7 @@ public class AdminController {
                 break;
             case REGISTER_SELLER:
                 if (acceptStatus) {
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
+                    Seller seller = gson.fromJson(request.getRequestDescription(),Seller.class);
                     if (RegisterAndLogin.checkUsername(seller.getUsername())) {
                         try {
                             String sellerPath = "Resources/Accounts/Seller/" + seller.getUsername() + ".json";

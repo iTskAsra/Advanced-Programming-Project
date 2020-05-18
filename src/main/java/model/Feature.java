@@ -24,4 +24,12 @@ public class Feature {
     public void setParameterValue(String parameterValue) {
         this.parameterValue = parameterValue;
     }
+
+    @Override
+    public String toString() {
+        return "Feature{" +
+                "parameter='" + parameter + '\'' +
+                ", parameterValue='" + parameterValue + '\'' +
+                '}';
+    }
 }

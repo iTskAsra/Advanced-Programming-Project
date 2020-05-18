@@ -31,7 +31,6 @@ public class AllProductsPanelController {
         availableSorts.add("availability");
         availableSorts.add("date");
         availableSorts.add("company");
-        availableSorts.add("best selling");
     }
 
     public static ArrayList<Product> getResult() {
@@ -117,7 +116,7 @@ public class AllProductsPanelController {
         return allAvailableFilters;
     }
 
-    public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
+    public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
         getResult().clear();
         ArrayList<Product> products = getAllProducts();
         for (int count = 0; count < getCurrentFilters().size(); count++) {
@@ -235,13 +234,57 @@ public class AllProductsPanelController {
                     }
                     checkPreviousFilters(count);
                     break;
-
+                case "Feature":
+                    Category category = null;
+                    category = GetDataFromDatabase.getCategory(splitFilters[1]);
+                    Feature feature = new Feature(splitFilters[2], splitFilters[3]);
+                    Feature featureCategory = new Feature(splitFilters[2], null);
+                    String featureToString = feature.toString();
+                    String featureCategoryToString = featureCategory.toString();
+                    ArrayList<String> featuresToString = new ArrayList<>();
+                    for (Feature j : category.getFeatures()){
+                        featuresToString.add(j.toString());
+                    }
+                    if (!featuresToString.contains(featureCategoryToString)) {
+                        throw new ExceptionsLibrary.NoFeatureWithThisName();
+                    }
+                    for (Product j : products) {
+                        if (j.getCategory().getName().equalsIgnoreCase(category.getName())) {
+                            if (!getProductRemoved(j,featureToString)) {
+                                if (!getResult().contains(j)) {
+                                    getResult().add(j);
+                                }
+                            }
+                        }
+                    }
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (getProductRemoved(tempProduct, featureToString)) {
+                            iterator.remove();
+                        }
+                    }
+                    checkPreviousFilters(count);
+                    break;
             }
+        }
+
+    }
+
+    private static boolean getProductRemoved(Product product, String feature) {
+        ArrayList<String> featuresToString = new ArrayList<>();
+        for (Feature j : product.getCategoryFeatures()){
+            featuresToString.add(j.toString());
+        }
+        if (featuresToString.contains(feature)) {
+            return false;
+        } else {
+            return true;
         }
     }
 
     private static void checkPreviousFilters(int count) throws ExceptionsLibrary.NoAccountException {
-        for (int l = 0; l < count;l++){
+        for (int l = 0; l < count; l++) {
             String i = getCurrentFilters().get(l);
             String[] splitFilters = i.split("--");
             switch (splitFilters[0]) {
@@ -302,6 +345,16 @@ public class AllProductsPanelController {
                     while (iterator.hasNext()) {
                         Product tempProduct = iterator.next();
                         if (tempProduct.getAvailability() == 0) {
+                            iterator.remove();
+                        }
+                    }
+                    break;
+                case "Feature":
+                    String feature = new Feature(splitFilters[2],splitFilters[3]).toString();
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (getProductRemoved(tempProduct, feature)) {
                             iterator.remove();
                         }
                     }
@@ -389,7 +442,7 @@ public class AllProductsPanelController {
         getCurrentSort().add("name");
     }
 
-    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException {
+    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
         if (getCurrentFilters().size() == 0) {
             setResult(getAllProducts());
         } else {

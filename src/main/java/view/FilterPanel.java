@@ -86,13 +86,14 @@ public class FilterPanel extends Menu {
                         String[] splitFilters = i.split("--");
                         if (splitFilters.length == 2) {
                             System.out.printf("%d. %s : %s\n", count, splitFilters[0], splitFilters[1]);
-                        } else {
+                        } else if (splitFilters.length == 3) {
                             System.out.printf("%d. %s : %s - %s\n", count, splitFilters[0], splitFilters[1], splitFilters[2]);
+                        } else {
+                            System.out.printf("%d. %s : %s -> %s -> %s\n", count, splitFilters[0], splitFilters[1], splitFilters[2],splitFilters[3]);
                         }
                         count++;
                     }
-                }
-                else {
+                } else {
                     System.out.println("No current filter!");
                 }
                 getParentMenu().show();
@@ -121,13 +122,14 @@ public class FilterPanel extends Menu {
                     filters.put(4, "Brand");
                     filters.put(5, "Seller");
                     filters.put(6, "Availability");
-                    filters.put(7, "Back");
+                    filters.put(7, "Feature");
+                    filters.put(8, "Back");
                     for (int i : filters.keySet()) {
                         System.out.println(i + ". " + filters.get(i));
                     }
                     System.out.println("Enter the number of filter:");
                     int chosenNumber = Integer.parseInt(Main.scanInput("int"));
-                    while (chosenNumber > 7 || chosenNumber < 1) {
+                    while (chosenNumber > 8 || chosenNumber < 1) {
                         System.out.println("Invalid number, try again");
                         chosenNumber = Integer.parseInt(Main.scanInput("int"));
                     }
@@ -136,9 +138,9 @@ public class FilterPanel extends Menu {
                             System.out.println("Enter name of the product:");
                             String name = Main.scanInput("String");
                             Iterator iterator = AllProductsPanelController.getCurrentFilters().iterator();
-                            while (iterator.hasNext()){
+                            while (iterator.hasNext()) {
                                 String temp = (String) iterator.next();
-                                if (temp.startsWith("Search--")){
+                                if (temp.startsWith("Search--")) {
                                     iterator.remove();
                                 }
                             }
@@ -177,8 +179,7 @@ public class FilterPanel extends Menu {
                             if (GetDataFromDatabase.getAccount(sellerName) != null) {
                                 AllProductsPanelController.getCurrentFilters().add("Seller--" + sellerName);
                                 System.out.println("Filter applied!");
-                            }
-                            else{
+                            } else {
                                 System.out.println("No seller with this name!");
                             }
                             break;
@@ -191,9 +192,9 @@ public class FilterPanel extends Menu {
                             }
                             if (input.equalsIgnoreCase("yes")) {
                                 iterator = AllProductsPanelController.getCurrentFilters().iterator();
-                                while (iterator.hasNext()){
+                                while (iterator.hasNext()) {
                                     String temp = (String) iterator.next();
-                                    if (temp.startsWith("Availability--")){
+                                    if (temp.startsWith("Availability--")) {
                                         iterator.remove();
                                     }
                                 }
@@ -203,8 +204,23 @@ public class FilterPanel extends Menu {
                                     AllProductsPanelController.getCurrentFilters().remove("Availability--yes");
                                 }
                             }
-
                             System.out.println("Filter applied!");
+                            break;
+                        case 7:
+                            System.out.println("Enter name of the category:");
+                            String categoryName = Main.scanInput("String");
+                            System.out.println("Enter name of the feature:");
+                            String featureName = Main.scanInput("String");
+                            System.out.println("Enter value:");
+                            String value = Main.scanInput("String");
+                            iterator = AllProductsPanelController.getCurrentFilters().iterator();
+                            while (iterator.hasNext()) {
+                                String temp = (String) iterator.next();
+                                if (temp.startsWith("Feature--")) {
+                                    iterator.remove();
+                                }
+                            }
+                            AllProductsPanelController.getCurrentFilters().add("Feature--" + categoryName + "--" + featureName + "--" + value);
                             break;
                     }
                     AllProductsPanelController.filterAnAvailableFilter();
@@ -215,6 +231,8 @@ public class FilterPanel extends Menu {
                     System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
+                    System.out.println(noFeatureWithThisName.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();
@@ -239,6 +257,7 @@ public class FilterPanel extends Menu {
                 filters.put(4, "Brand");
                 filters.put(5, "Seller");
                 filters.put(6, "Availability");
+                filters.put(7, "Feature");
                 System.out.println("-".repeat(30));
                 for (int i : filters.keySet()) {
                     System.out.println(i + ". " + filters.get(i));

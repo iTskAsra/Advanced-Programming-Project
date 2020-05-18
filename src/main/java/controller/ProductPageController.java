@@ -49,15 +49,14 @@ public class ProductPageController {
         return getProduct();
     }
 
-    public static String[] compare(int productId) throws ExceptionsLibrary.NoProductException {
-        String[] products = new String[2];
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String firstProductData = gson.toJson(getProduct());
-        products[0] = firstProductData;
-        Gson gson1 = new GsonBuilder().serializeNulls().create();
+    public static Product[] compare(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.CategoriesNotMatch {
+        Product[] products = new Product[2];
+        products[0] = getProduct();
         Product product1 = GetDataFromDatabase.getProduct(productId);
-        String secondProductData = gson1.toJson(product1);
-        products[1] = secondProductData;
+        products[1] = product1;
+        if (!products[0].getCategory().getName().equals(products[1].getCategory().getName())){
+            throw new ExceptionsLibrary.CategoriesNotMatch();
+        }
         return products;
     }
 

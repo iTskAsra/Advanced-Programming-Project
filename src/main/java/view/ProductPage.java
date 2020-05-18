@@ -53,12 +53,12 @@ public class ProductPage extends Menu {
             @Override
             public void run() {
                 int productId = Integer.parseInt(Main.scanInput("int"));
-                String[] products = new String[0];
+                Product[] products = new Product[2];
                 try {
                     products = ProductPageController.compare(productId);
                     Gson gson = new GsonBuilder().serializeNulls().create();
-                    Product product1 = gson.fromJson(products[0],Product.class);
-                    Product product2 = gson.fromJson(products[1],Product.class);
+                    Product product1 = products[0];
+                    Product product2 = products[1];
 
                     Double product1Rate = 0.00;
                     for (Rate i : product1.getRates()){
@@ -75,16 +75,16 @@ public class ProductPage extends Menu {
                     product2Rate = product2Rate /product2.getRates().size();
 
                     System.out.println("-".repeat(80));
-                    System.out.printf("ProductID : %-6d   %6d\n",product1.getProductId(),product2.getProductId());
-                    System.out.printf("Name : %-20s%s%20s\n",product1.getName()," ".repeat(10),product2.getName());
-                    System.out.printf("Rates : %.2f%s%.2f\n",product1Rate," ".repeat(5),product2Rate);
-                    System.out.printf("Company : %-20s%s%20s\n",product1.getCompany()," ".repeat(10),product2.getCompany());
+                    System.out.printf("ProductID : %d  -  %d\n",product1.getProductId(),product2.getProductId());
+                    System.out.printf("Name : %s  -  %s\n",product1.getName(),product2.getName());
+                    System.out.printf("Rates : %.2f  -  %.2f\n",product1Rate,product2Rate);
+                    System.out.printf("Company : %s  -  %s\n",product1.getCompany(),product2.getCompany());
                     for (Feature i : product1.getCategoryFeatures()){
-                        System.out.printf("%s : %s%s%s\n",i.getParameter(),i.getParameterValue()," ".repeat(5),getFeatureOfProduct2(product2,i));
+                        System.out.printf("%s : %s  -  %s\n",i.getParameter(),i.getParameterValue(),getFeatureOfProduct2(product2,i));
                     }
-                    System.out.printf("Description : %-20s%s%20s\n",product1.getDescription()," ".repeat(10),product2.getDescription());
+                    System.out.printf("Description : %s  -  %s\n",product1.getDescription(),product2.getDescription());
                     System.out.println("-".repeat(80));
-                } catch (ExceptionsLibrary.NoProductException e) {
+                } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.CategoriesNotMatch e) {
                     System.out.println(e.getMessage());
                 }
                 getParentMenu().show();
@@ -95,7 +95,7 @@ public class ProductPage extends Menu {
 
     private String getFeatureOfProduct2(Product product,Feature i) {
         for (Feature j : product.getCategoryFeatures()){
-            if (j.getParameter().equals(i)){
+            if (j.getParameter().equals(i.getParameter())){
                 return j.getParameterValue();
             }
         }

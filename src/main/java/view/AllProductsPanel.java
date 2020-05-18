@@ -101,6 +101,10 @@ public class AllProductsPanel extends Menu {
                     System.out.println(e.getMessage());
                 } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
                     System.out.println(noFilterWithThisName.getMessage());
+                } catch (ExceptionsLibrary.NoCategoryException e) {
+                    System.out.println(e.getMessage());
+                } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
+                    noFeatureWithThisName.printStackTrace();
                 }
                 getParentMenu().show();
                 getParentMenu().run();
