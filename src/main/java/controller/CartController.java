@@ -43,7 +43,6 @@ public class CartController {
     }
 
     public static double getTotalPriceWithoutSale() {
-        //setTotalPriceWithoutSale(showTotalPrice());
         return showTotalPrice();
     }
 

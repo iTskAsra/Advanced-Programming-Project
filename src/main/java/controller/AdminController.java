@@ -92,7 +92,6 @@ public class AdminController {
     }
 
     public static void processRequest(int requestId, boolean acceptStatus) throws ExceptionsLibrary.NoRequestException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException {
-        //TODO check exceptions and messages in process request
         Request request = GetDataFromDatabase.getRequest(requestId);
         Gson gson = new GsonBuilder().serializeNulls().create();
         switch (request.getRequestType()) {

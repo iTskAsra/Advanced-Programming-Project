@@ -59,10 +59,9 @@ public class SortHandler {
         System.out.println("Sort by :");
         HashMap<Integer, String> fields = new HashMap<>();
         fields.put(1, "Request ID");
-        fields.put(2, "Request Description");
-        fields.put(3, "Request Type");
-        fields.put(4, "Request Condition");
-        fields.put(5, "Request Seller");
+        fields.put(2, "Request Type");
+        fields.put(3, "Request Condition");
+        fields.put(4, "Request Seller");
         for (int i : fields.keySet()) {
             System.out.println(i + ". " + fields.get(i));
         }

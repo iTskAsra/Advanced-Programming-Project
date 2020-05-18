@@ -242,7 +242,6 @@ public class CartPanel extends Menu {
                     if (input.trim().equalsIgnoreCase("pay")) {
                         CartController.purchase();
                         System.out.println("Cart bought!");
-
                     } else if (input.trim().equalsIgnoreCase("cancel")) {
                         System.out.println("Payment cancelled!");
                     }

@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -9,13 +8,11 @@ public class BuyLog {
     private String logDate;
     private double value;
     private double discountApplied;
-    private HashMap<String,String> receiverInfo;
-    //private ArrayList<Product> logProducts;
-    //private ArrayList<String> sellerName;
-    private HashMap<Product,Integer> logProducts;
+    private HashMap<String, String> receiverInfo;
+    private HashMap<Product, Integer> logProducts;
     private String deliveryCondition;
 
-    public BuyLog(String logDate, double value, double discountApplied, HashMap<Product,Integer> logProducts, String deliveryCondition,HashMap<String,String> receiverInfo) {
+    public BuyLog(String logDate, double value, double discountApplied, HashMap<Product, Integer> logProducts, String deliveryCondition, HashMap<String, String> receiverInfo) {
         Random random = new Random();
         this.logId = random.nextInt(10000);
         this.logDate = logDate;
@@ -66,21 +63,13 @@ public class BuyLog {
         this.discountApplied = discountApplied;
     }
 
-    public HashMap<Product,Integer> getLogProducts() {
+    public HashMap<Product, Integer> getLogProducts() {
         return logProducts;
     }
 
-    public void setLogProducts(HashMap<Product,Integer> logProducts) {
+    public void setLogProducts(HashMap<Product, Integer> logProducts) {
         this.logProducts = logProducts;
     }
-
-    /*public ArrayList<String> getSellerName() {
-        return sellerName;
-    }
-
-    public void setSellerName(ArrayList<String> sellerName) {
-        this.sellerName = sellerName;
-    }*/
 
     public String getDeliveryCondition() {
         return deliveryCondition;
