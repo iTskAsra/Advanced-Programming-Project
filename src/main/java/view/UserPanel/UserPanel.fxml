@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@UserPanelStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserPanel.UserPanel">
+   <children>
+      <Button id="back" fx:id="back" layoutX="85.0" layoutY="861.0" mnemonicParsing="false" onAction="#back" styleClass="normal-button" text="Back" />
+      <Button id="logout" fx:id="logout" layoutX="335.0" layoutY="861.0" mnemonicParsing="false" onAction="#logout" styleClass="normal-button" text="Logout" />
+      <Pane layoutX="11.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="500.0">
+         <children>
+            <Label id="name" fx:id="name" layoutX="191.0" layoutY="24.0" text="Label" />
+            <VBox layoutX="30.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="400.0">
+               <children>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="infoTitle" text="Username:" />
+                        <Label fx:id="username" alignment="CENTER" prefHeight="150.0" prefWidth="230.0" styleClass="infoValue" text="Label" wrapText="true">
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="infoTitle" text="Role:" />
+                        <Label id="role" fx:id="role" alignment="CENTER" prefHeight="150.0" prefWidth="230.0" text="Label" wrapText="true">
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="infoTitle" text="Email:" />
+                        <Label fx:id="email" alignment="CENTER" prefHeight="150.0" prefWidth="230.0" styleClass="infoValue" text="Label" wrapText="true">
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="infoTitle" text="Phone Number:" />
+                        <Label fx:id="phoneNumber" alignment="CENTER" prefHeight="150.0" prefWidth="230.0" styleClass="infoValue" text="Label" wrapText="true">
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="infoTitle" text="Password:" />
+                        <Label fx:id="password" alignment="CENTER" prefHeight="150.0" prefWidth="230.0" styleClass="infoValue" text="Label" wrapText="true">
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+      <Button fx:id="editInfoButton" layoutX="700.0" layoutY="294.0" mnemonicParsing="false" onAction="#editInfoButtonClicked" styleClass="normal-button" text="Edit Info" />
+      <Label fx:id="balance" layoutX="1226.0" layoutY="879.0" styleClass="infoTitle" text="Label" />
+      <Label fx:id="editInfoLabel" layoutX="700.0" layoutY="245.0" styleClass="buttonTitle" text="Edit Info" underline="true" />
+      <Button fx:id="cartButton" layoutX="1050.0" layoutY="294.0" mnemonicParsing="false" styleClass="normal-button" text="Cart" />
+      <Label fx:id="cartLabel" layoutX="1050.0" layoutY="246.0" styleClass="buttonTitle" text="Cart" underline="true" />
+      <Button fx:id="buySellLogButton" layoutX="700.0" layoutY="556.0" mnemonicParsing="false" onAction="#buySellLogButtonClicked" styleClass="normal-button" text="Buy Log" />
+      <Label fx:id="buySellLogLabel" layoutX="700.0" layoutY="509.0" styleClass="buttonTitle" text="Buy Log" underline="true" />
+      <Button fx:id="discountOrOffButton" layoutX="1050.0" layoutY="556.0" mnemonicParsing="false" onAction="#discountOrOffButtonClicked" prefWidth="220.0" styleClass="normal-button" text="Discount Codes" />
+      <Label fx:id="discountOrOffLabel" layoutX="1050.0" layoutY="510.0" styleClass="buttonTitle" text="Discount Codes" underline="true" />
+      <Button id="back" fx:id="help" layoutX="585.0" layoutY="860.0" mnemonicParsing="false" onAction="#helpButtonClicked" styleClass="normal-button" text="Help" />
+   </children>
+</Pane>

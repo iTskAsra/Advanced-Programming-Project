@@ -1,0 +1,126 @@
+package view.UserPanel.EditInfo;
+
+import controller.CustomerController;
+import controller.ExceptionsLibrary;
+import controller.SellerController;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import model.Customer;
+import model.Seller;
+import view.AlertBox.ErrorBox.ErrorBoxStart;
+import view.AlertBox.MessageBox.AlertBoxStart;
+import view.Base.Main;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+
+public class EditInfo implements Initializable {
+
+    @FXML
+    private Button close;
+    @FXML
+    private Button edit;
+    @FXML
+    private TextField firstName;
+    @FXML
+    private TextField lastName;
+    @FXML
+    private TextField email;
+    @FXML
+    private TextField phoneNumber;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private TextField company;
+    @FXML
+    private Label companyLabel;
+
+    public void close() {
+        Stage stage = (Stage) close.getScene().getWindow();
+        stage.close();
+    }
+
+    public void editInfo() {
+        if (Main.checkLoggedIn().equals("Customer") || Main.checkLoggedIn().equals("Admin")) {
+            HashMap<String, String> dataToEdit = new HashMap<>();
+            dataToEdit.put("firstName", firstName.getText());
+            dataToEdit.put("lastName", lastName.getText());
+            dataToEdit.put("email", email.getText());
+            dataToEdit.put("phoneNumber", phoneNumber.getText());
+            dataToEdit.put("password", password.getText());
+            try {
+                checkFields();
+                CustomerController.editCustomerInfo(dataToEdit);
+                AlertBoxStart.messageRun("Message", "Edited Successfully!");
+                close();
+            } catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.ChangeUsernameException | ExceptionsLibrary.NotAcceptableFormatInput e) {
+                try {
+                    ErrorBoxStart.errorRun(e);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (Main.checkLoggedIn().equals("Seller")) {
+            HashMap<String, String> dataToEdit = new HashMap<>();
+            dataToEdit.put("firstName", firstName.getText());
+            dataToEdit.put("lastName", lastName.getText());
+            dataToEdit.put("email", email.getText());
+            dataToEdit.put("phoneNumber", phoneNumber.getText());
+            dataToEdit.put("password", password.getText());
+            dataToEdit.put("companyName", company.getText());
+            try {
+                checkFields();
+                SellerController.editSellerInfo(dataToEdit);
+                AlertBoxStart.messageRun("Message", "Edited Successfully!");
+                close();
+            } catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.ChangeUsernameException | ExceptionsLibrary.NotAcceptableFormatInput e) {
+                try {
+                    ErrorBoxStart.errorRun(e);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+
+        }
+    }
+
+    private void checkFields() throws ExceptionsLibrary.NotAcceptableFormatInput {
+        if (!(email.getText().matches("\\w+@\\w+.\\w+") && phoneNumber.getText().matches("\\d+"))) {
+            throw new ExceptionsLibrary.NotAcceptableFormatInput();
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (Main.checkLoggedIn().equals("Customer")) {
+            Customer customer = CustomerController.getCustomer();
+            companyLabel.setVisible(false);
+            company.setVisible(false);
+            firstName.setText(customer.getFirstName());
+            lastName.setText(customer.getLastName());
+            email.setText(customer.getEmail());
+            phoneNumber.setText(customer.getPhoneNumber());
+            password.setText(customer.getPassword());
+        } else if (Main.checkLoggedIn().equals("Seller")) {
+            Seller seller = SellerController.getSeller();
+            companyLabel.setVisible(true);
+            company.setVisible(true);
+            firstName.setText(seller.getFirstName());
+            lastName.setText(seller.getLastName());
+            email.setText(seller.getEmail());
+            phoneNumber.setText(seller.getPhoneNumber());
+            password.setText(seller.getPassword());
+            company.setText(seller.getCompanyName());
+        }
+    }
+}

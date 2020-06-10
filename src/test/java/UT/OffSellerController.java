@@ -9,7 +9,7 @@ import model.ProductOrOffCondition;
 import model.Seller;
 import org.junit.Assert;
 import org.junit.Test;
-import view.Main;
+import view.Base.Main;
 
 import java.util.Date;
 import java.util.HashMap;

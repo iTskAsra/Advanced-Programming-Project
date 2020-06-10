@@ -38,7 +38,7 @@ public class CustomerController {
         Customer customer = (Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
-                if (i.equals("username")){
+                if (i.equals("username")) {
                     throw new ExceptionsLibrary.ChangeUsernameException();
                 }
                 Field field = Customer.class.getSuperclass().getDeclaredField(i);

@@ -154,6 +154,12 @@ public class  ExceptionsLibrary {
         }
     }
 
+    public static class NotAcceptableFormatInput extends Exception{
+        public NotAcceptableFormatInput() {
+            super("Input format is not acceptable");
+        }
+    }
+
 
 
 

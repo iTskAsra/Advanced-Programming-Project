@@ -3,7 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
-import view.Main;
+import view.Base.Main;
 
 import java.util.ArrayList;
 

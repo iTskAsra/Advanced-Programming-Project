@@ -1,0 +1,76 @@
+.root{
+    -fx-background-color: linear-gradient(#bbb6b6,#363232);
+}
+.normal-button{
+    -fx-background-color: dodgerblue;
+    -fx-text-fill: aliceblue;
+    -fx-padding: 10;
+    -fx-font-family: Futura;
+    -fx-font-size: 15pt;
+    -fx-pref-height: 75;
+    -fx-pref-width: 250;
+    -fx-cursor: hand;
+    -fx-border-radius: 3;
+}
+#cart{
+    -fx-background-color: darkgreen;
+}
+#logout{
+    -fx-background-color: firebrick;
+    -fx-text-fill: aliceblue;
+    -fx-padding: 10;
+    -fx-font-family: Futura;
+    -fx-font-size: 15pt;
+    -fx-pref-height: 50;
+    -fx-pref-width: 100;
+    -fx-cursor: hand;
+    -fx-border-radius: 3;
+}
+#back{
+    -fx-background-color: dodgerblue;
+    -fx-text-fill: aliceblue;
+    -fx-padding: 10;
+    -fx-font-family: Futura;
+    -fx-font-size: 15pt;
+    -fx-pref-height: 50;
+    -fx-pref-width: 100;
+    -fx-cursor: hand;
+    -fx-border-radius: 3;
+}
+
+#name{
+    -fx-text-fill: aliceblue;
+    -fx-font-size: 40;
+    -fx-font-family: Futura;
+}
+
+.infoTitle{
+    -fx-text-fill: aliceblue;
+    -fx-font-size: 20;
+    -fx-font-family: Futura;
+}
+.infoValue{
+    -fx-text-fill: aqua;
+    -fx-font-size: 20;
+    -fx-font-family: Futura;
+}
+
+.buttonTitle{
+    -fx-text-fill: aliceblue;
+    -fx-font-size: 30;
+    -fx-font-family: Futura;
+}
+#discountCodeButton{
+    -fx-background-color: dodgerblue;
+    -fx-text-fill: aliceblue;
+    -fx-padding: 10;
+    -fx-font-family: Futura;
+    -fx-font-size: 15pt;
+    -fx-pref-height: 75;
+    -fx-pref-width: 250;
+    -fx-cursor: hand;
+    -fx-border-radius: 3;
+}
+#role{
+    -fx-text-fill: firebrick;
+}
