@@ -114,7 +114,7 @@ public class SellerController {
             Gson gsonProduct = new GsonBuilder().serializeNulls().create();
             product.setProductCondition(ProductOrOffCondition.PENDING_TO_EDIT);
             String editedProduct = gsonProduct.toJson(product);
-            Request request = new Request(editedProduct, RequestType.EDIT_PODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller().getUsername());
+            Request request = new Request(editedProduct, RequestType.EDIT_PRODUCT, RequestOrCommentCondition.PENDING_TO_ACCEPT, getSeller().getUsername());
             Gson gsonRequest = new GsonBuilder().serializeNulls().create();
             String requestDetails = gsonRequest.toJson(request);
             try {
@@ -130,15 +130,29 @@ public class SellerController {
         }
     }
 
-    public static void removeProduct(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
+    public static void removeProductRequest(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         Product product = GetDataFromDatabase.getProduct(productId);
-        String path = "Resources/Products/" + product.getProductId() + ".json";
-        SetDataToDatabase.updateSellerOfProduct(product,1);
-        File file = new File(path);
-        file.delete();
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+        String productDetails = gson.toJson(product);
+        Request request = new Request(productDetails,RequestType.REMOVE_PRODUCT,RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller().getUsername());
+        Gson gsonRequest = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+        try {
+            String path = "Resources/Requests/" + request.getRequestId() + ".json";
+            while (Files.exists(Paths.get(path))) {
+                Random random = new Random();
+                request.setRequestId(random.nextInt(1000000));
+                path = "Resources/Requests/" + request.getRequestId() + ".json";
+            }
+            String requestDetails = gsonRequest.toJson(request);
+            FileWriter fileWriter = new FileWriter(path);
+            fileWriter.write(requestDetails);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void addProductRequest(Product product, String category) {
+    public static void addProductRequest(Product product) {
         product.setSeller(getSeller());
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         String productDetails = gson.toJson(product);
@@ -148,7 +162,7 @@ public class SellerController {
             String path = "Resources/Requests/" + request.getRequestId() + ".json";
             while (Files.exists(Paths.get(path))) {
                 Random random = new Random();
-                request.setRequestId(random.nextInt(10000));
+                request.setRequestId(random.nextInt(1000000));
                 path = "Resources/Requests/" + request.getRequestId() + ".json";
             }
             String requestDetails = gsonRequest.toJson(request);
@@ -237,7 +251,7 @@ public class SellerController {
             String path = "Resources/Requests/" + request.getRequestId() + ".json";
             while (Files.exists(Paths.get(path))) {
                 Random random = new Random();
-                request.setRequestId(random.nextInt(10000));
+                request.setRequestId(random.nextInt(1000000));
                 path = "Resources/Requests/" + request.getRequestId() + ".json";
             }
             String requestDetails = gsonRequest.toJson(request);
@@ -279,8 +293,8 @@ public class SellerController {
         ArrayList<SellLog> buyersLogs = new ArrayList<>();
         Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
         for (SellLog i : seller.getSellerLogs()) {
-            for (Product j : i.getLogProducts().keySet()) {
-                if (j.getProductId() == productId) {
+            for (String[] j : i.getLogProducts()) {
+                if (Integer.parseInt(j[0]) == productId) {
                     buyersLogs.add(i);
                 }
             }
@@ -335,6 +349,30 @@ public class SellerController {
             }
         }
         return false;
+    }
+
+    public static ArrayList<Request> showSellerRequests() throws ExceptionsLibrary.NoRequestException {
+        ArrayList<Request> sellerRequests = new ArrayList<>();
+        String path = "Resources/Requests";
+        File file = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : file.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String requestId = fileName.replace(".json", "");
+            Request request = GetDataFromDatabase.getRequest(Integer.parseInt(requestId));
+            if (request.getRequestSeller().equals(getSeller().getUsername())) {
+                sellerRequests.add(request);
+            }
+        }
+        return sellerRequests;
     }
 
 }

@@ -9,13 +9,13 @@ public class SellLog {
     private String logDate;
     private double value;
     private double discountApplied;
-    private HashMap<Product,Integer> logProducts;
+    private ArrayList<String[]> logProducts;
     private String buyer;
     private String deliveryCondition;
 
-    public SellLog(String logDate, double value, double discountApplied, HashMap<Product,Integer> logProducts, String buyer, String deliveryCondition) {
+    public SellLog(String logDate, double value, double discountApplied, ArrayList<String[]> logProducts, String buyer, String deliveryCondition) {
         Random random = new Random();
-        this.logId = random.nextInt(10000);
+        this.logId = random.nextInt(1000000);
         this.logDate = logDate;
         this.value = value;
         this.discountApplied = discountApplied;
@@ -56,11 +56,11 @@ public class SellLog {
         this.discountApplied = discountApplied;
     }
 
-    public HashMap<Product,Integer> getLogProducts() {
+    public ArrayList<String[]> getLogProducts() {
         return logProducts;
     }
 
-    public void setLogProducts(HashMap<Product,Integer> logProducts) {
+    public void setLogProducts(ArrayList<String[]> logProducts) {
         this.logProducts = logProducts;
     }
 

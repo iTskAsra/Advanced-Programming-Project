@@ -1,5 +1,8 @@
 package view.UserPanel.SellLog.SellLogDetails;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -48,14 +51,30 @@ public class SellLogDetails implements Initializable {
         discountApplied.setText(String.valueOf(getSellLog().getDiscountApplied()));
         buyer.setText(getSellLog().getBuyer());
 
-        TableColumn<BuyLog,Integer> productName = new TableColumn<>("Name");;
-        TableColumn<BuyLog,Integer> price= new TableColumn<>("Price");;
+        TableColumn<String[],Integer> productId = new TableColumn<>("Product ID");
+        TableColumn<String[],String> productName = new TableColumn<>("Name");
+        TableColumn<String[],Double> price= new TableColumn<>("Price");
+        TableColumn<String[],Integer> quantity = new TableColumn<>("Quantity");
+
+        productId.setStyle("-fx-alignment: CENTER");
         productName.setStyle("-fx-alignment: CENTER");
+        quantity.setStyle("-fx-alignment: CENTER");
         price.setStyle("-fx-alignment: CENTER");
-        products.getColumns().addAll(productName,price);
-        ObservableList<Product> productsList = FXCollections.observableArrayList(getSellLog().getLogProducts().keySet());
-        productName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        price.setCellValueFactory(new PropertyValueFactory<>("priceWithOff"));
+        products.getColumns().addAll(productId,productName,price,quantity);
+        ObservableList<String[]> productsList = FXCollections.observableArrayList(getSellLog().getLogProducts());
+        productId.setCellValueFactory(c -> {
+            return new SimpleIntegerProperty(Integer.parseInt(c.getValue()[0])).asObject();
+        });
+        productName.setCellValueFactory(c -> {
+            return new SimpleStringProperty(c.getValue()[1]);
+        });
+        price.setCellValueFactory(c -> {
+            return new SimpleDoubleProperty(Double.parseDouble(c.getValue()[2])).asObject();
+        });
+        quantity.setCellValueFactory(c -> {
+            return new SimpleIntegerProperty(Integer.parseInt(c.getValue()[3])).asObject();
+        });
+
         products.setItems(productsList);
     }
 

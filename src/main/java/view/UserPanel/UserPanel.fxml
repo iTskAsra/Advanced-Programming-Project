@@ -73,12 +73,13 @@
       <Button fx:id="editInfoButton" layoutX="700.0" layoutY="294.0" mnemonicParsing="false" onAction="#editInfoButtonClicked" styleClass="normal-button" text="Edit Info" />
       <Label fx:id="balance" layoutX="1226.0" layoutY="879.0" styleClass="infoTitle" text="Label" />
       <Label fx:id="editInfoLabel" layoutX="700.0" layoutY="245.0" styleClass="buttonTitle" text="Edit Info" underline="true" />
-      <Button fx:id="cartButton" layoutX="1050.0" layoutY="294.0" mnemonicParsing="false" styleClass="normal-button" text="Cart" />
+      <Button fx:id="cartButton" layoutX="1050.0" layoutY="294.0" mnemonicParsing="false" onAction="#cartButtonClicked" styleClass="normal-button" text="Cart" />
       <Label fx:id="cartLabel" layoutX="1050.0" layoutY="246.0" styleClass="buttonTitle" text="Cart" underline="true" />
       <Button fx:id="buySellLogButton" layoutX="700.0" layoutY="556.0" mnemonicParsing="false" onAction="#buySellLogButtonClicked" styleClass="normal-button" text="Buy Log" />
       <Label fx:id="buySellLogLabel" layoutX="700.0" layoutY="509.0" styleClass="buttonTitle" text="Buy Log" underline="true" />
       <Button fx:id="discountOrOffButton" layoutX="1050.0" layoutY="556.0" mnemonicParsing="false" onAction="#discountOrOffButtonClicked" prefWidth="220.0" styleClass="normal-button" text="Discount Codes" />
       <Label fx:id="discountOrOffLabel" layoutX="1050.0" layoutY="510.0" styleClass="buttonTitle" text="Discount Codes" underline="true" />
-      <Button id="back" fx:id="help" layoutX="585.0" layoutY="860.0" mnemonicParsing="false" onAction="#helpButtonClicked" styleClass="normal-button" text="Help" />
+      <Button id="back" fx:id="help" layoutX="585.0" layoutY="861.0" mnemonicParsing="false" onAction="#helpButtonClicked" styleClass="normal-button" text="Help" />
+      <Button id="requests" fx:id="requests" layoutX="835.0" layoutY="861.0" mnemonicParsing="false" onAction="#requests" prefWidth="210.0" styleClass="normal-button" text="Requests Status" />
    </children>
 </Pane>

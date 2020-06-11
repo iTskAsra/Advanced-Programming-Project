@@ -50,7 +50,7 @@ public class ManageSellerProducts extends Menu {
             public void run() {
                 int productId = Integer.parseInt(Main.scanInput("int"));
                 try {
-                    SellerController.removeProduct(productId);
+                    SellerController.removeProductRequest(productId);
                     System.out.println("Product removed!");
                 } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException e) {
                     System.out.println(e.getMessage());
@@ -97,7 +97,7 @@ public class ManageSellerProducts extends Menu {
                     System.out.println("Enter product description:");
                     String description = Main.scanInput("String");
                     Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE, name, company, price, null, quantity, category1, productFeatures, description, new ArrayList<Rate>(), new ArrayList<Comment>(), Main.localDateTime.format(Main.dateTimeFormatter), price);
-                    SellerController.addProductRequest(product, category);
+                    SellerController.addProductRequest(product);
                     System.out.println("Request sent!");
                 } catch (ExceptionsLibrary.NoCategoryException e) {
                     e.printStackTrace();

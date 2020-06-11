@@ -64,3 +64,8 @@
     -fx-text-fill: darkgreen;
     -fx-font-family: Futura;
 }
+
+#requests{
+    -fx-pref-height: 50;
+    -fx-pref-width: 200;
+}

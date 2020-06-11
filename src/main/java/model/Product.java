@@ -21,7 +21,7 @@ public class Product {
 
     public Product(ProductOrOffCondition productCondition, String name, String company, double price, Seller seller, int availability, Category category, ArrayList<Feature> categoryFeatures, String description, ArrayList<Rate> rates, ArrayList<Comment> productComments, String date,Double priceWithOff) {
         Random random = new Random();
-        this.productId = random.nextInt(10000);
+        this.productId = random.nextInt(1000000);
         this.productCondition = productCondition;
         this.name = name;
         this.company = company;

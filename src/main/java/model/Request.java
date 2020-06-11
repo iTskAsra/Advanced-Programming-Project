@@ -15,7 +15,7 @@ public class Request {
         this.requestType = requestType;
         this.requestCondition = requestCondition;
         Random random = new Random();
-        requestId = random.nextInt(10000);
+        requestId = random.nextInt(1000000);
         this.requestSeller = requestSeller;
     }
 

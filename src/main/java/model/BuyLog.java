@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -9,12 +10,12 @@ public class BuyLog {
     private double value;
     private double discountApplied;
     private HashMap<String, String> receiverInfo;
-    private HashMap<Product, Integer> logProducts;
+    private ArrayList<String[]> logProducts;
     private String deliveryCondition;
 
-    public BuyLog(String logDate, double value, double discountApplied, HashMap<Product, Integer> logProducts, String deliveryCondition, HashMap<String, String> receiverInfo) {
+    public BuyLog(String logDate, double value, double discountApplied, ArrayList<String[]> logProducts, String deliveryCondition, HashMap<String, String> receiverInfo) {
         Random random = new Random();
-        this.logId = random.nextInt(10000);
+        this.logId = random.nextInt(1000000);
         this.logDate = logDate;
         this.value = value;
         this.discountApplied = discountApplied;
@@ -63,11 +64,11 @@ public class BuyLog {
         this.discountApplied = discountApplied;
     }
 
-    public HashMap<Product, Integer> getLogProducts() {
+    public ArrayList<String[]> getLogProducts() {
         return logProducts;
     }
 
-    public void setLogProducts(HashMap<Product, Integer> logProducts) {
+    public void setLogProducts(ArrayList<String[]> logProducts) {
         this.logProducts = logProducts;
     }
 

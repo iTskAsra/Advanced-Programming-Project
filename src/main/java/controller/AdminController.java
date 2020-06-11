@@ -74,7 +74,9 @@ public class AdminController {
             String fileName = i.getName();
             String requestId = fileName.replace(".json", "");
             Request request = GetDataFromDatabase.getRequest(Integer.parseInt(requestId));
-            allRequests.add(request);
+            if (request.getRequestCondition().equals(RequestOrCommentCondition.PENDING_TO_ACCEPT)) {
+                allRequests.add(request);
+            }
         }
         return allRequests;
     }
@@ -82,13 +84,17 @@ public class AdminController {
     public static String showRequest(int requestId) throws ExceptionsLibrary.NoRequestException {
         Request request = GetDataFromDatabase.getRequest(requestId);
         if (request != null) {
-            Gson gson = new GsonBuilder().serializeNulls().create();
-            String reuestData = gson.toJson(request);
-            return reuestData;
+            if (request.getRequestCondition().equals(RequestOrCommentCondition.PENDING_TO_ACCEPT)) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                String reuestData = gson.toJson(request);
+                return reuestData;
+            }
+            else {
+                throw new ExceptionsLibrary.NoRequestException();
+            }
         } else {
             throw new ExceptionsLibrary.NoRequestException();
         }
-
     }
 
     public static void processRequest(int requestId, boolean acceptStatus) throws ExceptionsLibrary.NoRequestException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException {
@@ -101,7 +107,7 @@ public class AdminController {
                     off.setOffCondition(ProductOrOffCondition.ACCEPTED);
                     while (checkIfOffExist(off.getOffId())) {
                         Random random = new Random();
-                        off.setOffId(random.nextInt(10000));
+                        off.setOffId(random.nextInt(1000000));
                     }
                     String offDetails = gson.toJson(off);
                     Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
@@ -114,25 +120,22 @@ public class AdminController {
                         fileWriter.write(offDetails);
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                         for (String i :off.getOffProducts()){
                             Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
                             temp.setPriceWithOff(temp.getPrice()-off.getOffAmount());
                             SetDataToDatabase.setProduct(temp);
                             SetDataToDatabase.updateSellerOfProduct(temp,0);
                         }
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                     } catch (IOException e) {
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
-                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                    File fileRequest = new File(requestPath);
-                    fileRequest.delete();
+                    request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                    SetDataToDatabase.setRequest(request);
 
                 }
                 break;
@@ -163,19 +166,16 @@ public class AdminController {
                         FileWriter fileWriter = new FileWriter(offPath);
                         fileWriter.write(offDetails);
                         fileWriter.close();
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                     } catch (IOException e) {
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
-                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                    File fileRequest = new File(requestPath);
-                    fileRequest.delete();
+                    request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                    SetDataToDatabase.setRequest(request);
                 }
                 break;
             case ADD_PRODUCT:
@@ -184,7 +184,7 @@ public class AdminController {
                     product.setProductCondition(ProductOrOffCondition.ACCEPTED);
                     while (checkIfProductExist(product.getProductId())) {
                         Random random = new Random();
-                        product.setProductId(random.nextInt(10000));
+                        product.setProductId(random.nextInt(1000000));
                     }
                     String productDetails = gson.toJson(product);
                     Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
@@ -197,22 +197,19 @@ public class AdminController {
                         fileWriter.write(productDetails);
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                     } catch (IOException e) {
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
-                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                    File fileRequest = new File(requestPath);
-                    fileRequest.delete();
+                    request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                    SetDataToDatabase.setRequest(request);
                 }
                 break;
-            case EDIT_PODUCT:
+            case EDIT_PRODUCT:
                 if (acceptStatus) {
                     Product product = gson.fromJson(request.getRequestDescription(), Product.class);
                     product.setProductCondition(ProductOrOffCondition.ACCEPTED);
@@ -234,19 +231,16 @@ public class AdminController {
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
                         SetDataToDatabase.updateSellerOfProduct(product,0);
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                     } catch (IOException e) {
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                         throw new ExceptionsLibrary.NoAccountException();
                     }
                 } else {
-                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                    File fileRequest = new File(requestPath);
-                    fileRequest.delete();
+                    request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                    SetDataToDatabase.setRequest(request);
                 }
                 break;
             case REGISTER_SELLER:
@@ -262,22 +256,33 @@ public class AdminController {
                             String sellerData = gsonSeller.toJson(seller);
                             fileWriterSeller.write(sellerData);
                             fileWriterSeller.close();
-                            String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                            File fileRequest = new File(requestPath);
-                            fileRequest.delete();
+                            request.setRequestCondition(RequestOrCommentCondition.ACCEPTED);
+                            SetDataToDatabase.setRequest(request);
                         } catch (IOException e) {
                             throw new ExceptionsLibrary.NoAccountException();
                         }
                     } else {
-                        String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                        File fileRequest = new File(requestPath);
-                        fileRequest.delete();
+                        request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                        SetDataToDatabase.setRequest(request);
                         throw new ExceptionsLibrary.UsernameAlreadyExists();
                     }
                 } else {
-                    String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
-                    File fileRequest = new File(requestPath);
-                    fileRequest.delete();
+                    request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                    SetDataToDatabase.setRequest(request);
+                }
+                break;
+            case REMOVE_PRODUCT:
+                if (acceptStatus) {
+                    Product product = gson.fromJson(request.getRequestDescription(),Product.class);
+                    String path = "Resources/Products/" + product.getProductId() + ".json";
+                    SetDataToDatabase.updateSellerOfProduct(product,1);
+                    File file = new File(path);
+                    file.delete();
+                    request.setRequestCondition(RequestOrCommentCondition.ACCEPTED);
+                    SetDataToDatabase.setRequest(request);
+                } else {
+                    request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
+                    SetDataToDatabase.setRequest(request);
                 }
                 break;
         }
@@ -834,4 +839,26 @@ public class AdminController {
             return true;
         }
     }
+
+    public static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
+        ArrayList<Product> allProducts = new ArrayList<>();
+        String path = "Resources/Products";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            int productId = Integer.parseInt(fileName.replace(".json", ""));
+            allProducts.add(GetDataFromDatabase.getProduct(productId));
+        }
+        return allProducts;
+    }
+
 }

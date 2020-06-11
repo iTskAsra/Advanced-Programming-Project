@@ -74,12 +74,12 @@
       <Label layoutX="1050.0" layoutY="246.0" styleClass="buttonTitle" text="Users" underline="true" />
       <Button fx:id="sales" layoutX="669.0" layoutY="470.0" mnemonicParsing="false" onAction="#salesButtonClicked" styleClass="normal-button" text="Sales" />
       <Label layoutX="669.0" layoutY="421.0" styleClass="buttonTitle" text="Sales" underline="true" />
-      <Button fx:id="products" layoutX="1050.0" layoutY="470.0" mnemonicParsing="false" prefWidth="220.0" styleClass="normal-button" text="Products" />
+      <Button fx:id="products" layoutX="1050.0" layoutY="470.0" mnemonicParsing="false" onAction="#productsButtonClicked" prefWidth="220.0" styleClass="normal-button" text="Products" />
       <Label layoutX="1050.0" layoutY="421.0" styleClass="buttonTitle" text="Products" underline="true" />
       <Button id="back" fx:id="help" layoutX="585.0" layoutY="860.0" mnemonicParsing="false" onAction="#helpButtonClicked" styleClass="normal-button" text="Help" />
-      <Button fx:id="requests" layoutX="669.0" layoutY="646.0" mnemonicParsing="false" styleClass="normal-button" text="Requests" />
+      <Button fx:id="requests" layoutX="669.0" layoutY="646.0" mnemonicParsing="false" onAction="#requestsButtonClicked" styleClass="normal-button" text="Requests" />
       <Label layoutX="669.0" layoutY="597.0" styleClass="buttonTitle" text="Requests" underline="true" />
-      <Button fx:id="categories" layoutX="1050.0" layoutY="646.0" mnemonicParsing="false" prefWidth="220.0" styleClass="normal-button" text="Categories" />
+      <Button fx:id="categories" layoutX="1050.0" layoutY="646.0" mnemonicParsing="false" onAction="#categoriesButtonClicked" prefWidth="220.0" styleClass="normal-button" text="Categories" />
       <Label layoutX="1050.0" layoutY="597.0" styleClass="buttonTitle" text="Categories" underline="true" />
    </children>
 </Pane>

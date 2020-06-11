@@ -58,6 +58,9 @@ public class UserPanel implements Initializable {
     private Button cartButton;
     @FXML
     private Label cartLabel;
+    @FXML
+    private Button requests;
+
 
 
     public void back() throws IOException {
@@ -164,6 +167,16 @@ public class UserPanel implements Initializable {
             stage.showAndWait();
         }
         else {
+            Stage stage = new Stage();
+            File file = new File("src/main/java/view/UserPanel/ManageSellerOffs/ManageSellerOffs.fxml");
+            URL url = file.toURI().toURL();
+            Parent root = FXMLLoader.load(url);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.showAndWait();
         }
     }
 
@@ -177,6 +190,7 @@ public class UserPanel implements Initializable {
             phoneNumber.setText(customer.getPhoneNumber());
             password.setText(customer.getPassword());
             balance.setText("Your current balance is: " + customer.getCredit());
+            requests.setVisible(false);
         }
         else {
             Seller seller = SellerController.getSeller();
@@ -194,6 +208,37 @@ public class UserPanel implements Initializable {
             discountOrOffLabel.setText("Manage Offs");
             discountOrOffButton.setText("Manage Offs");
         }
+    }
+
+    public void cartButtonClicked() throws IOException {
+        if (Main.checkLoggedIn().equals("Customer")) {
+
+        }
+        else {
+            Stage stage = new Stage();
+            File file = new File("src/main/java/view/UserPanel/ManageSellerProducts/ManageSellerProducts.fxml");
+            URL url = file.toURI().toURL();
+            Parent root = FXMLLoader.load(url);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.show();
+        }
+    }
+
+    public void requests() throws IOException {
+        Stage stage = new Stage();
+        File file = new File("src/main/java/view/UserPanel/RequestsStatus/RequestsStatus.fxml");
+        URL url = file.toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
     }
 
 }

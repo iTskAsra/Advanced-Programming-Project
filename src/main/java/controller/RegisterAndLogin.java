@@ -45,7 +45,7 @@ public class RegisterAndLogin {
                 String requestPath = "Resources/Requests/" + request.getRequestId() + ".json";
                 while (Files.exists(Paths.get(requestPath))) {
                     Random random = new Random();
-                    request.setRequestId(random.nextInt(10000));
+                    request.setRequestId(random.nextInt(1000000));
                 }
                 Gson gsonRequest = new GsonBuilder().serializeNulls().create();
                 String requestDetails = gsonRequest.toJson(request);

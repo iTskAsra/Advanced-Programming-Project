@@ -127,7 +127,7 @@ public class ManageRequestsMenu extends Menu {
                             System.out.printf("Username : %s\nFirst Name : %s\nLast Name : %s\nEmail : %s\nPhone Number : %s\nCredit : %.2f\n", seller.getUsername(), seller.getFirstName(), seller.getLastName(), seller.getEmail(), seller.getPhoneNumber(), seller.getCredit());
                             break;
                         case ADD_PRODUCT:
-                        case EDIT_PODUCT:
+                        case EDIT_PRODUCT:
                             Product product = gson.fromJson(request.getRequestDescription(), Product.class);
                             System.out.printf("Name : %s\nPrice : %.2f\nCategory : %s\nQuantity : %d\n", product.getName(), product.getPrice(), product.getCategory().getName(), product.getAvailability());
                             break;

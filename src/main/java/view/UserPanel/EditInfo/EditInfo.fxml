@@ -22,7 +22,6 @@
         <Button fx:id="edit" layoutX="335.0" layoutY="427.0" mnemonicParsing="false" onAction="#editInfo" styleClass="register-button" text="Edit" />
         <Button fx:id="close" layoutX="172.0" layoutY="427.0" mnemonicParsing="false" onAction="#close" styleClass="close-button" text="Close" />
         <Label fx:id="companyLabel" layoutX="158.0" layoutY="342.0" styleClass="fields" text="Company:" />
-        <PasswordField fx:id="company" layoutX="286.0" layoutY="337.0" promptText="Company" />
       <TextField fx:id="company" layoutX="286.0" layoutY="337.0" promptText="Company" />
     </children>
 </Pane>

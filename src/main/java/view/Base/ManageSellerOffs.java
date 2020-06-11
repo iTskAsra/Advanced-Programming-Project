@@ -49,7 +49,7 @@ public class ManageSellerOffs extends Menu {
 
             @Override
             public void run() {
-                int productId = Integer.parseInt(Main.scanInput("int"));
+                int offId = Integer.parseInt(Main.scanInput("int"));
                 System.out.println("Enter fields to edit : (startDate, endDate, offAmount) (separate by comma)");
                 String fields = Main.scanInput("String");
                 String[] splitFields = fields.split("\\s*,\\s*");
@@ -60,7 +60,7 @@ public class ManageSellerOffs extends Menu {
                     editedData.put(i,newValue);
                 }
                 try {
-                    SellerController.editOffRequest(productId,editedData);
+                    SellerController.editOffRequest(offId,editedData);
                     System.out.println("Request sent!");
                 } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
                     System.out.println(noFeatureWithThisName.getMessage());

@@ -95,6 +95,7 @@ public class RegisterScene implements Initializable {
             String data = gson.toJson(customer);
             try {
                 RegisterAndLogin.register(data);
+                close();
                 AlertBoxStart.messageRun("Message", "Successfully Registered!");
             } catch (ExceptionsLibrary.AdminExist | ExceptionsLibrary.UsernameAlreadyExists e) {
                 ErrorBoxStart.errorRun(e);
@@ -105,6 +106,7 @@ public class RegisterScene implements Initializable {
             String data = gson.toJson(seller);
             try {
                 RegisterAndLogin.register(data);
+                close();
                 AlertBoxStart.messageRun("Message", "Request Sent!");
             } catch (ExceptionsLibrary.AdminExist | ExceptionsLibrary.UsernameAlreadyExists e) {
                 ErrorBoxStart.errorRun(e);

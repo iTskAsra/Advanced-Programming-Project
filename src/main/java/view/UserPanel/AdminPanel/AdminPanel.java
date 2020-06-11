@@ -144,4 +144,46 @@ public class AdminPanel implements Initializable {
         updateScene();
     }
 
+    public void requestsButtonClicked() throws IOException {
+        Stage stage = new Stage();
+        File file = new File("src/main/java/view/UserPanel/AdminPanel/Requests/Requests.fxml");
+        URL url = file.toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.showAndWait();
+        updateScene();
+    }
+
+    public void categoriesButtonClicked() throws IOException {
+        Stage stage = new Stage();
+        File file = new File("src/main/java/view/UserPanel/AdminPanel/Categories/Categories.fxml");
+        URL url = file.toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.showAndWait();
+        updateScene();
+    }
+
+    public void productsButtonClicked() throws IOException {
+        Stage stage = new Stage();
+        File file = new File("src/main/java/view/UserPanel/AdminPanel/Products/Products.fxml");
+        URL url = file.toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.showAndWait();
+        updateScene();
+    }
+
 }

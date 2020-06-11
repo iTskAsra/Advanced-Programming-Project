@@ -1,9 +1,10 @@
 package model;
 
 public enum RequestType {
-    EDIT_PODUCT,
+    EDIT_PRODUCT,
     ADD_PRODUCT,
     EDIT_OFF,
     ADD_OFF,
-    REGISTER_SELLER
+    REGISTER_SELLER,
+    REMOVE_PRODUCT
 }

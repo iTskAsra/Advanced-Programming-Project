@@ -1,5 +1,6 @@
 package view.UserPanel.EditInfo;
 
+import controller.AdminController;
 import controller.CustomerController;
 import controller.ExceptionsLibrary;
 import controller.SellerController;
@@ -7,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Admin;
 import model.Customer;
 import model.Seller;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
@@ -121,6 +123,15 @@ public class EditInfo implements Initializable {
             phoneNumber.setText(seller.getPhoneNumber());
             password.setText(seller.getPassword());
             company.setText(seller.getCompanyName());
+        } else if (Main.checkLoggedIn().equals("Admin")){
+            Admin admin = AdminController.getAdmin();
+            companyLabel.setVisible(false);
+            company.setVisible(false);
+            firstName.setText(admin.getFirstName());
+            lastName.setText(admin.getLastName());
+            email.setText(admin.getEmail());
+            phoneNumber.setText(admin.getPhoneNumber());
+            password.setText(admin.getPassword());
         }
     }
 }

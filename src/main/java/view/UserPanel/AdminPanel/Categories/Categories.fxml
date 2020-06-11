@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@CategoriesStyle.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserPanel.AdminPanel.Categories.Categories">
+   <children>
+      <Label id="title" layoutX="203.0" layoutY="14.0" text="Categories" />
+      <ButtonBar layoutX="102.0" layoutY="344.0" prefHeight="42.0" prefWidth="397.0">
+        <buttons>
+          <Button id="close" fx:id="close" mnemonicParsing="false" onAction="#close" text="Close" />
+            <Button id="close" fx:id="remove" mnemonicParsing="false" onAction="#removeCategoryButtonClicked" text="Remove" />
+            <Button fx:id="editCategory" mnemonicParsing="false" onAction="#editCategoryButtonClicked" text="Edit" />
+            <Button id="addCategory" fx:id="addCategory" mnemonicParsing="false" onAction="#addCategoryButtonClicked" text="New Category" />
+        </buttons>
+      </ButtonBar>
+      <TreeView fx:id="treeView" layoutX="166.0" layoutY="100.0" prefHeight="200.0" prefWidth="271.0" />
+   </children>
+</Pane>

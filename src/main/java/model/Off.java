@@ -13,7 +13,7 @@ public class Off {
 
     public Off(ArrayList<String> offProducts, ProductOrOffCondition offCondition, String startDate, String endDate, double offAmount) {
         Random random = new Random();
-        this.offId = random.nextInt(10000);
+        this.offId = random.nextInt(1000000);
         this.offProducts = offProducts;
         this.offCondition = offCondition;
         this.startDate = startDate;

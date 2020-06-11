@@ -40,6 +40,22 @@ public class SetDataToDatabase {
         }
     }
 
+    public static void setRequest(Request request) {
+        String path = "Resources/Requests/" + request.getRequestId() + ".json";
+        File file = new File(path);
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+            String data = gson.toJson(request);
+            fileWriter.write(data);
+            fileWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void setSale(Sale sale) {
         String path = "Resources/Sales/" + sale.getSaleCode() + ".json";
         File file = new File(path);

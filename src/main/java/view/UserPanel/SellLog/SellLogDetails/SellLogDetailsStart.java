@@ -17,7 +17,7 @@ public class SellLogDetailsStart {
     public static void start(SellLog sellLog) throws IOException {
         SellLogDetails.setSellLog(sellLog);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/BuyLog/SellLogDetails/SellLogDetails.fxml");
+        File file = new File("src/main/java/view/UserPanel/SellLog/SellLogDetails/SellLogDetails.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

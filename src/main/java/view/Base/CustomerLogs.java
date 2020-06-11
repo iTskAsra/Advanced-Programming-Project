@@ -84,8 +84,8 @@ public class CustomerLogs extends Menu {
                     buyLog = CustomerController.showCustomerLogDetail(logID);
                     System.out.println("-".repeat(40));
                     System.out.printf("Log ID : %d\nLog Date : %s\nLog Value : %.2f\nDiscount Applied : %.2f\nProducts :\n",buyLog.getLogId(),buyLog.getLogDate(),buyLog.getValue(),buyLog.getDiscountApplied());
-                    for (Product i :buyLog.getLogProducts().keySet()){
-                        System.out.printf("Product ID : %d     Product Name : %s     Product Price : %.2f   Quantity : %d\n",i.getProductId(),i.getName(),i.getPriceWithOff(),buyLog.getLogProducts().get(i));
+                    for (String[] i :buyLog.getLogProducts()){
+                        System.out.printf("Product ID : %d     Product Name : %s     Product Price : %.2f   Quantity : %d\n",Integer.parseInt(i[0]),i[1],Double.parseDouble(i[2]),Integer.parseInt(i[3]));
                     }
                     System.out.println("-".repeat(40));
                 } catch (ExceptionsLibrary.NoLogException e) {

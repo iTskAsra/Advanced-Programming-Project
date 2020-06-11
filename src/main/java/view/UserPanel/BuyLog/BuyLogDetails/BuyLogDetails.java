@@ -1,6 +1,9 @@
 package view.UserPanel.BuyLog.BuyLogDetails;
 
-import controller.CustomerController;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,8 +13,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.BuyLog;
-import model.Product;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -48,14 +51,31 @@ public class BuyLogDetails implements Initializable {
         discountApplied.setText(String.valueOf(getBuyLog().getDiscountApplied()));
         delivery.setText(getBuyLog().getReceiverInfo().get("name"));
 
-        TableColumn<BuyLog,Integer> productName = new TableColumn<>("Name");;
-        TableColumn<BuyLog,Integer> price= new TableColumn<>("Price");;
+        TableColumn<String[],Integer> productId = new TableColumn<>("Product ID");
+        TableColumn<String[],String> productName = new TableColumn<>("Name");
+        TableColumn<String[],Double> price= new TableColumn<>("Price");
+        TableColumn<String[],Integer> quantity = new TableColumn<>("Quantity");
+
+        productId.setStyle("-fx-alignment: CENTER");
         productName.setStyle("-fx-alignment: CENTER");
+        quantity.setStyle("-fx-alignment: CENTER");
         price.setStyle("-fx-alignment: CENTER");
-        products.getColumns().addAll(productName,price);
-        ObservableList<Product> productsList = FXCollections.observableArrayList(getBuyLog().getLogProducts().keySet());
-        productName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        price.setCellValueFactory(new PropertyValueFactory<>("priceWithOff"));
+        products.getColumns().addAll(productId,productName,price,quantity);
+        ObservableList<String[]> productsList = FXCollections.observableArrayList(getBuyLog().getLogProducts());
+        productId.setCellValueFactory(c -> {
+            return new SimpleIntegerProperty(Integer.parseInt(c.getValue()[0])).asObject();
+        });
+        productName.setCellValueFactory(c -> {
+            return new SimpleStringProperty(c.getValue()[1]);
+        });
+        price.setCellValueFactory(c -> {
+            return new SimpleDoubleProperty(Double.parseDouble(c.getValue()[2])).asObject();
+        });
+        quantity.setCellValueFactory(c -> {
+            return new SimpleIntegerProperty(Integer.parseInt(c.getValue()[3])).asObject();
+        });
+
+
         products.setItems(productsList);
     }
 
