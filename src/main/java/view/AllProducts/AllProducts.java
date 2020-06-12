@@ -98,7 +98,7 @@ public class AllProducts implements Initializable {
 
         sort.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
             AllProductsPanelController.getCurrentSort().clear();
-            AllProductsPanelController.setSort((String)sort.getValue());
+            AllProductsPanelController.setSort((String) sort.getValue());
             updateProducts();
         });
 
@@ -144,7 +144,7 @@ public class AllProducts implements Initializable {
         });
 
         try {
-            TableColumn<String,String> currentFilters= new TableColumn<>("Current Filters");
+            TableColumn<String, String> currentFilters = new TableColumn<>("Current Filters");
             currentFilters.setStyle("-fx-alignment: CENTER");
             currentFilters.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<String, String>, ObservableValue<String>>() {
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<String, String> p) {
@@ -236,9 +236,9 @@ public class AllProducts implements Initializable {
                 }
             });
 
-            featureTreeView.getSelectionModel().selectedItemProperty().addListener((v,oldValue,newValue) -> {
+            featureTreeView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
                 TreeItem treeItem = (TreeItem) newValue;
-                if (!treeItem.isLeaf()){
+                if (!treeItem.isLeaf()) {
                     featureValue.setPromptText("");
                     featureValue.setVisible(false);
                     featureApplyButton.setVisible(false);
@@ -289,9 +289,9 @@ public class AllProducts implements Initializable {
         ObservableList<String> filters = FXCollections.observableArrayList(AllProductsPanelController.getCurrentFilters());
         listView.setItems(filters);
         Iterator iterator = listView.getItems().iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             String temp = (String) iterator.next();
-            if (temp == null){
+            if (temp == null) {
                 iterator.remove();
             }
         }
@@ -308,7 +308,7 @@ public class AllProducts implements Initializable {
     private void updateProducts() {
         clearProducts();
         AllProductsPanelController.getCurrentSort().clear();
-        AllProductsPanelController.setSort((String)sort.getValue());
+        AllProductsPanelController.setSort((String) sort.getValue());
         ArrayList<Product> allProducts = null;
         try {
             allProducts = AllProductsPanelController.showProducts();
@@ -323,7 +323,12 @@ public class AllProducts implements Initializable {
                     ratesSum += j.getRateScore();
                 }
                 Double rateDouble = ratesSum / i.getRates().size();
-                Label rate = new Label(String.valueOf(rateDouble));
+                Label rate = new Label();
+                if (!rateDouble.isNaN()) {
+                    rate.setText(Math.round(rateDouble * 2) / 2.0 + "/5");
+                } else {
+                    rate.setText("Not rated yet!");
+                }
                 vBox.getChildren().addAll(imageView, name, price, rate);
                 tilePane.getChildren().add(vBox);
                 vBox.getStyleClass().add("vBoxProduct");
@@ -343,7 +348,7 @@ public class AllProducts implements Initializable {
         tilePane.getChildren().clear();
     }
 
-    public void searchApplyClicked(){
+    public void searchApplyClicked() {
         Iterator iterator = AllProductsPanelController.getCurrentFilters().iterator();
         while (iterator.hasNext()) {
             String temp = (String) iterator.next();
@@ -355,13 +360,13 @@ public class AllProducts implements Initializable {
         updateFilterList();
     }
 
-    public void priceApplyClicked(){
+    public void priceApplyClicked() {
         AllProductsPanelController.getCurrentFilters().add("Price--" + minPrice.getText() + "--" + maxPrice.getText());
         updateFilterList();
 
     }
 
-    public void availabilityApplyClicked(){
+    public void availabilityApplyClicked() {
         boolean isSelected = availability.isSelected();
         if (isSelected) {
             Iterator iterator = AllProductsPanelController.getCurrentFilters().iterator();
@@ -381,13 +386,13 @@ public class AllProducts implements Initializable {
 
     }
 
-    public void brandApplyClicked(){
+    public void brandApplyClicked() {
         String brandName = brand.getText();
         AllProductsPanelController.getCurrentFilters().add("Brand--" + brandName);
         updateFilterList();
     }
 
-    public void sellerApplyClicked(){
+    public void sellerApplyClicked() {
         String sellerName = seller.getText();
         try {
             if (GetDataFromDatabase.getAccount(sellerName) != null) {
@@ -401,7 +406,7 @@ public class AllProducts implements Initializable {
         }
     }
 
-    public void featureApplyClicked(){
+    public void featureApplyClicked() {
         String category = getTreeItems()[0].getValue();
         String feature = getTreeItems()[1].getValue();
         String featureValueString = featureValue.getText();
@@ -416,7 +421,7 @@ public class AllProducts implements Initializable {
         updateFilterList();
     }
 
-    public void categoryApplyClicked(TreeItem treeItem){
+    public void categoryApplyClicked(TreeItem treeItem) {
         AllProductsPanelController.getCurrentFilters().add("Category--" + treeItem.getValue());
         updateFilterList();
     }
@@ -443,7 +448,6 @@ public class AllProducts implements Initializable {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
-
 
 
 }
