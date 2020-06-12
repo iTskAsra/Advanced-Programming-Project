@@ -66,8 +66,7 @@ public class MainMenuController implements Initializable {
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
             stage.setScene(scene);
-        }
-        else {
+        } else {
             Stage stage = (Stage) account.getScene().getWindow();
             File file = new File("src/main/java/view/UserPanel/AdminPanel/AdminPanel.fxml");
             URL url = file.toURI().toURL();
@@ -75,6 +74,15 @@ public class MainMenuController implements Initializable {
             Scene scene = new Scene(root);
             stage.setScene(scene);
         }
+    }
+
+    public void productsButtonClicked() throws IOException {
+        Stage stage = (Stage) account.getScene().getWindow();
+        File file = new File("src/main/java/view/AllProducts/AllProducts.fxml");
+        URL url = file.toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
     }
 
     public void exitButtonClicked() {
@@ -141,4 +149,6 @@ public class MainMenuController implements Initializable {
             }
         });
     }
+
+
 }

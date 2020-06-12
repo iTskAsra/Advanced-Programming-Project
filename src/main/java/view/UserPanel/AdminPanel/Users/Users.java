@@ -59,13 +59,7 @@ public class Users implements Initializable {
             AlertBoxStart.messageRun("Message", "User deleted!");
             updateTable();
         } catch (ExceptionsLibrary.NoAccountException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            ErrorBoxStart.errorRun(e);
         }
     }
 
@@ -75,7 +69,7 @@ public class Users implements Initializable {
         File file = new File("src/main/java/view/RegisterAndLoginStage/Register/RegisterScene.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 600, 800);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.showAndWait();
@@ -86,11 +80,7 @@ public class Users implements Initializable {
         try {
             accounts = FXCollections.observableArrayList(AdminController.showAllUsers());
         } catch (ExceptionsLibrary.NoAccountException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         username.setCellValueFactory(new PropertyValueFactory<>("username"));
         role.setCellValueFactory(new PropertyValueFactory<>("role"));

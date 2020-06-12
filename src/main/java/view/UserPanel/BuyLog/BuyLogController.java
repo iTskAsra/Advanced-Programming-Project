@@ -24,9 +24,9 @@ public class BuyLogController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TableColumn<BuyLog,Integer> logId = new TableColumn<>("Log ID");;
+        TableColumn<BuyLog,Integer> logId = new TableColumn<>("Log ID");
         TableColumn<BuyLog,String> logDate= new TableColumn<>("Log Date");
-        TableColumn<BuyLog,Double> value= new TableColumn<>("Value");;
+        TableColumn<BuyLog,Double> value= new TableColumn<>("Value");
         TableColumn<BuyLog,Double> discountApplied = new TableColumn<>("Discount");
         TableColumn<BuyLog,String> delivery = new TableColumn<>("Delivery");
         logId.setStyle("-fx-alignment: CENTER");

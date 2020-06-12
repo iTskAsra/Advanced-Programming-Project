@@ -161,7 +161,7 @@ public class AllProductsPanelController {
                     break;
                 case "Price":
                     for (Product j : products) {
-                        boolean isInRange = j.getPrice() >= Double.parseDouble(splitFilters[1]) && j.getPrice() <= Double.parseDouble(splitFilters[2]);
+                        boolean isInRange = j.getPriceWithOff() >= Double.parseDouble(splitFilters[1]) && j.getPriceWithOff() <= Double.parseDouble(splitFilters[2]);
                         if (isInRange) {
                             if (!getResult().contains(j)) {
                                 getResult().add(j);
@@ -171,7 +171,7 @@ public class AllProductsPanelController {
                     iterator = getResult().iterator();
                     while (iterator.hasNext()) {
                         Product tempProduct = iterator.next();
-                        boolean isInRange = tempProduct.getPrice() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPrice() <= Double.parseDouble(splitFilters[2]);
+                        boolean isInRange = tempProduct.getPriceWithOff() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPriceWithOff() <= Double.parseDouble(splitFilters[2]);
                         if (!isInRange) {
                             iterator.remove();
                         }
@@ -312,7 +312,7 @@ public class AllProductsPanelController {
                     iterator = getResult().iterator();
                     while (iterator.hasNext()) {
                         Product tempProduct = iterator.next();
-                        boolean isInRange = tempProduct.getPrice() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPrice() <= Double.parseDouble(splitFilters[2]);
+                        boolean isInRange = tempProduct.getPriceWithOff() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPriceWithOff() <= Double.parseDouble(splitFilters[2]);
                         if (!isInRange) {
                             iterator.remove();
                         }
@@ -389,7 +389,7 @@ public class AllProductsPanelController {
         return sellers;
     }
 
-    private static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
+    public static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
         ArrayList<Product> allProducts = new ArrayList<>();
         String path = "Resources/Products";
         File folder = new File(path);
@@ -462,11 +462,11 @@ public class AllProductsPanelController {
                         Date o1Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o1));
                         Date o2Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o2));
                         return o1Date.compareTo(o2Date);
-                    } else if (getCurrentSort().get(0).equalsIgnoreCase("price")) {
+                    } else if (getCurrentSort().get(0).equalsIgnoreCase("priceWithOff")) {
                         Double o1Price = (Double) field.get(o1);
                         Double o2Price = (Double) field.get(o2);
                         return o1Price.compareTo(o2Price);
-                    } else if (getCurrentSort().get(0).equalsIgnoreCase("availability")) {
+                    } else if (getCurrentSort().get(0).equalsIgnoreCase("availability") || getCurrentSort().get(0).equalsIgnoreCase("productId")) {
                         Integer o1Availability = (Integer) field.get(o1);
                         Integer o2Availability = (Integer) field.get(o2);
                         return o1Availability.compareTo(o2Availability);
@@ -501,4 +501,26 @@ public class AllProductsPanelController {
     }
 
 
+    public static void setSort(String value) {
+        switch (value){
+            case "Product ID":
+                getCurrentSort().add("productId");
+                break;
+            case "Name":
+                getCurrentSort().add("name");
+                break;
+            case "Company":
+                getCurrentSort().add("company");
+                break;
+            case "Price":
+                getCurrentSort().add("priceWithOff");
+                break;
+            case "Date":
+                getCurrentSort().add("date");
+                break;
+            case "Availability":
+                getCurrentSort().add("availability");
+                break;
+        }
+    }
 }

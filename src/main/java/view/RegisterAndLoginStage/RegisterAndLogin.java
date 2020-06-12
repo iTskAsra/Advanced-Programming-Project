@@ -44,7 +44,7 @@ public class RegisterAndLogin {
         File file = new File("src/main/java/view/RegisterAndLoginStage/Register/RegisterScene.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 600, 800);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.show();

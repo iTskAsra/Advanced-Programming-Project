@@ -69,11 +69,7 @@ public class Sales implements Initializable {
         try {
             sales = FXCollections.observableArrayList(AdminController.showSales());
         } catch (ExceptionsLibrary.NoSaleException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         saleCode.setCellValueFactory(new PropertyValueFactory<>("saleCode"));
         startDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
@@ -175,13 +171,7 @@ public class Sales implements Initializable {
             AlertBoxStart.messageRun("Message","Sale removed!");
             sales.remove(sale);
         } catch (ExceptionsLibrary.NoSaleException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            ErrorBoxStart.errorRun(e);
         }
     }
 

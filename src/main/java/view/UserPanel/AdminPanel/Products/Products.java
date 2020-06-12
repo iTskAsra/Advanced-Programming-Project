@@ -71,11 +71,7 @@ public class Products implements Initializable {
         try {
             products = FXCollections.observableArrayList(AdminController.getAllProducts());
         } catch (ExceptionsLibrary.NoProductException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         productId.setCellValueFactory(new PropertyValueFactory<>("productId"));
         name.setCellValueFactory(new PropertyValueFactory<>("name"));

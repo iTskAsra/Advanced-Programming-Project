@@ -55,7 +55,7 @@ public class ManageSellerProducts implements Initializable {
         File file = new File("src/main/java/view/UserPanel/ManageSellerProducts/NewEditProductRequest/NewEditProductRequest.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.showAndWait();
@@ -67,11 +67,7 @@ public class ManageSellerProducts implements Initializable {
         try {
             products = FXCollections.observableArrayList(SellerController.showSellerProducts());
         } catch (ExceptionsLibrary.NoAccountException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         productId.setCellValueFactory(new PropertyValueFactory<>("productId"));
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -97,7 +93,7 @@ public class ManageSellerProducts implements Initializable {
         File file = new File("src/main/java/view/UserPanel/ManageSellerProducts/NewEditProductRequest/NewEditProductRequest.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.showAndWait();
@@ -106,11 +102,7 @@ public class ManageSellerProducts implements Initializable {
 
     public void removeProduct() throws IOException {
         if (table.getSelectionModel().getSelectedItem() == null){
-            try {
-                AlertBoxStart.messageRun("Notice!","You should select a request from the table first!");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AlertBoxStart.messageRun("Notice!","You should select a request from the table first!");
             return;
         }
         Product temp = (Product) table.getSelectionModel().getSelectedItem();
@@ -119,11 +111,7 @@ public class ManageSellerProducts implements Initializable {
             AlertBoxStart.messageRun("Message","Request Sent!");
             updateTable();
         } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
     }
 
@@ -138,9 +126,9 @@ public class ManageSellerProducts implements Initializable {
         File file = new File("src/main/java/view/UserPanel/ManageSellerProducts/ProductBuyers/ProductBuyers.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
-        stage.show();
+        stage.showAndWait();
     }
 }

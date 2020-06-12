@@ -55,7 +55,7 @@ public class ManageSellerOffs implements Initializable {
         File file = new File("src/main/java/view/UserPanel/ManageSellerOffs/NewEditOffRequest/NewEditOffRequest.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 550, 550);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.showAndWait();
@@ -66,11 +66,7 @@ public class ManageSellerOffs implements Initializable {
         try {
             offs = FXCollections.observableArrayList(SellerController.showOffs());
         } catch (ExceptionsLibrary.NoAccountException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         offId.setCellValueFactory(new PropertyValueFactory<>("offId"));
         startDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
@@ -95,7 +91,7 @@ public class ManageSellerOffs implements Initializable {
         File file = new File("src/main/java/view/UserPanel/ManageSellerOffs/NewEditOffRequest/NewEditOffRequest.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 550, 550);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.showAndWait();

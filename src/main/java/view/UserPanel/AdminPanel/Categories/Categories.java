@@ -51,11 +51,7 @@ public class Categories implements Initializable {
             }
             treeView.setRoot(categoriesRoot);
         } catch (ExceptionsLibrary.NoCategoryException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
     }
 

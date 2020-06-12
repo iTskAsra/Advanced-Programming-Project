@@ -62,11 +62,7 @@ public class Requests implements Initializable {
         try {
             requests = FXCollections.observableArrayList(AdminController.showAdminRequests());
         } catch (ExceptionsLibrary.NoRequestException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         requestId.setCellValueFactory(new PropertyValueFactory<>("requestId"));
         requestType.setCellValueFactory(new PropertyValueFactory<>("requestType"));
@@ -80,11 +76,7 @@ public class Requests implements Initializable {
         try {
             AdminController.processRequest(temp.getRequestId(),true);
         } catch (ExceptionsLibrary.NoRequestException | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.UsernameAlreadyExists | ExceptionsLibrary.NoProductException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         updateTable();
     }
@@ -95,11 +87,7 @@ public class Requests implements Initializable {
         try {
             AdminController.processRequest(temp.getRequestId(),false);
         } catch (ExceptionsLibrary.NoRequestException | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.UsernameAlreadyExists | ExceptionsLibrary.NoProductException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         updateTable();
     }
@@ -116,7 +104,7 @@ public class Requests implements Initializable {
         File file = new File("src/main/java/view/UserPanel/AdminPanel/Requests/RequestDetails/RequestDetails.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 800, 400);
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.show();

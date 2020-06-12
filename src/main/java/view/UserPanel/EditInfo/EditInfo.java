@@ -60,13 +60,7 @@ public class EditInfo implements Initializable {
                 AlertBoxStart.messageRun("Message", "Edited Successfully!");
                 close();
             } catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.ChangeUsernameException | ExceptionsLibrary.NotAcceptableFormatInput e) {
-                try {
-                    ErrorBoxStart.errorRun(e);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                ErrorBoxStart.errorRun(e);
             }
         } else if (Main.checkLoggedIn().equals("Seller")) {
             HashMap<String, String> dataToEdit = new HashMap<>();
@@ -82,13 +76,7 @@ public class EditInfo implements Initializable {
                 AlertBoxStart.messageRun("Message", "Edited Successfully!");
                 close();
             } catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.ChangeUsernameException | ExceptionsLibrary.NotAcceptableFormatInput e) {
-                try {
-                    ErrorBoxStart.errorRun(e);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                ErrorBoxStart.errorRun(e);
             }
         }
         else {

@@ -10,15 +10,26 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class ErrorBoxStart {
-    public static void errorRun(Exception e) throws IOException {
+    public static void errorRun(Exception e) {
         AlertBox.setException(e);
         Stage stage = new Stage();
         File file = new File("src/main/java/view/AlertBox/ErrorBox/AlertBox.fxml");
-        URL url = file.toURI().toURL();
-        Parent root = FXMLLoader.load(url);
+        URL url = null;
+        try {
+            url = file.toURI().toURL();
+        } catch (MalformedURLException malformedURLException) {
+            malformedURLException.printStackTrace();
+        }
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(url);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);

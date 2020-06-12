@@ -42,11 +42,7 @@ public class RequestsStatus implements Initializable {
         try {
             requests = FXCollections.observableArrayList(SellerController.showSellerRequests());
         } catch (ExceptionsLibrary.NoRequestException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
         requestId.setCellValueFactory(new PropertyValueFactory<>("requestId"));
         requestType.setCellValueFactory(new PropertyValueFactory<>("requestType"));

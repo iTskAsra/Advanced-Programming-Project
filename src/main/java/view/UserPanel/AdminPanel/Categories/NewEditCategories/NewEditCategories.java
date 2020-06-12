@@ -109,12 +109,8 @@ public class NewEditCategories implements Initializable {
                 if (isNewCategory()){
                     setNewCategory(false);
                     AdminController.addCategory(data);
-                    try {
-                        AlertBoxStart.messageRun("Message", "Added Category!");
-                        close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    AlertBoxStart.messageRun("Message", "Added Category!");
+                    close();
                 }
                 else {
                     setNewCategory(false);
@@ -127,28 +123,15 @@ public class NewEditCategories implements Initializable {
                         AlertBoxStart.messageRun("Message", "Edited Category!");
                         close();
                     } catch (ExceptionsLibrary.NoCategoryException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoProductException e) {
-                        try {
-                            ErrorBoxStart.errorRun(e);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    } catch (IOException e) {
+                        ErrorBoxStart.errorRun(e);
                     }
                 }
             } catch (ExceptionsLibrary.CategoryExistsWithThisName e) {
-                try {
-                    ErrorBoxStart.errorRun(e);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                ErrorBoxStart.errorRun(e);
             }
 
         } else {
-            try {
-                ErrorBoxStart.errorRun(new ExceptionsLibrary.CategoryExistsWithThisName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(new ExceptionsLibrary.CategoryExistsWithThisName());
         }
     }
 

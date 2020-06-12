@@ -48,7 +48,7 @@ public class AdminPanel implements Initializable {
         File file = new File("src/main/java/view/MainMenuStage/MainMenu.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
-        Scene scene = new Scene(root, 1920, 1080);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
     }
 

@@ -67,18 +67,10 @@ public class NewEditOffRequest implements Initializable {
             Off off = new Off(null, ProductOrOffCondition.PENDING_TO_CREATE, startDateString, endDateString, Double.parseDouble(offAmount.getText()));
             try {
                 SellerController.addOffRequest(off, products.getText());
-                try {
-                    AlertBoxStart.messageRun("Message","Request sent!");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                AlertBoxStart.messageRun("Message","Request sent!");
                 close();
             } catch (ExceptionsLibrary.NoProductException e) {
-                try {
-                    ErrorBoxStart.errorRun(e);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                ErrorBoxStart.errorRun(e);
             }
         }
         else {
@@ -88,18 +80,10 @@ public class NewEditOffRequest implements Initializable {
             dataToEdit.put("offAmount",offAmount.getText());
             try {
                 SellerController.editOffRequest(Integer.parseInt(offId.getText()),dataToEdit);
-                try {
-                    AlertBoxStart.messageRun("Message","Request sent!");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                AlertBoxStart.messageRun("Message","Request sent!");
                 close();
             } catch (ExceptionsLibrary.NoOffException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.CannotChangeThisFeature e) {
-                try {
-                    ErrorBoxStart.errorRun(e);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                ErrorBoxStart.errorRun(e);
             }
         }
     }

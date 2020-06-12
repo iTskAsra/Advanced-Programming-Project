@@ -53,11 +53,7 @@ public class ProductBuyers implements Initializable {
                 }
             }
         } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException e) {
-            try {
-                ErrorBoxStart.errorRun(e);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            ErrorBoxStart.errorRun(e);
         }
     }
 }

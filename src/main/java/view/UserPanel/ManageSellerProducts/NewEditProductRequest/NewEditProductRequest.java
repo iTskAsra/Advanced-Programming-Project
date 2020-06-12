@@ -75,11 +75,7 @@ public class NewEditProductRequest implements Initializable {
             }
             Product product = new Product(ProductOrOffCondition.PENDING_TO_CREATE, name.getText(), company.getText(), Double.parseDouble(price.getText()), null, Integer.parseInt(quantity.getText()), (Category) category.getValue(), productFeatures, description.getText(), new ArrayList<Rate>(), new ArrayList<Comment>(), Main.localDateTime.format(Main.dateTimeFormatter), Double.parseDouble(price.getText()));
             SellerController.addProductRequest(product);
-            try {
-                AlertBoxStart.messageRun("Message","Request sent!");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AlertBoxStart.messageRun("Message","Request sent!");
             close();
         }
         else {
@@ -91,18 +87,10 @@ public class NewEditProductRequest implements Initializable {
             dataToEdit.put("description",description.getText());
             try {
                 SellerController.editProductRequest(Integer.parseInt(productId.getText()),dataToEdit);
-                try {
-                    AlertBoxStart.messageRun("Message","Request sent!");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                AlertBoxStart.messageRun("Message","Request sent!");
                 close();
             } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.CannotChangeThisFeature e) {
-                try {
-                    ErrorBoxStart.errorRun(e);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                ErrorBoxStart.errorRun(e);
             }
         }
     }
@@ -148,12 +136,12 @@ public class NewEditProductRequest implements Initializable {
                 });
 
         productId.setDisable(true);
+        try {
+            category.getItems().addAll(AdminController.showCategories());
+        } catch (ExceptionsLibrary.NoCategoryException e) {
+            e.printStackTrace();
+        }
         if (isNewProduct()) {
-            try {
-                category.getItems().addAll(AdminController.showCategories());
-            } catch (ExceptionsLibrary.NoCategoryException e) {
-                e.printStackTrace();
-            }
 
             category.valueProperty().addListener((v, oldValue, newValue) -> {
                 Category newValueCategory = (Category) newValue;
@@ -166,22 +154,18 @@ public class NewEditProductRequest implements Initializable {
             });
         }
         else {
-            category.valueProperty().addListener((v, oldValue, newValue) -> {
-                Category newValueCategory = (Category) newValue;
-                for (Feature i : newValueCategory.getFeatures()) {
-                    TextField feature = new TextField();
-                    feature.setText(i.getParameterValue());
-                    feature.setId(i.getParameterValue());
-                    features.getChildren().add(feature);
-                }
-            });
+            for (Feature i : getEditProduct().getCategoryFeatures()) {
+                TextField feature = new TextField();
+                feature.setText(i.getParameterValue());
+                feature.setId(i.getParameterValue());
+                features.getChildren().add(feature);
+            }
             productId.setText(String.valueOf(editProduct.getProductId()));
             name.setText(editProduct.getName());
             company.setText(editProduct.getCompany());
             price.setText(String.valueOf(editProduct.getPrice()));
             quantity.setText(String.valueOf(editProduct.getAvailability()));
-            category.setValue(editProduct.getCategory());
-            category.setEditable(false);
+            category.setDisable(true);
             description.setText(editProduct.getDescription());
         }
 

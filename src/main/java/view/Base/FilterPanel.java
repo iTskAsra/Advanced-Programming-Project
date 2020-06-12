@@ -225,14 +225,8 @@ public class FilterPanel extends Menu {
                     }
                     AllProductsPanelController.filterAnAvailableFilter();
 
-                } catch (ExceptionsLibrary.NoFilterWithThisName | ExceptionsLibrary.NoCategoryException e) {
+                } catch (ExceptionsLibrary.NoFilterWithThisName | ExceptionsLibrary.NoCategoryException | ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoFeatureWithThisName e) {
                     System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.NoProductException e) {
-                    System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.NoAccountException e) {
-                    System.out.println(e.getMessage());
-                } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
-                    System.out.println(noFeatureWithThisName.getMessage());
                 }
                 getParentMenu().show();
                 getParentMenu().run();
