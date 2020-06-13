@@ -18,9 +18,9 @@
    <children>
       <Label id="label" fx:id="title" layoutX="776.0" layoutY="21.0" text="Label" />
       <ImageView fx:id="image" fitHeight="500.0" fitWidth="500.0" layoutX="70.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" />
-      <Accordion layoutX="881.0" layoutY="138.0" prefHeight="550.0" prefWidth="750.0">
+      <Accordion fx:id="accordion" layoutX="881.0" layoutY="138.0" prefHeight="550.0" prefWidth="750.0">
         <panes>
-          <TitledPane animated="false" text="Digest">
+          <TitledPane fx:id="digest" animated="false" text="Digest">
                <content>
                   <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="770.0">
                      <content>

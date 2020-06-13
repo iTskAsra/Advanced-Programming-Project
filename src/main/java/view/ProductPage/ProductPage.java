@@ -7,10 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -79,6 +76,10 @@ public class ProductPage implements Initializable {
     private ImageView image;
     @FXML
     private Label rateLabel;
+    @FXML
+    private Accordion accordion;
+    @FXML
+    private TitledPane digest;
 
 
     @Override
@@ -132,8 +133,9 @@ public class ProductPage implements Initializable {
                 rateButton.setVisible(true);
                 rateLabel.setVisible(true);
             }
-
         }
+
+        //TODO set one achardion expanded
 
 
         rateButton.setOnAction( e -> {
@@ -210,6 +212,8 @@ public class ProductPage implements Initializable {
                 });
             }
         });
+
+        accordion.setExpandedPane(digest);
 
     }
 
