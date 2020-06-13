@@ -135,9 +135,6 @@ public class ProductPage implements Initializable {
             }
         }
 
-        //TODO set one achardion expanded
-
-
         rateButton.setOnAction( e -> {
             try {
                 CustomerController.rateProduct(product.getProductId(), Double.parseDouble(rateTextField.getText()));
