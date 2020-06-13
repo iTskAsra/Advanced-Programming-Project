@@ -78,7 +78,7 @@ public class ProductPageController {
 
     }
 
-    private static boolean isBoughtByCommenter(Customer customer, Product product) {
+    public static boolean isBoughtByCommenter(Customer customer, Product product) {
         for (BuyLog i : customer.getCustomerLog()) {
             for (String[] j : i.getLogProducts()) {
                 if (Integer.parseInt(j[0]) == product.getProductId()) {

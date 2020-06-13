@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@CompareStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ProductPage.Compare.Compare">
+   <children>
+      <Label id="label" layoutX="295.0" layoutY="14.0" text="Compare" />
+      <TableView fx:id="table" layoutX="31.0" layoutY="190.0" prefHeight="210.0" prefWidth="741.0">
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy></TableView>
+      <Button id="back" fx:id="close" layoutX="358.0" layoutY="531.0" mnemonicParsing="false" onAction="#closeButtonClicked" text="Close" />
+      <TextField fx:id="productIdTextField" layoutX="269.0" layoutY="436.0" promptText="Enter Product ID" />
+      <Button fx:id="compare" layoutX="467.0" layoutY="436.0" mnemonicParsing="false" onAction="#compareButtonClicked" styleClass="apply-Button" text="Compare" />
+   </children>
+</Pane>

@@ -1,9 +1,6 @@
 package view.AllProducts;
 
-import controller.AdminController;
-import controller.AllProductsPanelController;
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
+import controller.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,6 +28,7 @@ import view.HelpWindow.Help;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -132,7 +130,7 @@ public class AllProducts implements Initializable {
                     }
                 });
             } else {
-                login.setText("Login/Signup");
+                login.setText("Login");
                 login.setOnAction(e -> {
                     try {
                         accountButtonClickedNotLoggedIn();
@@ -331,9 +329,31 @@ public class AllProducts implements Initializable {
                 }
                 vBox.getChildren().addAll(imageView, name, price, rate);
                 tilePane.getChildren().add(vBox);
+                vBox.setId(String.valueOf(i.getProductId()));
                 vBox.getStyleClass().add("vBoxProduct");
                 vBox.setOnMouseClicked(e -> {
-                    //TODO go to product page
+                    Product product = null;
+                    try {
+                        product = AllProductsPanelController.goToProductPage(Integer.parseInt(vBox.getId()));
+                        ProductPageController.setProduct(product);
+                        Stage stage = new Stage();
+                        File file = new File("src/main/java/view/ProductPage/ProductPage.fxml");
+                        URL url = file.toURI().toURL();
+                        Parent root = FXMLLoader.load(url);
+                        Scene scene = new Scene(root);
+                        scene.setFill(Color.TRANSPARENT);
+                        stage.setScene(scene);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initStyle(StageStyle.TRANSPARENT);
+                        stage.show();
+                    } catch (ExceptionsLibrary.NoProductException exception) {
+                        ErrorBoxStart.errorRun(exception);
+                    } catch (MalformedURLException malformedURLException) {
+                        malformedURLException.printStackTrace();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+
                 });
             }
         } catch (ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoFilterWithThisName | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.NoCategoryException e) {
@@ -436,7 +456,7 @@ public class AllProducts implements Initializable {
     }
 
     public void helpButtonClicked() throws IOException {
-        Help.setMessage("Here you can see products and filter");
+        Help.setMessage("Here you can see products, sort and filter them, you can filter them by features value by double-clicking on the feature and see your current filters and delete them by double-clicking on them and you can see categories too!");
         Stage stage = new Stage();
         File file = new File("src/main/java/view/HelpWindow/Help.fxml");
         URL url = file.toURI().toURL();

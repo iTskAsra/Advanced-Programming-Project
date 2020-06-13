@@ -122,7 +122,6 @@ public class ProductPage extends Menu {
                     System.out.printf("%s : %s\n",i.getParameter(),i.getParameterValue());
                 }
                 System.out.printf("Description : %s\n",ProductPageController.attributes().getDescription());
-                System.out.printf("ProductID : %d\n",ProductPageController.attributes().getProductId());
                 Double productRate = 0.00;
                 for (Rate i : ProductPageController.attributes().getRates()){
                     productRate+=i.getRateScore();
