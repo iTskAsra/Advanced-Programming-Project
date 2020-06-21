@@ -85,6 +85,15 @@ public class MainMenuController implements Initializable {
         stage.setScene(scene);
     }
 
+    public void offsButtonClicked() throws IOException {
+        Stage stage = (Stage) account.getScene().getWindow();
+        File file = new File("src/main/java/view/OffPanel/OffPanel.fxml");
+        URL url = file.toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
+
     public void exitButtonClicked() {
         System.exit(0);
     }

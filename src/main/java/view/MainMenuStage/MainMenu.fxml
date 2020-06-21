@@ -23,7 +23,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Button>
-      <Button layoutX="150.0" layoutY="600.0" mnemonicParsing="false" styleClass="normal-button" text="Offs">
+      <Button fx:id="offs" layoutX="150.0" layoutY="600.0" mnemonicParsing="false" onAction="#offsButtonClicked" styleClass="normal-button" text="Offs">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>

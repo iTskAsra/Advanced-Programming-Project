@@ -100,6 +100,14 @@ public class SetPeriodicSales {
         return number;
     }
 
+    private static boolean offsSet() {
+        File file = new File("Resources/Offs");
+        if (file.exists()){
+            return true;
+        }
+        return false;
+    }
+
     public static Double randomOff() {
         double minRangeAmount = 10000;
         double maxRangeAmount = 50000;
@@ -109,7 +117,7 @@ public class SetPeriodicSales {
     }
 
     public static void removeExpiredOff() throws ExceptionsLibrary.NoOffException, ParseException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
-        if (isOkToRun()) {
+        if (offsSet()) {
             Main.localDateTime = LocalDateTime.now();
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM");
             String offsPath = "Resources/Offs";

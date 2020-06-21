@@ -48,35 +48,39 @@ public class Sales implements Initializable {
     private TextField usernames;
 
     ObservableList<Sale> sales = null;
-
+    TableColumn<Sale,String> saleCodeTable = new TableColumn<>("Sale Code");
+    TableColumn<Sale,String> startDateTable= new TableColumn<>("Sale Start Date");
+    TableColumn<Sale,String> endDateTable= new TableColumn<>("Sale End Date");
+    TableColumn<Sale,Double> percentTable= new TableColumn<>("Percent");
+    TableColumn<Sale,Double> maxAmountTable = new TableColumn<>("Max Amount");
+    TableColumn<Sale,Integer> validTimesTable = new TableColumn<>("Valid Times");
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         saleCode.setEditable(false);
-        TableColumn<Sale,String> saleCode = new TableColumn<>("Sale Code");
-        TableColumn<Sale,String> startDate= new TableColumn<>("Sale Start Date");
-        TableColumn<Sale,String> endDate= new TableColumn<>("Sale End Date");
-        TableColumn<Sale,Double> percent= new TableColumn<>("Percent");
-        TableColumn<Sale,Double> maxAmount = new TableColumn<>("Max Amount");
-        TableColumn<Sale,Integer> validTimes = new TableColumn<>("Valid Times");
-        saleCode.setStyle("-fx-alignment: CENTER");
-        startDate.setStyle("-fx-alignment: CENTER");
-        endDate.setStyle("-fx-alignment: CENTER");
-        percent.setStyle("-fx-alignment: CENTER");
-        maxAmount.setStyle("-fx-alignment: CENTER");
-        validTimes.setStyle("-fx-alignment: CENTER");
-        table.getColumns().addAll(saleCode,startDate,endDate,percent,maxAmount,validTimes);
+
+        saleCodeTable.setStyle("-fx-alignment: CENTER");
+        startDateTable.setStyle("-fx-alignment: CENTER");
+        endDateTable.setStyle("-fx-alignment: CENTER");
+        percentTable.setStyle("-fx-alignment: CENTER");
+        maxAmountTable.setStyle("-fx-alignment: CENTER");
+        validTimesTable.setStyle("-fx-alignment: CENTER");
+        table.getColumns().addAll(saleCodeTable,startDateTable,endDateTable,percentTable,maxAmountTable,validTimesTable);
+        updateTable();
+    }
+
+    private void updateTable() {
         try {
             sales = FXCollections.observableArrayList(AdminController.showSales());
         } catch (ExceptionsLibrary.NoSaleException e) {
             ErrorBoxStart.errorRun(e);
         }
-        saleCode.setCellValueFactory(new PropertyValueFactory<>("saleCode"));
-        startDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        endDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-        percent.setCellValueFactory(new PropertyValueFactory<>("salePercent"));
-        maxAmount.setCellValueFactory(new PropertyValueFactory<>("saleMaxAmount"));
-        validTimes.setCellValueFactory(new PropertyValueFactory<>("validTimes"));
+        saleCodeTable.setCellValueFactory(new PropertyValueFactory<>("saleCode"));
+        startDateTable.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        endDateTable.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        percentTable.setCellValueFactory(new PropertyValueFactory<>("salePercent"));
+        maxAmountTable.setCellValueFactory(new PropertyValueFactory<>("saleMaxAmount"));
+        validTimesTable.setCellValueFactory(new PropertyValueFactory<>("validTimes"));
         table.setItems(sales);
         table.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
@@ -108,7 +112,11 @@ public class Sales implements Initializable {
         usernamesLabel.setVisible(true);
     }
 
-    //TODO updateTables() (sales, buyLogs, sellLogs)
+    //TODO cart
+    //TODO purchase
+    //TODO fields check
+    //TODO admin register first
+    //TODO modify database update
 
     public void editButtonClicked() throws IOException {
         Sale sale = (Sale) table.getSelectionModel().getSelectedItem();
@@ -126,9 +134,12 @@ public class Sales implements Initializable {
         try {
             AdminController.editSaleInfo(sale.getSaleCode(),dataToEdit);
             AlertBoxStart.messageRun("Message","Sale edited!");
+            updateTable();
         } catch (ExceptionsLibrary.NoSaleException | ExceptionsLibrary.CannotChangeThisFeature | ExceptionsLibrary.NoFeatureWithThisName e) {
             ErrorBoxStart.errorRun(e);
         }
+
+
     }
 
     public void newSaleButtonClicked() throws IOException {
@@ -153,6 +164,7 @@ public class Sales implements Initializable {
             AdminController.addSale(sale);
             sales.add(sale);
             AlertBoxStart.messageRun("Message","Sale added!");
+            updateTable();
         }
         else {
             ErrorBoxStart.errorRun(new ExceptionsLibrary.NoSaleException());
@@ -169,7 +181,7 @@ public class Sales implements Initializable {
             }
             AdminController.removeSaleCode(saleCode.getText());
             AlertBoxStart.messageRun("Message","Sale removed!");
-            sales.remove(sale);
+            updateTable();
         } catch (ExceptionsLibrary.NoSaleException e) {
             ErrorBoxStart.errorRun(e);
         }

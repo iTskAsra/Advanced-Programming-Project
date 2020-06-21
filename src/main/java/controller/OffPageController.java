@@ -1,7 +1,5 @@
 package controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import model.*;
 
 import java.io.File;
@@ -31,41 +29,7 @@ public class OffPageController {
         availableSorts.add("availability");
         availableSorts.add("date");
         availableSorts.add("company");
-        availableSorts.add("best selling");
     }
-
-    public static ArrayList<Off> listOffs() throws ExceptionsLibrary.NoOffException {
-        ArrayList<Off> offsList = new ArrayList<>();
-        String path = "Resources/Offs";
-        File folder = new File(path);
-        FileFilter fileFilter = new FileFilter() {
-            @Override
-            public boolean accept(File file1) {
-                if (file1.getName().endsWith(".json")) {
-                    return true;
-                }
-                return false;
-            }
-        };
-        for (File i : folder.listFiles(fileFilter)){
-            String offId = i.getName().replace(".json","");
-            Off off = GetDataFromDatabase.getOff(Integer.parseInt(offId));
-            offsList.add(off);
-        }
-        return offsList;
-    }
-
-
-    public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
-        Product product = null;
-        try {
-            product = GetDataFromDatabase.getProduct(productId);
-        } catch (ExceptionsLibrary.NoProductException e) {
-            throw new ExceptionsLibrary.NoProductException();
-        }
-        return product;
-    }
-
 
     public static ArrayList<Product> getResult() {
         return result;
@@ -150,9 +114,9 @@ public class OffPageController {
         return allAvailableFilters;
     }
 
-    public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
+    public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
         getResult().clear();
-        ArrayList<Product> products = getAllProducts();
+        ArrayList<Product> products = getOffProducts();
         for (int count = 0; count < getCurrentFilters().size(); count++) {
             String i = getCurrentFilters().get(count);
             String[] splitFilters = i.split("--");
@@ -195,7 +159,7 @@ public class OffPageController {
                     break;
                 case "Price":
                     for (Product j : products) {
-                        boolean isInRange = j.getPrice() >= Double.parseDouble(splitFilters[1]) && j.getPrice() <= Double.parseDouble(splitFilters[2]);
+                        boolean isInRange = j.getPriceWithOff() >= Double.parseDouble(splitFilters[1]) && j.getPriceWithOff() <= Double.parseDouble(splitFilters[2]);
                         if (isInRange) {
                             if (!getResult().contains(j)) {
                                 getResult().add(j);
@@ -205,7 +169,7 @@ public class OffPageController {
                     iterator = getResult().iterator();
                     while (iterator.hasNext()) {
                         Product tempProduct = iterator.next();
-                        boolean isInRange = tempProduct.getPrice() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPrice() <= Double.parseDouble(splitFilters[2]);
+                        boolean isInRange = tempProduct.getPriceWithOff() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPriceWithOff() <= Double.parseDouble(splitFilters[2]);
                         if (!isInRange) {
                             iterator.remove();
                         }
@@ -268,13 +232,57 @@ public class OffPageController {
                     }
                     checkPreviousFilters(count);
                     break;
-
+                case "Feature":
+                    Category category = null;
+                    category = GetDataFromDatabase.getCategory(splitFilters[1]);
+                    Feature feature = new Feature(splitFilters[2], splitFilters[3]);
+                    Feature featureCategory = new Feature(splitFilters[2], null);
+                    String featureToString = feature.toString();
+                    String featureCategoryToString = featureCategory.toString();
+                    ArrayList<String> featuresToString = new ArrayList<>();
+                    for (Feature j : category.getFeatures()){
+                        featuresToString.add(j.toString());
+                    }
+                    if (!featuresToString.contains(featureCategoryToString)) {
+                        throw new ExceptionsLibrary.NoFeatureWithThisName();
+                    }
+                    for (Product j : products) {
+                        if (j.getCategory().getName().equalsIgnoreCase(category.getName())) {
+                            if (!getProductRemoved(j,featureToString)) {
+                                if (!getResult().contains(j)) {
+                                    getResult().add(j);
+                                }
+                            }
+                        }
+                    }
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (getProductRemoved(tempProduct, featureToString)) {
+                            iterator.remove();
+                        }
+                    }
+                    checkPreviousFilters(count);
+                    break;
             }
+        }
+
+    }
+
+    private static boolean getProductRemoved(Product product, String feature) {
+        ArrayList<String> featuresToString = new ArrayList<>();
+        for (Feature j : product.getCategoryFeatures()){
+            featuresToString.add(j.toString());
+        }
+        if (featuresToString.contains(feature)) {
+            return false;
+        } else {
+            return true;
         }
     }
 
     private static void checkPreviousFilters(int count) throws ExceptionsLibrary.NoAccountException {
-        for (int l = 0; l < count;l++){
+        for (int l = 0; l < count; l++) {
             String i = getCurrentFilters().get(l);
             String[] splitFilters = i.split("--");
             switch (splitFilters[0]) {
@@ -302,7 +310,7 @@ public class OffPageController {
                     iterator = getResult().iterator();
                     while (iterator.hasNext()) {
                         Product tempProduct = iterator.next();
-                        boolean isInRange = tempProduct.getPrice() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPrice() <= Double.parseDouble(splitFilters[2]);
+                        boolean isInRange = tempProduct.getPriceWithOff() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPriceWithOff() <= Double.parseDouble(splitFilters[2]);
                         if (!isInRange) {
                             iterator.remove();
                         }
@@ -339,6 +347,16 @@ public class OffPageController {
                         }
                     }
                     break;
+                case "Feature":
+                    String feature = new Feature(splitFilters[2],splitFilters[3]).toString();
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (getProductRemoved(tempProduct, feature)) {
+                            iterator.remove();
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -369,26 +387,6 @@ public class OffPageController {
         return sellers;
     }
 
-    private static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
-        ArrayList<Product> allProducts = new ArrayList<>();
-        String path = "Resources/Products";
-        File folder = new File(path);
-        FileFilter fileFilter = new FileFilter() {
-            @Override
-            public boolean accept(File file1) {
-                if (file1.getName().endsWith(".json")) {
-                    return true;
-                }
-                return false;
-            }
-        };
-        for (File i : folder.listFiles(fileFilter)) {
-            String fileName = i.getName();
-            int productId = Integer.parseInt(fileName.replace(".json", ""));
-            allProducts.add(GetDataFromDatabase.getProduct(productId));
-        }
-        return allProducts;
-    }
 
     public static ArrayList<String> showCurrentFilters() {
         return getCurrentFilters();
@@ -422,9 +420,9 @@ public class OffPageController {
         getCurrentSort().add("name");
     }
 
-    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException {
+    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
         if (getCurrentFilters().size() == 0) {
-            setResult(getAllProducts());
+            setResult(getOffProducts());
         } else {
             filterAnAvailableFilter();
         }
@@ -442,11 +440,11 @@ public class OffPageController {
                         Date o1Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o1));
                         Date o2Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o2));
                         return o1Date.compareTo(o2Date);
-                    } else if (getCurrentSort().get(0).equalsIgnoreCase("price")) {
+                    } else if (getCurrentSort().get(0).equalsIgnoreCase("priceWithOff")) {
                         Double o1Price = (Double) field.get(o1);
                         Double o2Price = (Double) field.get(o2);
                         return o1Price.compareTo(o2Price);
-                    } else if (getCurrentSort().get(0).equalsIgnoreCase("availability")) {
+                    } else if (getCurrentSort().get(0).equalsIgnoreCase("availability") || getCurrentSort().get(0).equalsIgnoreCase("productId")) {
                         Integer o1Availability = (Integer) field.get(o1);
                         Integer o2Availability = (Integer) field.get(o2);
                         return o1Availability.compareTo(o2Availability);
@@ -461,6 +459,16 @@ public class OffPageController {
         return getResult();
     }
 
+    public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
+        Product product = null;
+        try {
+            product = GetDataFromDatabase.getProduct(productId);
+        } catch (ExceptionsLibrary.NoProductException e) {
+            throw new ExceptionsLibrary.NoProductException();
+        }
+        return product;
+    }
+
     private static boolean isFeature(Product i, String j) {
         for (Feature k : i.getCategoryFeatures()) {
             if (k.getParameter().equals(j)) {
@@ -468,6 +476,108 @@ public class OffPageController {
             }
         }
         return false;
+    }
+
+
+    public static void setSort(String value) {
+        switch (value){
+            case "Product ID":
+                getCurrentSort().add("productId");
+                break;
+            case "Name":
+                getCurrentSort().add("name");
+                break;
+            case "Company":
+                getCurrentSort().add("company");
+                break;
+            case "Price":
+                getCurrentSort().add("priceWithOff");
+                break;
+            case "Date":
+                getCurrentSort().add("date");
+                break;
+            case "Availability":
+                getCurrentSort().add("availability");
+                break;
+        }
+    }
+
+    private static ArrayList<Product> getOffProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
+        ArrayList<Product> allProducts = new ArrayList<>();
+        String path = "Resources/Products";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            int productId = Integer.parseInt(fileName.replace(".json", ""));
+            if (isInOff(productId)) {
+                allProducts.add(GetDataFromDatabase.getProduct(productId));
+            }
+        }
+        return allProducts;
+    }
+
+    public static boolean isInOff(int productId) {
+        String path = "Resources/Offs";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            int offId = Integer.parseInt(fileName.replace(".json", ""));
+            Off off = null;
+            try {
+                off = GetDataFromDatabase.getOff(offId);
+            } catch (ExceptionsLibrary.NoOffException e) {
+                e.printStackTrace();
+            }
+            for (String j : off.getOffProducts()){
+                if (j.equals(String.valueOf(productId))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static Off offDetails(int productId) throws ExceptionsLibrary.NoOffException {
+        String path = "Resources/Offs";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            int offId = Integer.parseInt(fileName.replace(".json", ""));
+            Off off = GetDataFromDatabase.getOff(offId);
+            for (String j : off.getOffProducts()){
+                if (j.equals(String.valueOf(productId))){
+                    return off;
+                }
+            }
+        }
+        return null;
     }
 
 }

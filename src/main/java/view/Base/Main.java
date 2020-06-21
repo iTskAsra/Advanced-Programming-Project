@@ -23,13 +23,7 @@ public class Main {
         try {
             SetPeriodicSales.setPeriodicSales();
             SetPeriodicSales.removeExpiredOff();
-        } catch (ExceptionsLibrary.NoAccountException e) {
-            e.printStackTrace();
-        } catch (ExceptionsLibrary.NoOffException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (ExceptionsLibrary.NoProductException e) {
+        } catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoProductException | ParseException | ExceptionsLibrary.NoOffException e) {
             e.printStackTrace();
         }
         mainMenu.show();
