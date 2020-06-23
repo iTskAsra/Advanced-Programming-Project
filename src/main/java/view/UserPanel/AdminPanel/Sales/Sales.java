@@ -112,8 +112,6 @@ public class Sales implements Initializable {
         usernamesLabel.setVisible(true);
     }
 
-    //TODO cart
-    //TODO purchase
     //TODO fields check
     //TODO admin register first
     //TODO modify database update

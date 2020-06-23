@@ -111,6 +111,19 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    public void cartButtonClicked() throws IOException {
+        Stage stage = new Stage();
+        File file = new File("src/main/java/view/Cart/Cart.fxml");
+        URL url = file.toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (Main.statusProperty().getValue() != null) {

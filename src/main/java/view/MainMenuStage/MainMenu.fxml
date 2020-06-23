@@ -33,7 +33,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Button>
-      <Button id="cart" layoutX="400.0" layoutY="450.0" mnemonicParsing="false" styleClass="normal-button" text="Cart">
+      <Button id="cart" layoutX="400.0" layoutY="450.0" mnemonicParsing="false" onAction="#cartButtonClicked" styleClass="normal-button" text="Cart">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>

@@ -1,5 +1,5 @@
 .root{
-    -fx-background-color: linear-gradient(#155505, #033d34);
+    -fx-background-color: linear-gradient(#054e55, #03103d);
     -fx-background-radius: 30;
     -fx-border-radius: 30;
 }
@@ -9,13 +9,13 @@
     -fx-padding: 10;
     -fx-font-family: Futura;
     -fx-font-size: 15pt;
-    -fx-pref-height: 80;
-    -fx-pref-width: 300;
+    -fx-pref-height: 50;
+    -fx-pref-width: 100;
     -fx-cursor: hand;
     -fx-border-radius: 3;
 }
 
-#purchase{
+#apply{
     -fx-background-color: darkgreen;
 }
 

@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import view.Purchase.Purchase;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -36,15 +37,17 @@ public class CartController {
     }
 
     public static double getTotalPriceWithSale() {
+        setTotalPriceWithSale();
         return totalPriceWithSale;
     }
 
-    public static void setTotalPriceWithSale(double totalPriceWithSale) {
-        CartController.totalPriceWithSale = totalPriceWithSale;
+    public static void setTotalPriceWithSale() {
+        CartController.totalPriceWithSale = getTotalPriceWithoutSale() - getSaleDiscount();
     }
 
     public static double getTotalPriceWithoutSale() {
-        return showTotalPrice();
+        setTotalPriceWithoutSale(showTotalPrice());
+        return totalPriceWithoutSale;
     }
 
     public static void setTotalPriceWithoutSale(double totalPriceWithoutSale) {
@@ -84,16 +87,9 @@ public class CartController {
 
     public static void increaseProduct(Product product) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NotEnoughNumberAvailableException {
         for (Product i : getCartProducts().keySet()) {
-            if (i.getProductId() == product.getProductId() && i.getSeller().getUsername().equals(product.getSeller().getUsername())) {
+            if (i.getProductId() == product.getProductId()) {
                 if (i.getAvailability() >= cartProducts.get(i) + 1) {
                     cartProducts.put(i, cartProducts.get(i) + 1);
-                    return;
-                } else {
-                    throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
-                }
-            } else if (i.getProductId() == product.getProductId() && !(i.getSeller().getUsername().equals(product.getSeller().getUsername()))) {
-                if (product.getAvailability() >= 1) {
-                    cartProducts.put(product, 1);
                     return;
                 } else {
                     throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
@@ -149,13 +145,13 @@ public class CartController {
     public static void discountApply(String saleCode) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException {
         if (saleCode == null) {
             setTotalPriceWithoutSale(showTotalPrice());
-            setTotalPriceWithSale(showTotalPrice());
             setSaleDiscount(0.00);
+            setTotalPriceWithSale();
             return;
         } else if (saleCode.startsWith("Off:")) {
             Double amount = Double.parseDouble(saleCode.replace("Off:", ""));
             setSaleDiscount(amount);
-            setTotalPriceWithSale(getTotalPriceWithoutSale() - getSaleDiscount());
+            setTotalPriceWithSale();
         } else {
             Sale sale = GetDataFromDatabase.getSale(saleCode);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -174,7 +170,7 @@ public class CartController {
                                         setSaleDiscount(sale.getSalePercent() * showTotalPrice() / 100);
                                     }
                                     j.setValidTimes(j.getValidTimes() - 1);
-                                    setTotalPriceWithSale(getTotalPriceWithoutSale() - getSaleDiscount());
+                                    setTotalPriceWithSale();
                                 } else {
                                     throw new ExceptionsLibrary.UsedAllValidTimesException();
                                 }
