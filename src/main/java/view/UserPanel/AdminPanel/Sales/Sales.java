@@ -112,10 +112,6 @@ public class Sales implements Initializable {
         usernamesLabel.setVisible(true);
     }
 
-    //TODO fields check
-    //TODO admin register first
-    //TODO modify database update
-
     public void editButtonClicked() throws IOException {
         Sale sale = (Sale) table.getSelectionModel().getSelectedItem();
         HashMap<String,String> dataToEdit = new HashMap();
