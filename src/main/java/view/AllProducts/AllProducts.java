@@ -24,6 +24,7 @@ import model.*;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
 import view.Base.Main;
 import view.HelpWindow.Help;
+import view.MainMenuStage.CheckFields;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -381,6 +382,14 @@ public class AllProducts implements Initializable {
     }
 
     public void priceApplyClicked() {
+        try {
+            CheckFields.checkField("double",minPrice.getText());
+            CheckFields.checkField("double",maxPrice.getText());
+        } catch (ExceptionsLibrary.NotAcceptableFormatInput e) {
+            ErrorBoxStart.errorRun(e);
+            return;
+        }
+
         AllProductsPanelController.getCurrentFilters().add("Price--" + minPrice.getText() + "--" + maxPrice.getText());
         updateFilterList();
 

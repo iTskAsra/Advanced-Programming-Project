@@ -20,6 +20,7 @@ import model.*;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
 import view.AlertBox.MessageBox.AlertBoxStart;
 import view.Base.Main;
+import view.MainMenuStage.CheckFields;
 
 
 import java.io.File;
@@ -137,6 +138,12 @@ public class ProductPage implements Initializable {
 
         rateButton.setOnAction( e -> {
             try {
+                try {
+                    CheckFields.checkField("double",rateTextField.getText());
+                } catch (ExceptionsLibrary.NotAcceptableFormatInput notAcceptableFormatInput) {
+                    ErrorBoxStart.errorRun(notAcceptableFormatInput);
+                    return;
+                }
                 CustomerController.rateProduct(product.getProductId(), Double.parseDouble(rateTextField.getText()));
                 AlertBoxStart.messageRun("Message", "Rate successful!");
             } catch (ExceptionsLibrary.NoProductException exception) {

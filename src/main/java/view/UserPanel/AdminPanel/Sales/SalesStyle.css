@@ -43,3 +43,7 @@
     -fx-pref-height: 15;
     -fx-pref-width: 70;
 }
+
+#users{
+    -fx-font-size: 16;
+}

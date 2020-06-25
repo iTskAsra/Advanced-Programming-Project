@@ -441,6 +441,14 @@ public class AdminController {
         while (checkSaleCode(sale.getSaleCode())) {
             sale.setSaleCode(Sale.getRandomSaleCode());
         }
+        if (sale.getSaleAccounts().size() == 0){
+            try {
+                sale.getSaleAccounts().clear();
+                sale.getSaleAccounts().addAll(AdminController.showAllUsers());
+            } catch (ExceptionsLibrary.NoAccountException e) {
+                e.printStackTrace();
+            }
+        }
         for (Account i : sale.getSaleAccounts()) {
             if (i.getSaleCodes() == null) {
                 i.setSaleCodes(new ArrayList<>());
@@ -448,6 +456,7 @@ public class AdminController {
             i.getSaleCodes().add(sale);
             SetDataToDatabase.setAccount(i);
         }
+
         SetDataToDatabase.setSale(sale);
     }
 
@@ -482,6 +491,28 @@ public class AdminController {
         }
 
         for (File i : adminFolder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String username = fileName.replace(".json", "");
+            Account account = GetDataFromDatabase.getAccount(username);
+            list.add(account);
+        }
+        return list;
+    }
+
+    public static ArrayList<Account> showAllCustomers() throws ExceptionsLibrary.NoAccountException {
+        ArrayList<Account> list = new ArrayList<>();
+        String customerPath = "Resources/Accounts/Customer";
+        File customerFolder = new File(customerPath);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : customerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
             Account account = GetDataFromDatabase.getAccount(username);

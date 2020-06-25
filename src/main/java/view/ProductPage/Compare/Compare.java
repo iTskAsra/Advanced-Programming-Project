@@ -19,6 +19,7 @@ import model.Feature;
 import model.Product;
 import model.Rate;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
+import view.MainMenuStage.CheckFields;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,6 +47,12 @@ public class Compare implements Initializable {
     }
 
     public void compareButtonClicked() {
+        try {
+            CheckFields.checkField("int",productIdTextField.getText());
+        } catch (ExceptionsLibrary.NotAcceptableFormatInput notAcceptableFormatInput) {
+            ErrorBoxStart.errorRun(notAcceptableFormatInput);
+            return;
+        }
         int productIds = Integer.parseInt(productIdTextField.getText());
         try {
             products = FXCollections.observableArrayList(ProductPageController.compare(productIds));

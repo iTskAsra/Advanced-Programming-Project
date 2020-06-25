@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import model.BuyLog;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
 import view.AlertBox.MessageBox.AlertBoxStart;
+import view.MainMenuStage.CheckFields;
 import view.UserPanel.BuyLog.BuyLogDetails.BuyLogDetailsStart;
 
 import java.io.IOException;
@@ -85,6 +86,12 @@ public class Purchase implements Initializable {
         pricesSales.setVisible(false);
         apply.setVisible(false);
         next.setOnAction( e -> {
+            try {
+                CheckFields.checkField("int",phoneNumberText.getText());
+            } catch (ExceptionsLibrary.NotAcceptableFormatInput notAcceptableFormatInput) {
+                ErrorBoxStart.errorRun(notAcceptableFormatInput);
+                return;
+            }
             HashMap<String, String> receiverInfo = new HashMap<>();
             receiverInfo.put("name",nameText.getText());
             receiverInfo.put("address",addressText.getText());

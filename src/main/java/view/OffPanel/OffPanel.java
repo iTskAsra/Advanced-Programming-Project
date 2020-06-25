@@ -27,6 +27,7 @@ import model.*;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
 import view.Base.Main;
 import view.HelpWindow.Help;
+import view.MainMenuStage.CheckFields;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -422,6 +423,14 @@ public class OffPanel implements Initializable {
     }
 
     public void priceApplyClicked() {
+        try {
+            CheckFields.checkField("double",minPrice.getText());
+            CheckFields.checkField("double",maxPrice.getText());
+        } catch (ExceptionsLibrary.NotAcceptableFormatInput e) {
+            ErrorBoxStart.errorRun(e);
+            return;
+        }
+
         OffPageController.getCurrentFilters().add("Price--" + minPrice.getText() + "--" + maxPrice.getText());
         updateFilterList();
 

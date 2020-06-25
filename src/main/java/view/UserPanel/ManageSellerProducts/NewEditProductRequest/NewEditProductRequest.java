@@ -20,6 +20,7 @@ import view.AlertBox.ErrorBox.AlertBox;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
 import view.AlertBox.MessageBox.AlertBoxStart;
 import view.Base.Main;
+import view.MainMenuStage.CheckFields;
 
 import java.io.IOException;
 import java.net.URL;
@@ -66,6 +67,14 @@ public class NewEditProductRequest implements Initializable {
     }
 
     public void sendRequestButtonClicked() {
+        try {
+            CheckFields.checkField("double",price.getText());
+            CheckFields.checkField("int",quantity.getText());
+        } catch (ExceptionsLibrary.NotAcceptableFormatInput notAcceptableFormatInput) {
+            ErrorBoxStart.errorRun(notAcceptableFormatInput);
+            return;
+        }
+
         if (isNewProduct()) {
             ArrayList<Feature> productFeatures = new ArrayList<>();
             for (Node j : features.getChildren()) {

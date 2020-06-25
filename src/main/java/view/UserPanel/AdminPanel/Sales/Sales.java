@@ -16,6 +16,7 @@ import model.BuyLog;
 import model.Sale;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
 import view.AlertBox.MessageBox.AlertBoxStart;
+import view.MainMenuStage.CheckFields;
 import view.UserPanel.BuyLog.BuyLogDetails.BuyLogDetailsStart;
 
 import java.io.IOException;
@@ -113,6 +114,16 @@ public class Sales implements Initializable {
     }
 
     public void editButtonClicked() throws IOException {
+
+        try {
+            CheckFields.checkField("double",percent.getText());
+            CheckFields.checkField("double",maxAmount.getText());
+            CheckFields.checkField("int",validTimes.getText());
+        } catch (ExceptionsLibrary.NotAcceptableFormatInput notAcceptableFormatInput) {
+            ErrorBoxStart.errorRun(notAcceptableFormatInput);
+            return;
+        }
+
         Sale sale = (Sale) table.getSelectionModel().getSelectedItem();
         HashMap<String,String> dataToEdit = new HashMap();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -137,6 +148,16 @@ public class Sales implements Initializable {
     }
 
     public void newSaleButtonClicked() throws IOException {
+
+        try {
+            CheckFields.checkField("double",percent.getText());
+            CheckFields.checkField("double",maxAmount.getText());
+            CheckFields.checkField("int",validTimes.getText());
+        } catch (ExceptionsLibrary.NotAcceptableFormatInput notAcceptableFormatInput) {
+            ErrorBoxStart.errorRun(notAcceptableFormatInput);
+            return;
+        }
+
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String startDateString = startDate.getValue().format(dateTimeFormatter);
         String endDateString = endDate.getValue().format(dateTimeFormatter);
@@ -144,13 +165,15 @@ public class Sales implements Initializable {
         endDateString = endDateString + " 00:00";
         ArrayList<Account> saleAccounts = new ArrayList<>();
         String[] userList = usernames.getText().split("\\s*,\\s*");
-        for (String i : userList){
-            Account account = null;
-            try {
-                account = GetDataFromDatabase.getAccount(i);
-                saleAccounts.add(account);
-            } catch (ExceptionsLibrary.NoAccountException e) {
-                ErrorBoxStart.errorRun(e);
+        if (!userList[0].equals("")) {
+            for (String i : userList) {
+                Account account = null;
+                try {
+                    account = GetDataFromDatabase.getAccount(i);
+                    saleAccounts.add(account);
+                } catch (ExceptionsLibrary.NoAccountException e) {
+                    ErrorBoxStart.errorRun(e);
+                }
             }
         }
         if (usernames.isVisible()) {

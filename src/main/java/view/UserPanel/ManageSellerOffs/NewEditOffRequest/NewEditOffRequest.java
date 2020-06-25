@@ -14,6 +14,7 @@ import model.*;
 import view.AlertBox.ErrorBox.ErrorBoxStart;
 import view.AlertBox.MessageBox.AlertBoxStart;
 import view.Base.Main;
+import view.MainMenuStage.CheckFields;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,6 +59,12 @@ public class NewEditOffRequest implements Initializable {
     }
 
     public void sendRequestButtonClicked() {
+        try {
+            CheckFields.checkField("double",offAmount.getText());
+        } catch (ExceptionsLibrary.NotAcceptableFormatInput notAcceptableFormatInput) {
+            ErrorBoxStart.errorRun(notAcceptableFormatInput);
+            return;
+        }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String startDateString = startDate.getValue().format(dateTimeFormatter);
         String endDateString = endDate.getValue().format(dateTimeFormatter);
