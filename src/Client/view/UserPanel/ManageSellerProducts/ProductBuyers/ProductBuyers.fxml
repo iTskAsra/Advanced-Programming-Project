@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@ProductBuyersStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserPanel.ManageSellerProducts.ProductBuyers.ProductBuyers">
+   <children>
+      <Label id="title" layoutX="173.0" layoutY="14.0" stylesheets="@ProductBuyersStyle.css" text="Product Buyer" />
+      <Button id="close" fx:id="close" layoutX="250.0" layoutY="336.0" mnemonicParsing="false" onAction="#close" text="Close" />
+      <ListView fx:id="list" layoutX="14.0" layoutY="100.0" prefHeight="220.0" prefWidth="569.0" />
+   </children>
+</Pane>

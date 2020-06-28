@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" stylesheets="@AlertBoxStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AlertBox.MessageBox.AlertBox">
+    <children>
+        <Button fx:id="ok" alignment="TOP_CENTER" layoutY="341.0" mnemonicParsing="false" onAction="#close" prefHeight="58.0" prefWidth="300.0" styleClass="ok-button" text="Ok" />
+        <Label id="title" fx:id="title" layoutX="85.0" layoutY="14.0" text="Message">
+            <font>
+                <Font name="Futura Medium" size="32.0" />
+            </font>
+        </Label>
+        <Label fx:id="messageLabel" layoutX="20.0" layoutY="57.0" prefHeight="270.0" prefWidth="260.0" text="Here you can login and logout,view your account details,search for products and offs and see your cart." textAlignment="CENTER" wrapText="true">
+            <font>
+                <Font size="27.0" />
+            </font>
+        </Label>
+    </children>
+</Pane>

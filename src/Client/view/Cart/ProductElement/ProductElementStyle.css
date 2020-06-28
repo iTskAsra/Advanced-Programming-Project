@@ -1,0 +1,64 @@
+.root{
+    -fx-background-color: aliceblue;
+}
+.normal-button{
+    -fx-background-color: dodgerblue;
+    -fx-text-fill: aliceblue;
+    -fx-padding: 10;
+    -fx-font-family: Futura;
+    -fx-font-size: 15pt;
+    -fx-pref-height: 80;
+    -fx-pref-width: 300;
+    -fx-cursor: hand;
+    -fx-border-radius: 3;
+}
+
+
+
+
+.infoTitle{
+    -fx-text-fill: dodgerblue;
+    -fx-font-size: 20;
+    -fx-font-family: Futura;
+}
+.infoValue{
+    -fx-text-fill: #d0a016;
+    -fx-font-size: 20;
+    -fx-font-family: Futura;
+}
+
+#decrease{
+    -fx-background-color: firebrick;
+    -fx-text-fill: aliceblue;
+    -fx-font-size: 15;
+    -fx-font-family: Futura;
+}
+
+#increase{
+    -fx-background-color: darkgreen;
+    -fx-text-fill: aliceblue;
+    -fx-font-size: 15;
+    -fx-font-family: Futura;
+}
+
+#tilePane{
+    -fx-grid-lines-visible: true;
+    -fx-border-color: dodgerblue;
+}
+
+.label-Names{
+    -fx-text-fill: dodgerblue;
+    -fx-font-size: 25;
+    -fx-font-family: Futura;
+}
+
+.apply-Button{
+    -fx-background-color: darkgreen;
+    -fx-text-fill: aliceblue;
+    -fx-font-family: Futura;
+    -fx-font-size: 8pt;
+    -fx-pref-height: 30;
+    -fx-pref-width: 80;
+    -fx-cursor: hand;
+    -fx-border-radius: 3;
+}
