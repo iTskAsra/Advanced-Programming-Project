@@ -47,7 +47,7 @@ public class EditInfo implements Initializable {
     }
 
     public void editInfo() {
-        if (Main.checkLoggedIn().equals("Customer") || Main.checkLoggedIn().equals("Admin")) {
+        if (Main.checkLoggedIn().equals("Customer")) {
             HashMap<String, String> dataToEdit = new HashMap<>();
             dataToEdit.put("firstName", firstName.getText());
             dataToEdit.put("lastName", lastName.getText());
@@ -80,7 +80,20 @@ public class EditInfo implements Initializable {
             }
         }
         else {
-
+            HashMap<String, String> dataToEdit = new HashMap<>();
+            dataToEdit.put("firstName", firstName.getText());
+            dataToEdit.put("lastName", lastName.getText());
+            dataToEdit.put("email", email.getText());
+            dataToEdit.put("phoneNumber", phoneNumber.getText());
+            dataToEdit.put("password", password.getText());
+            try {
+                checkFields();
+                AdminController.editAdminInfo(dataToEdit);
+                AlertBoxStart.messageRun("Message", "Edited Successfully!");
+                close();
+            } catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoFeatureWithThisName | ExceptionsLibrary.ChangeUsernameException | ExceptionsLibrary.NotAcceptableFormatInput e) {
+                ErrorBoxStart.errorRun(e);
+            }
         }
     }
 
