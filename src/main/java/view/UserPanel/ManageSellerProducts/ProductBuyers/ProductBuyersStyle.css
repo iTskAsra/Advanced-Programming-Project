@@ -1,0 +1,42 @@
+.root{
+    -fx-background-color: aliceblue;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+#title{
+    -fx-text-fill: dodgerblue;
+    -fx-font-size: 40;
+    -fx-font-family: Futura;
+}
+.button{
+    -fx-background-color: dodgerblue;
+    -fx-text-fill: aliceblue;
+    -fx-padding: 10;
+    -fx-font-family: Futura;
+    -fx-font-size: 15pt;
+    -fx-pref-height: 50;
+    -fx-pref-width: 100;
+    -fx-cursor: hand;
+    -fx-border-radius: 3;
+}
+
+.infoTitle{
+    -fx-text-fill: aliceblue;
+    -fx-font-size: 20;
+    -fx-font-family: Futura;
+}
+.infoValue{
+    -fx-text-fill: aqua;
+    -fx-font-size: 20;
+    -fx-font-family: Futura;
+}
+
+#close{
+    -fx-background-color: firebrick;
+}
+
+.list-cell{
+    -fx-text-fill: #17589e;
+    -fx-font-size: 15;
+    -fx-font-family: Futura;
+}

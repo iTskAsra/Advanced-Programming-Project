@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" stylesheets="@EditInfoStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserPanel.EditInfo.EditInfo">
+    <children>
+        <Label id="title" layoutX="246.0" layoutY="14.0" text="Edit Info" />
+        <Label layoutX="158.0" layoutY="92.0" styleClass="fields" text="First Name:" />
+        <TextField fx:id="firstName" layoutX="286.0" layoutY="87.0" promptText="First Name" />
+        <Label layoutX="158.0" layoutY="142.0" styleClass="fields" text="Last Name:" />
+        <TextField fx:id="lastName" layoutX="286.0" layoutY="137.0" promptText="Last Name" />
+        <Label layoutX="158.0" layoutY="192.0" styleClass="fields" text="E-mail:" />
+        <TextField fx:id="email" layoutX="286.0" layoutY="187.0" promptText="E-mail" />
+        <Label layoutX="158.0" layoutY="242.0" styleClass="fields" text="Phone Number:" />
+        <TextField fx:id="phoneNumber" layoutX="286.0" layoutY="237.0" promptText="Phone Number" />
+        <Label layoutX="158.0" layoutY="292.0" styleClass="fields" text="Password:" />
+        <PasswordField fx:id="password" layoutX="286.0" layoutY="287.0" promptText="Password" />
+        <Button fx:id="edit" layoutX="335.0" layoutY="427.0" mnemonicParsing="false" onAction="#editInfo" styleClass="register-button" text="Edit" />
+        <Button fx:id="close" layoutX="172.0" layoutY="427.0" mnemonicParsing="false" onAction="#close" styleClass="close-button" text="Close" />
+        <Label fx:id="companyLabel" layoutX="158.0" layoutY="342.0" styleClass="fields" text="Company:" />
+      <TextField fx:id="company" layoutX="286.0" layoutY="337.0" promptText="Company" />
+    </children>
+</Pane>

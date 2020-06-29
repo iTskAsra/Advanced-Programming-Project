@@ -1,0 +1,19 @@
+.root {
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-border-color: firebrick;
+    -fx-border-width: 5;
+}
+
+.ok-button {
+    -fx-background-color: firebrick;
+    -fx-text-fill: aliceblue;
+    -fx-cursor: hand;
+    -fx-font-family: Futura;
+    -fx-font-size: 25;
+    -fx-background-radius: 0 0 30 30;
+}
+
+#help {
+    -fx-text-fill: firebrick;
+}

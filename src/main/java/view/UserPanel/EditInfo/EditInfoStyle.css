@@ -1,0 +1,34 @@
+.root{
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+
+#title{
+    -fx-text-fill: green;
+    -fx-font-family: Futura;
+    -fx-font-size: 30;
+}
+.fields{
+    -fx-text-fill: #363232;
+    -fx-font-family: Futura;
+    -fx-font-size: 15;
+    -fx-font-weight: 200;
+}
+
+.register-button{
+    -fx-background-color: darkgreen;
+    -fx-text-fill: aliceblue;
+    -fx-cursor: hand;
+    -fx-font-family: Futura;
+    -fx-background-radius: 20;
+    -fx-font-size: 20;
+}
+
+.close-button{
+    -fx-background-color: firebrick;
+    -fx-text-fill: aliceblue;
+    -fx-cursor: hand;
+    -fx-font-family: Futura;
+    -fx-background-radius: 20;
+    -fx-font-size: 20;
+}
