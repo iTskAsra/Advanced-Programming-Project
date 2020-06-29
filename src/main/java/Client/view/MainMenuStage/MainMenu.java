@@ -1,5 +1,6 @@
 package Client.view.MainMenuStage;
 
+import Client.Client;
 import controller.ExceptionsLibrary;
 import controller.GetDataFromDatabase;
 import controller.SetPeriodicSales;
@@ -25,6 +26,8 @@ public class MainMenu extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        Client client = new Client();
         GetDataFromDatabase.setResources();
         try {
             SetPeriodicSales.setPeriodicSales();

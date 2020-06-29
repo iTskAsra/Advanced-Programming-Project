@@ -16,7 +16,6 @@ public class Client {
 
     public Client() throws IOException {
 
-
         clientSocket = new Socket("localhost", 8080);
         dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
         this.token = dataInputStream.readUTF();
