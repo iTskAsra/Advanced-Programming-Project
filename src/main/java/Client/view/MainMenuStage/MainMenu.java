@@ -20,14 +20,18 @@ import java.text.ParseException;
 
 public class MainMenu extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
+
+    public MainMenu() throws IOException {
+    }
+
+    public static void main(String[] args) {launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Client client = new Client();
+        Client.run();
+
         GetDataFromDatabase.setResources();
         try {
             SetPeriodicSales.setPeriodicSales();
