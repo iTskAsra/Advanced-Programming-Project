@@ -13,11 +13,11 @@ public class ClientHandler extends Thread {
 
     public void run() {
         InputStream inp = null;
-        BufferedReader brinp = null;
+        DataInputStream brinp = null;
         DataOutputStream out = null;
         try {
             inp = socket.getInputStream();
-            brinp = new BufferedReader(new InputStreamReader(inp));
+            brinp = new DataInputStream(new BufferedInputStream(inp));
             out = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             return;
@@ -25,7 +25,7 @@ public class ClientHandler extends Thread {
         String line;
         while (true) {
             try {
-                line = brinp.readLine();
+                line = brinp.readUTF();
                 if ((line == null) || line.equalsIgnoreCase("QUIT")) {
                     socket.close();
                     return;
@@ -38,6 +38,28 @@ public class ClientHandler extends Thread {
                 return;
             }
         }
+    }
+
+
+    public void writeToClient(String dataToWrite,DataOutputStream out){
+        try {
+            out.writeUTF(dataToWrite);
+            out.flush();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String readDataFromClient(DataInputStream in) {
+        String readData = null;
+        try {
+            readData = in.readUTF();
+            return readData;
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return readData;
     }
 }
 
