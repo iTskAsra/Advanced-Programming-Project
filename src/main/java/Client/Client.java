@@ -28,6 +28,8 @@ public class Client {
 
     public static void sendMessage(String string){
 
+        string += token;
+
         try {
             dataOutputStream.writeUTF(string);
             dataOutputStream.flush();

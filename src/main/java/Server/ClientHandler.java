@@ -6,6 +6,8 @@ import java.net.Socket;
 
 public class ClientHandler extends Thread {
     protected Socket socket;
+    private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
 
     public ClientHandler(Socket clientSocket) {
         this.socket = clientSocket;
@@ -23,16 +25,16 @@ public class ClientHandler extends Thread {
             return;
         }
         String line;
+        String generatedToken = generateToken();
+        try {
+            out.writeUTF(generatedToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (true) {
             try {
                 line = brinp.readUTF();
-                if ((line == null) || line.equalsIgnoreCase("QUIT")) {
-                    socket.close();
-                    return;
-                } else {
-                    out.writeBytes(line + "\n\r");
-                    out.flush();
-                }
+                handleClientRequest(line);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -61,5 +63,23 @@ public class ClientHandler extends Thread {
 
         return readData;
     }
+
+
+    public void handleClientRequest(String receivedMessage) {
+        String[] splitMessage = receivedMessage.split(" ",5);
+    }
+
+
+    public static String generateToken() {
+        StringBuilder builder = new StringBuilder();
+        int count = 25;
+        while (count-- != 0) {
+            int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        }
+        return builder.toString();
+    }
 }
+
+
 

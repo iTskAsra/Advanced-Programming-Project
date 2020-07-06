@@ -4,11 +4,22 @@ import Client.Client;
 import controller.ExceptionsLibrary;
 import model.Account;
 
+import java.util.HashMap;
+
 public class RegisterAndLoginController {
 
-    public static void register(String dataToRegister) throws ExceptionsLibrary.AdminExist, ExceptionsLibrary.UsernameAlreadyExists {
+    public static void register(HashMap dataToRegister) throws ExceptionsLibrary.AdminExist, ExceptionsLibrary.UsernameAlreadyExists {
 
-        Client.sendMessage(dataToRegister);
+        String convertedDataToRegister = new String();
+
+        convertedDataToRegister += dataToRegister.get("username");
+        convertedDataToRegister += " ";
+
+        convertedDataToRegister += dataToRegister.get("password");
+        convertedDataToRegister += " ";
+
+
+        Client.sendMessage(convertedDataToRegister);
 
         String response = Client.receiveMessage();
 

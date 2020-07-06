@@ -14,6 +14,7 @@ public class Account {
     private String phoneNumber;
     private ArrayList<Sale> saleCodes;
     private double credit;
+    private boolean isOnline;
 
     public Account(String username, String password, String role, String firstName, String lastName, String email, String phoneNumber, ArrayList<Sale> saleCodes, double credit) {
         this.username = username;
