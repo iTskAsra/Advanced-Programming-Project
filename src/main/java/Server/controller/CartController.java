@@ -222,7 +222,7 @@ public class CartController {
             BuyLog buyLog = new BuyLog(dateNow, getTotalPriceWithSale(), getSaleDiscount(), cartProducts, "Delivered", getReceiverInfo());
             getCartCustomer().getCustomerLog().add(buyLog);
             getCartCustomer().setCredit(getCartCustomer().getCredit() - getTotalPriceWithSale());
-            controller.SetDataToDatabase.setAccount(getCartCustomer());
+            SetDataToDatabase.setAccount(getCartCustomer());
             HashMap<String, HashMap<Product, Integer>> productSellers = new HashMap<>();
             for (Product i : getCartProducts().keySet()) {
                 if (productSellers.containsKey(i.getSeller().getUsername())) {
@@ -234,12 +234,7 @@ public class CartController {
                 }
             }
             for (String k : productSellers.keySet()) {
-                Seller i = (Seller) controller.GetDataFromDatabase.getAccount(k);
                 ArrayList<String[]> productSeller = new ArrayList<>();
-                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(k)), getOffFromHashMap(productSellers.get(k)), productSeller, getCartCustomer().getUsername(), "Sent");
-                i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i.getUsername())));
-                i.getSellerLogs().add(sellLog);
-                controller.SetDataToDatabase.setAccount(i);
                 for (Product j : productSellers.get(k).keySet()){
                     String[] productDetails = new String[5];
                     productDetails[0] = String.valueOf(j.getProductId());
@@ -248,9 +243,15 @@ public class CartController {
                     productDetails[3] = String.valueOf(getCartProducts().get(j));
                     productSeller.add(productDetails);
                     j.setAvailability(j.getAvailability() - productSellers.get(k).get(j));
-                    controller.SetDataToDatabase.setProduct(j);
+                    SetDataToDatabase.setProduct(j);
                     SetDataToDatabase.updateSellerOfProduct(j, 0);
                 }
+                Seller newSeller = (Seller) controller.GetDataFromDatabase.getAccount(k);
+                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(k)), getOffFromHashMap(productSellers.get(k)), productSeller, getCartCustomer().getUsername(), "Sent");
+                newSeller.setCredit(newSeller.getCredit() + amountOfMoneyFromSell(productSellers.get(newSeller.getUsername())));
+                newSeller.getSellerLogs().add(sellLog);
+                SetDataToDatabase.setAccount(newSeller);
+
             }
             cartProducts.clear();
         } else {

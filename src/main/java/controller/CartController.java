@@ -234,12 +234,7 @@ public class CartController {
                 }
             }
             for (String k : productSellers.keySet()) {
-                Seller i = (Seller) GetDataFromDatabase.getAccount(k);
                 ArrayList<String[]> productSeller = new ArrayList<>();
-                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(k)), getOffFromHashMap(productSellers.get(k)), productSeller, getCartCustomer().getUsername(), "Sent");
-                i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i.getUsername())));
-                i.getSellerLogs().add(sellLog);
-                SetDataToDatabase.setAccount(i);
                 for (Product j : productSellers.get(k).keySet()){
                     String[] productDetails = new String[5];
                     productDetails[0] = String.valueOf(j.getProductId());
@@ -251,6 +246,12 @@ public class CartController {
                     SetDataToDatabase.setProduct(j);
                     SetDataToDatabase.updateSellerOfProduct(j, 0);
                 }
+                Seller newSeller = (Seller) GetDataFromDatabase.getAccount(k);
+                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(k)), getOffFromHashMap(productSellers.get(k)), productSeller, getCartCustomer().getUsername(), "Sent");
+                newSeller.setCredit(newSeller.getCredit() + amountOfMoneyFromSell(productSellers.get(newSeller.getUsername())));
+                newSeller.getSellerLogs().add(sellLog);
+                SetDataToDatabase.setAccount(newSeller);
+
             }
             cartProducts.clear();
         } else {
