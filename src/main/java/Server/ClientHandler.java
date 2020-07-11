@@ -7,6 +7,11 @@ import java.net.Socket;
 public class ClientHandler extends Thread {
     protected Socket socket;
     private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    public static ObjectOutputStream os;
+    public static ObjectInputStream is;
+    InputStream inp = null;
+    DataInputStream brinp = null;
+    DataOutputStream out = null;
 
 
     public ClientHandler(Socket clientSocket) {
@@ -14,9 +19,17 @@ public class ClientHandler extends Thread {
     }
 
     public void run() {
-        InputStream inp = null;
-        DataInputStream brinp = null;
-        DataOutputStream out = null;
+
+        try {
+            os = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            is = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             inp = socket.getInputStream();
             brinp = new DataInputStream(new BufferedInputStream(inp));
@@ -43,7 +56,7 @@ public class ClientHandler extends Thread {
     }
 
 
-    public void writeToClient(String dataToWrite,DataOutputStream out){
+    public void writeToClient(String dataToWrite){
         try {
             out.writeUTF(dataToWrite);
             out.flush();
@@ -52,10 +65,10 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public String readDataFromClient(DataInputStream in) {
+    public String readDataFromClient() {
         String readData = null;
         try {
-            readData = in.readUTF();
+            readData = brinp.readUTF();
             return readData;
         }catch (IOException e){
             e.printStackTrace();
@@ -63,6 +76,29 @@ public class ClientHandler extends Thread {
 
         return readData;
     }
+
+    public Object readObjectFromClient() {
+        Object object = null;
+        try {
+            object = is.readObject();
+            return object;
+        }catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void writeObjectToClient(Object object){
+        try {
+            os.writeObject(object);
+            os.flush();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     public void handleClientRequest(String receivedMessage) {
