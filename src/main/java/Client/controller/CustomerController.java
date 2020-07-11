@@ -23,7 +23,7 @@ public class CustomerController {
     }
 
     public static void setCustomer(Customer customer) {
-        Client.controller.CustomerController.customer = customer;
+        CustomerController.customer = customer;
     }
 
     public static String showCustomerInfo() throws ExceptionsLibrary.NoAccountException {

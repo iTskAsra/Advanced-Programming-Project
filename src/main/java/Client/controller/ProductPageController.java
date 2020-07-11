@@ -24,7 +24,7 @@ public class ProductPageController {
     }
 
     public static void setProduct(Product product) {
-        Client.controller.ProductPageController.product = product;
+        ProductPageController.product = product;
     }
 
     public static String digest() {

@@ -42,7 +42,7 @@ public class OffPageController {
     }
 
     public static void setResult(ArrayList<Product> result) {
-        Client.controller.OffPageController.result = result;
+        OffPageController.result = result;
     }
 
     public static ArrayList<String> getCurrentSort() {
@@ -50,7 +50,7 @@ public class OffPageController {
     }
 
     public static void setCurrentSort(ArrayList<String> currentSort) {
-        Client.controller.OffPageController.currentSort = currentSort;
+        OffPageController.currentSort = currentSort;
     }
 
     public static ArrayList<String> getAvailableSorts() {
@@ -58,7 +58,7 @@ public class OffPageController {
     }
 
     public static void setAvailableSorts(ArrayList<String> availableSorts) {
-        Client.controller.OffPageController.availableSorts = availableSorts;
+        OffPageController.availableSorts = availableSorts;
     }
 
     public static ArrayList<String> getAvailableFilters() {
@@ -66,7 +66,7 @@ public class OffPageController {
     }
 
     public static void setAvailableFilters(ArrayList<String> availableFilters) {
-        Client.controller.OffPageController.availableFilters = availableFilters;
+        OffPageController.availableFilters = availableFilters;
     }
 
     public static ArrayList<String> getCurrentFilters() {
@@ -74,7 +74,7 @@ public class OffPageController {
     }
 
     public static void setCurrentFilters(ArrayList<String> currentFilters) {
-        Client.controller.OffPageController.currentFilters = currentFilters;
+        OffPageController.currentFilters = currentFilters;
     }
 
     public static ArrayList<String> viewCategories() {

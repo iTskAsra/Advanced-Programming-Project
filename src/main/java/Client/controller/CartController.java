@@ -49,7 +49,7 @@ public class CartController {
     }
 
     public static void setSaleDiscount(double saleDiscount) {
-        Client.controller.CartController.saleDiscount = saleDiscount;
+        CartController.saleDiscount = saleDiscount;
     }
 
     public static double getTotalPriceWithSale() {
@@ -58,7 +58,7 @@ public class CartController {
     }
 
     public static void setTotalPriceWithSale() {
-        Client.controller.CartController.totalPriceWithSale = getTotalPriceWithoutSale() - getSaleDiscount();
+        CartController.totalPriceWithSale = getTotalPriceWithoutSale() - getSaleDiscount();
     }
 
     public static double getTotalPriceWithoutSale() {
@@ -67,7 +67,7 @@ public class CartController {
     }
 
     public static void setTotalPriceWithoutSale(double totalPriceWithoutSale) {
-        Client.controller.CartController.totalPriceWithoutSale = totalPriceWithoutSale;
+        CartController.totalPriceWithoutSale = totalPriceWithoutSale;
     }
 
     public static HashMap<String, String> getReceiverInfo() {
@@ -75,7 +75,7 @@ public class CartController {
     }
 
     public static void setReceiverInfo(HashMap<String, String> receiverInfo) {
-        Client.controller.CartController.receiverInfo = receiverInfo;
+        CartController.receiverInfo = receiverInfo;
     }
 
     public static HashMap<Product, Integer> getCartProducts() {
@@ -86,7 +86,7 @@ public class CartController {
     }
 
     public static void setCartProducts(HashMap<Product, Integer> cartProducts) {
-        Client.controller.CartController.cartProducts = cartProducts;
+        CartController.cartProducts = cartProducts;
     }
 
     public static Customer getCartCustomer() {
@@ -94,7 +94,7 @@ public class CartController {
     }
 
     public static void setCartCustomer(Customer cartCustomer) {
-        Client.controller.CartController.cartCustomer = cartCustomer;
+        CartController.cartCustomer = cartCustomer;
     }
 
     public static HashMap<Product, Integer> showCartProducts() {

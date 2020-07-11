@@ -29,7 +29,7 @@ public class AdminController {
 
 
     public static void setAdmin(Admin admin) {
-        Client.controller.AdminController.admin = admin;
+        AdminController.admin = admin;
     }
 
     public static String showAdminInfo() throws ExceptionsLibrary.NoAccountException {

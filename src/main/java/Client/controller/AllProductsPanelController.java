@@ -42,7 +42,7 @@ public class AllProductsPanelController {
     }
 
     public static void setResult(ArrayList<Product> result) {
-        Client.controller.AllProductsPanelController.result = result;
+        AllProductsPanelController.result = result;
     }
 
     public static ArrayList<String> getCurrentSort() {
@@ -50,7 +50,7 @@ public class AllProductsPanelController {
     }
 
     public static void setCurrentSort(ArrayList<String> currentSort) {
-        Client.controller.AllProductsPanelController.currentSort = currentSort;
+        AllProductsPanelController.currentSort = currentSort;
     }
 
     public static ArrayList<String> getAvailableSorts() {
@@ -58,7 +58,7 @@ public class AllProductsPanelController {
     }
 
     public static void setAvailableSorts(ArrayList<String> availableSorts) {
-        Client.controller.AllProductsPanelController.availableSorts = availableSorts;
+        AllProductsPanelController.availableSorts = availableSorts;
     }
 
     public static ArrayList<String> getAvailableFilters() {
@@ -66,7 +66,7 @@ public class AllProductsPanelController {
     }
 
     public static void setAvailableFilters(ArrayList<String> availableFilters) {
-        Client.controller.AllProductsPanelController.availableFilters = availableFilters;
+        AllProductsPanelController.availableFilters = availableFilters;
     }
 
     public static ArrayList<String> getCurrentFilters() {
@@ -74,7 +74,7 @@ public class AllProductsPanelController {
     }
 
     public static void setCurrentFilters(ArrayList<String> currentFilters) {
-        Client.controller.AllProductsPanelController.currentFilters = currentFilters;
+        AllProductsPanelController.currentFilters = currentFilters;
     }
 
     public static ArrayList<String> viewCategories() {
@@ -113,7 +113,7 @@ public class AllProductsPanelController {
 
         if (response instanceof ExceptionsLibrary.NoFilterWithThisName)
             throw new ExceptionsLibrary.NoFilterWithThisName();
-        if(response instanceof ExceptionsLibrary.NoCategoryException)
+        if (response instanceof ExceptionsLibrary.NoCategoryException)
             throw new ExceptionsLibrary.NoCategoryException();
 
 //        String path = "Resources/Category";
@@ -263,7 +263,7 @@ public class AllProductsPanelController {
                     String featureToString = feature.toString();
                     String featureCategoryToString = featureCategory.toString();
                     ArrayList<String> featuresToString = new ArrayList<>();
-                    for (Feature j : category.getFeatures()){
+                    for (Feature j : category.getFeatures()) {
                         featuresToString.add(j.toString());
                     }
                     if (!featuresToString.contains(featureCategoryToString)) {
@@ -271,7 +271,7 @@ public class AllProductsPanelController {
                     }
                     for (Product j : products) {
                         if (j.getCategory().getName().equalsIgnoreCase(category.getName())) {
-                            if (!getProductRemoved(j,featureToString)) {
+                            if (!getProductRemoved(j, featureToString)) {
                                 if (!getResult().contains(j)) {
                                     getResult().add(j);
                                 }
@@ -381,7 +381,7 @@ public class AllProductsPanelController {
                     }
                     break;
                 case "Feature":
-                    String feature = new Feature(splitFilters[2],splitFilters[3]).toString();
+                    String feature = new Feature(splitFilters[2], splitFilters[3]).toString();
                     iterator = getResult().iterator();
                     while (iterator.hasNext()) {
                         Product tempProduct = iterator.next();
@@ -573,7 +573,7 @@ public class AllProductsPanelController {
 
 
     public static void setSort(String value) {
-        switch (value){
+        switch (value) {
             case "Product ID":
                 getCurrentSort().add("productId");
                 break;
