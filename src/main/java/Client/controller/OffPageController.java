@@ -1,22 +1,22 @@
 package Client.controller;
 
+
 import Client.Client;
 import controller.ExceptionsLibrary;
 import controller.GetDataFromDatabase;
-import model.Category;
-import model.Feature;
-import model.Product;
-import model.Seller;
+import model.*;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.invoke.SwitchPoint;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class AllProductsPanelController {
+public class OffPageController {
+
     private static ArrayList<String> currentFilters;
     private static ArrayList<String> availableFilters;
     private static ArrayList<String> availableSorts;
@@ -42,7 +42,7 @@ public class AllProductsPanelController {
     }
 
     public static void setResult(ArrayList<Product> result) {
-        Client.controller.AllProductsPanelController.result = result;
+        Client.controller.OffPageController.result = result;
     }
 
     public static ArrayList<String> getCurrentSort() {
@@ -50,7 +50,7 @@ public class AllProductsPanelController {
     }
 
     public static void setCurrentSort(ArrayList<String> currentSort) {
-        Client.controller.AllProductsPanelController.currentSort = currentSort;
+        Client.controller.OffPageController.currentSort = currentSort;
     }
 
     public static ArrayList<String> getAvailableSorts() {
@@ -58,7 +58,7 @@ public class AllProductsPanelController {
     }
 
     public static void setAvailableSorts(ArrayList<String> availableSorts) {
-        Client.controller.AllProductsPanelController.availableSorts = availableSorts;
+        Client.controller.OffPageController.availableSorts = availableSorts;
     }
 
     public static ArrayList<String> getAvailableFilters() {
@@ -66,7 +66,7 @@ public class AllProductsPanelController {
     }
 
     public static void setAvailableFilters(ArrayList<String> availableFilters) {
-        Client.controller.AllProductsPanelController.availableFilters = availableFilters;
+        Client.controller.OffPageController.availableFilters = availableFilters;
     }
 
     public static ArrayList<String> getCurrentFilters() {
@@ -74,16 +74,15 @@ public class AllProductsPanelController {
     }
 
     public static void setCurrentFilters(ArrayList<String> currentFilters) {
-        Client.controller.AllProductsPanelController.currentFilters = currentFilters;
+        Client.controller.OffPageController.currentFilters = currentFilters;
     }
 
     public static ArrayList<String> viewCategories() {
-        ArrayList<String> categoriesName = new ArrayList();
 
         String func = "View Categories";
         Client.sendMessage(func);
 
-        categoriesName = (ArrayList<String>) Client.receiveObject();
+        return (ArrayList<String>) Client.receiveObject();
 //        String path = "Resources/Category";
 //        File folder = new File(path);
 //        FileFilter fileFilter = new FileFilter() {
@@ -95,12 +94,12 @@ public class AllProductsPanelController {
 //                return false;
 //            }
 //        };
-//
+//        ArrayList<String> categoriesName = new ArrayList();
 //        for (File i : folder.listFiles(fileFilter)) {
 //            String fileName = i.getName();
 //            categoriesName.add(fileName.replace(".json", ""));
 //        }
-        return categoriesName;
+//        return categoriesName;
     }
 
     public static ArrayList<String> showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
@@ -113,9 +112,10 @@ public class AllProductsPanelController {
 
         if (response instanceof ExceptionsLibrary.NoFilterWithThisName)
             throw new ExceptionsLibrary.NoFilterWithThisName();
-        if(response instanceof ExceptionsLibrary.NoCategoryException)
+        else if (response instanceof ExceptionsLibrary.NoCategoryException)
             throw new ExceptionsLibrary.NoCategoryException();
-
+        else
+            allAvailableFilters = (ArrayList<String>) response;
 //        String path = "Resources/Category";
 //        File folder = new File(path);
 //        FileFilter fileFilter = new FileFilter() {
@@ -137,9 +137,9 @@ public class AllProductsPanelController {
         return allAvailableFilters;
     }
 
-    public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
+    public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
         getResult().clear();
-        ArrayList<Product> products = getAllProducts();
+        ArrayList<Product> products = getOffProducts();
         for (int count = 0; count < getCurrentFilters().size(); count++) {
             String i = getCurrentFilters().get(count);
             String[] splitFilters = i.split("--");
@@ -300,8 +300,8 @@ public class AllProductsPanelController {
         Object[] toSend = new Object[2];
         toSend[0] = product;
         toSend[1] = feature;
-
         Client.sendObject(toSend);
+
         return (boolean) Client.receiveObject();
 //        ArrayList<String> featuresToString = new ArrayList<>();
 //        for (Feature j : product.getCategoryFeatures()){
@@ -430,37 +430,6 @@ public class AllProductsPanelController {
         return sellers;
     }
 
-    public static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
-        ArrayList<Product> allProducts = new ArrayList<>();
-
-        String func = "Get All Products";
-        Client.sendMessage(func);
-
-        Object response = Client.receiveObject();
-
-        if (response instanceof ExceptionsLibrary.NoProductException)
-            throw new ExceptionsLibrary.NoProductException();
-
-        else
-            allProducts = (ArrayList<Product>) response;
-//        String path = "Resources/Products";
-//        File folder = new File(path);
-//        FileFilter fileFilter = new FileFilter() {
-//            @Override
-//            public boolean accept(File file1) {
-//                if (file1.getName().endsWith(".json")) {
-//                    return true;
-//                }
-//                return false;
-//            }
-//        };
-//        for (File i : folder.listFiles(fileFilter)) {
-//            String fileName = i.getName();
-//            int productId = Integer.parseInt(fileName.replace(".json", ""));
-//            allProducts.add(GetDataFromDatabase.getProduct(productId));
-//        }
-        return allProducts;
-    }
 
     public static ArrayList<String> showCurrentFilters() {
         return getCurrentFilters();
@@ -494,43 +463,66 @@ public class AllProductsPanelController {
         getCurrentSort().add("name");
     }
 
-    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
-        if (getCurrentFilters().size() == 0) {
-            setResult(getAllProducts());
-        } else {
-            filterAnAvailableFilter();
-        }
-        Collections.sort(getResult(), new Comparator<Product>() {
-            @Override
-            public int compare(Product o1, Product o2) {
-                try {
-                    Field field = Product.class.getDeclaredField(getCurrentSort().get(0));
-                    field.setAccessible(true);
-                    if (getCurrentSort().get(0).equalsIgnoreCase("name") || getCurrentSort().get(0).equalsIgnoreCase("company")) {
-                        String o1Name = (String) field.get(o1);
-                        String o2Name = (String) field.get(o2);
-                        return o1Name.compareTo(o2Name);
-                    } else if (getCurrentSort().get(0).equalsIgnoreCase("date")) {
-                        Date o1Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o1));
-                        Date o2Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o2));
-                        return o1Date.compareTo(o2Date);
-                    } else if (getCurrentSort().get(0).equalsIgnoreCase("priceWithOff")) {
-                        Double o1Price = (Double) field.get(o1);
-                        Double o2Price = (Double) field.get(o2);
-                        return o1Price.compareTo(o2Price);
-                    } else if (getCurrentSort().get(0).equalsIgnoreCase("availability") || getCurrentSort().get(0).equalsIgnoreCase("productId")) {
-                        Integer o1Availability = (Integer) field.get(o1);
-                        Integer o2Availability = (Integer) field.get(o2);
-                        return o1Availability.compareTo(o2Availability);
-                    }
+    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
+        ArrayList<Product> products = new ArrayList<Product>();
 
-                } catch (NoSuchFieldException | IllegalAccessException | ParseException e) {
-                    e.printStackTrace();
-                }
-                return 0;
-            }
-        });
-        return getResult();
+        String func = "Show Product";
+        Client.sendMessage(func);
+
+        Object response = Client.receiveObject();
+
+        if (response instanceof ExceptionsLibrary.NoProductException)
+            throw new ExceptionsLibrary.NoProductException();
+        else if (response instanceof ExceptionsLibrary.NoFilterWithThisName)
+            throw new ExceptionsLibrary.NoFilterWithThisName();
+        else if (response instanceof ExceptionsLibrary.NoAccountException)
+            throw new ExceptionsLibrary.NoAccountException();
+        else if (response instanceof ExceptionsLibrary.NoFeatureWithThisName)
+            throw new ExceptionsLibrary.NoFeatureWithThisName();
+        else if (response instanceof ExceptionsLibrary.NoCategoryException)
+            throw new ExceptionsLibrary.NoCategoryException();
+        else if (response instanceof ExceptionsLibrary.NoOffException)
+            throw new ExceptionsLibrary.NoOffException();
+        else
+            products = (ArrayList<Product>) response;
+
+        return products;
+//        if (getCurrentFilters().size() == 0) {
+//            setResult(getOffProducts());
+//        } else {
+//            filterAnAvailableFilter();
+//        }
+//        Collections.sort(getResult(), new Comparator<Product>() {
+//            @Override
+//            public int compare(Product o1, Product o2) {
+//                try {
+//                    Field field = Product.class.getDeclaredField(getCurrentSort().get(0));
+//                    field.setAccessible(true);
+//                    if (getCurrentSort().get(0).equalsIgnoreCase("name") || getCurrentSort().get(0).equalsIgnoreCase("company")) {
+//                        String o1Name = (String) field.get(o1);
+//                        String o2Name = (String) field.get(o2);
+//                        return o1Name.compareTo(o2Name);
+//                    } else if (getCurrentSort().get(0).equalsIgnoreCase("date")) {
+//                        Date o1Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o1));
+//                        Date o2Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o2));
+//                        return o1Date.compareTo(o2Date);
+//                    } else if (getCurrentSort().get(0).equalsIgnoreCase("priceWithOff")) {
+//                        Double o1Price = (Double) field.get(o1);
+//                        Double o2Price = (Double) field.get(o2);
+//                        return o1Price.compareTo(o2Price);
+//                    } else if (getCurrentSort().get(0).equalsIgnoreCase("availability") || getCurrentSort().get(0).equalsIgnoreCase("productId")) {
+//                        Integer o1Availability = (Integer) field.get(o1);
+//                        Integer o2Availability = (Integer) field.get(o2);
+//                        return o1Availability.compareTo(o2Availability);
+//                    }
+//
+//                } catch (NoSuchFieldException | IllegalAccessException | ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                return 0;
+//            }
+//        });
+//        return getResult();
     }
 
     public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
@@ -553,7 +545,6 @@ public class AllProductsPanelController {
     }
 
     private static boolean isFeature(Product i, String j) {
-
         String func = "Is Feature";
         Client.sendMessage(func);
 
@@ -594,4 +585,114 @@ public class AllProductsPanelController {
                 break;
         }
     }
+
+    private static ArrayList<Product> getOffProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
+        ArrayList<Product> allProducts = new ArrayList<>();
+
+        String func = "Get Off Products";
+        Client.sendMessage(func);
+
+        Object response = Client.receiveObject();
+
+        if (response instanceof ExceptionsLibrary.NoProductException)
+            throw new ExceptionsLibrary.NoProductException();
+        else if (response instanceof ExceptionsLibrary.NoOffException)
+            throw new ExceptionsLibrary.NoOffException();
+//        String path = "Resources/Products";
+//        File folder = new File(path);
+//        FileFilter fileFilter = new FileFilter() {
+//            @Override
+//            public boolean accept(File file1) {
+//                if (file1.getName().endsWith(".json")) {
+//                    return true;
+//                }
+//                return false;
+//            }
+//        };
+//        for (File i : folder.listFiles(fileFilter)) {
+//            String fileName = i.getName();
+//            int productId = Integer.parseInt(fileName.replace(".json", ""));
+//            if (isInOff(productId)) {
+//                allProducts.add(GetDataFromDatabase.getProduct(productId));
+//            }
+//        }
+        return allProducts;
+    }
+
+    public static boolean isInOff(int productId) {
+
+        String func = "Is In Off";
+        Client.sendMessage(func);
+
+        Client.sendMessage(String.valueOf(productId));
+
+        return (boolean) Client.receiveObject();
+//        String path = "Resources/Offs";
+//        File folder = new File(path);
+//        FileFilter fileFilter = new FileFilter() {
+//            @Override
+//            public boolean accept(File file1) {
+//                if (file1.getName().endsWith(".json")) {
+//                    return true;
+//                }
+//                return false;
+//            }
+//        };
+//        for (File i : folder.listFiles(fileFilter)) {
+//            String fileName = i.getName();
+//            int offId = Integer.parseInt(fileName.replace(".json", ""));
+//            Off off = null;
+//            try {
+//                off = GetDataFromDatabase.getOff(offId);
+//            } catch (ExceptionsLibrary.NoOffException e) {
+//                e.printStackTrace();
+//            }
+//            for (String j : off.getOffProducts()){
+//                if (j.equals(String.valueOf(productId))){
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+    }
+
+    public static Off offDetails(int productId) throws ExceptionsLibrary.NoOffException {
+
+        String func = "Off Details";
+        Client.sendMessage(func);
+
+
+        Client.sendMessage(String.valueOf(productId));
+        Object response = Client.receiveObject();
+
+        if (response instanceof ExceptionsLibrary.NoOffException)
+            throw new ExceptionsLibrary.NoOffException();
+        else
+            return (Off) response;
+
+//        String path = "Resources/Offs";
+//        File folder = new File(path);
+//        FileFilter fileFilter = new FileFilter() {
+//            @Override
+//            public boolean accept(File file1) {
+//                if (file1.getName().endsWith(".json")) {
+//                    return true;
+//                }
+//                return false;
+//            }
+//        };
+//        for (File i : folder.listFiles(fileFilter)) {
+//            String fileName = i.getName();
+//            int offId = Integer.parseInt(fileName.replace(".json", ""));
+//            Off off = GetDataFromDatabase.getOff(offId);
+//            for (String j : off.getOffProducts()){
+//                if (j.equals(String.valueOf(productId))){
+//                    return off;
+//                }
+//            }
+//        }
+//        return null;
+    }
+
 }
+
