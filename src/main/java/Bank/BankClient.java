@@ -21,11 +21,6 @@ public class BankClient {
 
         private String token;
 
-        /**
-         * This method is used to add initiating socket and IN/OUT data stream .
-         *
-         * @throws IOException when IP/PORT hasn't been set up properly.
-         */
         public void ConnectToBankServer() throws IOException {
             try {
                 Socket socket = new Socket(IP, PORT);
@@ -36,9 +31,6 @@ public class BankClient {
             }
         }
 
-        /**
-         * This method is used to start a Thread ,listening on IN data stream.
-         */
         public void StartListeningOnInput() {
             new Thread(() -> {
                 while (true) {
@@ -52,12 +44,6 @@ public class BankClient {
             }).start();
         }
 
-        /**
-         * This method is used to send message with value
-         *
-         * @param msg to Bank server.
-         * @throws IOException when OUT data stream been interrupted.
-         */
         public void SendMessage(String msg) throws IOException {
             try {
                 outputStream.writeUTF(msg);
@@ -66,9 +52,6 @@ public class BankClient {
             }
         }
 
-        /**
-         * This method is used to illustrate an example of using methods of this class.
-         */
         public void run() {
             try {
                 ConnectToBankServer();
