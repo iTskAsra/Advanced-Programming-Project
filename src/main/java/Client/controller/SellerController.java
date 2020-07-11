@@ -32,7 +32,7 @@ public class SellerController {
     }
 
     public static void setSeller(Seller seller) {
-        Client.controller.SellerController.seller = seller;
+        SellerController.seller = seller;
     }
 
     public static String showSellerInfo() throws ExceptionsLibrary.NoAccountException {

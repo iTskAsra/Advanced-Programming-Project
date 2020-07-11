@@ -1,5 +1,6 @@
 package Server.controller;
 
+import controller.SetDataToDatabase;
 import model.*;
 
 import java.text.DateFormat;
@@ -204,7 +205,7 @@ public class CartController {
         return amount;
     }
 
-    public static void purchase() throws ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
+    public static void purchase() throws controller.ExceptionsLibrary.NoProductException, controller.ExceptionsLibrary.NoAccountException, controller.ExceptionsLibrary.CreditNotSufficientException {
         if (getTotalPriceWithSale() <= getCartCustomer().getCredit()) {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -221,39 +222,39 @@ public class CartController {
             BuyLog buyLog = new BuyLog(dateNow, getTotalPriceWithSale(), getSaleDiscount(), cartProducts, "Delivered", getReceiverInfo());
             getCartCustomer().getCustomerLog().add(buyLog);
             getCartCustomer().setCredit(getCartCustomer().getCredit() - getTotalPriceWithSale());
-            SetDataToDatabase.setAccount(getCartCustomer());
-            HashMap<Seller, HashMap<Product, Integer>> productSellers = new HashMap<>();
+            controller.SetDataToDatabase.setAccount(getCartCustomer());
+            HashMap<String, HashMap<Product, Integer>> productSellers = new HashMap<>();
             for (Product i : getCartProducts().keySet()) {
-                if (productSellers.containsKey(i.getSeller())) {
-                    productSellers.get(i.getSeller()).put(i, getCartProducts().get(i));
+                if (productSellers.containsKey(i.getSeller().getUsername())) {
+                    productSellers.get(i.getSeller().getUsername()).put(i, getCartProducts().get(i));
                 } else {
                     HashMap<Product, Integer> products = new HashMap<>();
                     products.put(i, getCartProducts().get(i));
-                    productSellers.put(i.getSeller(), products);
+                    productSellers.put(i.getSeller().getUsername(), products);
                 }
             }
-
-            for (Seller i : productSellers.keySet()) {
+            for (String k : productSellers.keySet()) {
+                Seller i = (Seller) controller.GetDataFromDatabase.getAccount(k);
                 ArrayList<String[]> productSeller = new ArrayList<>();
-                for (Product j : productSellers.get(i).keySet()){
+                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(k)), getOffFromHashMap(productSellers.get(k)), productSeller, getCartCustomer().getUsername(), "Sent");
+                i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i.getUsername())));
+                i.getSellerLogs().add(sellLog);
+                controller.SetDataToDatabase.setAccount(i);
+                for (Product j : productSellers.get(k).keySet()){
                     String[] productDetails = new String[5];
                     productDetails[0] = String.valueOf(j.getProductId());
                     productDetails[1] = j.getName();
                     productDetails[2] = String.valueOf(j.getPriceWithOff());
                     productDetails[3] = String.valueOf(getCartProducts().get(j));
                     productSeller.add(productDetails);
-                    j.setAvailability(j.getAvailability() - productSellers.get(i).get(j));
-                    SetDataToDatabase.setProduct(j);
+                    j.setAvailability(j.getAvailability() - productSellers.get(k).get(j));
+                    controller.SetDataToDatabase.setProduct(j);
                     SetDataToDatabase.updateSellerOfProduct(j, 0);
                 }
-                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(i)), getOffFromHashMap(productSellers.get(i)), productSeller, getCartCustomer().getUsername(), "Sent");
-                i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i)));
-                i.getSellerLogs().add(sellLog);
-                SetDataToDatabase.setAccount(i);
             }
             cartProducts.clear();
         } else {
-            throw new ExceptionsLibrary.CreditNotSufficientException();
+            throw new controller.ExceptionsLibrary.CreditNotSufficientException();
         }
     }
 

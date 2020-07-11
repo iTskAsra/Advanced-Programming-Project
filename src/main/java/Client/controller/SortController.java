@@ -19,7 +19,7 @@ public class SortController {
     }
 
     public static void setSortElement(String sortElement) {
-        Client.controller.SortController.sortElement = sortElement.replaceAll("\\s*", "");
+        SortController.sortElement = sortElement.replaceAll("\\s*", "");
     }
 
 

@@ -223,34 +223,34 @@ public class CartController {
             getCartCustomer().getCustomerLog().add(buyLog);
             getCartCustomer().setCredit(getCartCustomer().getCredit() - getTotalPriceWithSale());
             SetDataToDatabase.setAccount(getCartCustomer());
-            HashMap<Seller, HashMap<Product, Integer>> productSellers = new HashMap<>();
+            HashMap<String, HashMap<Product, Integer>> productSellers = new HashMap<>();
             for (Product i : getCartProducts().keySet()) {
-                if (productSellers.containsKey(i.getSeller())) {
-                    productSellers.get(i.getSeller()).put(i, getCartProducts().get(i));
+                if (productSellers.containsKey(i.getSeller().getUsername())) {
+                    productSellers.get(i.getSeller().getUsername()).put(i, getCartProducts().get(i));
                 } else {
                     HashMap<Product, Integer> products = new HashMap<>();
                     products.put(i, getCartProducts().get(i));
-                    productSellers.put(i.getSeller(), products);
+                    productSellers.put(i.getSeller().getUsername(), products);
                 }
             }
-
-            for (Seller i : productSellers.keySet()) {
+            for (String k : productSellers.keySet()) {
+                Seller i = (Seller) GetDataFromDatabase.getAccount(k);
                 ArrayList<String[]> productSeller = new ArrayList<>();
-                for (Product j : productSellers.get(i).keySet()){
+                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(k)), getOffFromHashMap(productSellers.get(k)), productSeller, getCartCustomer().getUsername(), "Sent");
+                i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i.getUsername())));
+                i.getSellerLogs().add(sellLog);
+                SetDataToDatabase.setAccount(i);
+                for (Product j : productSellers.get(k).keySet()){
                     String[] productDetails = new String[5];
                     productDetails[0] = String.valueOf(j.getProductId());
                     productDetails[1] = j.getName();
                     productDetails[2] = String.valueOf(j.getPriceWithOff());
                     productDetails[3] = String.valueOf(getCartProducts().get(j));
                     productSeller.add(productDetails);
-                    j.setAvailability(j.getAvailability() - productSellers.get(i).get(j));
+                    j.setAvailability(j.getAvailability() - productSellers.get(k).get(j));
                     SetDataToDatabase.setProduct(j);
                     SetDataToDatabase.updateSellerOfProduct(j, 0);
                 }
-                SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(i)), getOffFromHashMap(productSellers.get(i)), productSeller, getCartCustomer().getUsername(), "Sent");
-                i.setCredit(i.getCredit() + amountOfMoneyFromSell(productSellers.get(i)));
-                i.getSellerLogs().add(sellLog);
-                SetDataToDatabase.setAccount(i);
             }
             cartProducts.clear();
         } else {
