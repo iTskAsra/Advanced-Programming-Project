@@ -360,12 +360,11 @@ public class AdminController {
 
     private static boolean checkIfOffExist(int offId) {
 
-        String[] toSend = new String[2];
-        toSend[0] = "Check if Off Exists";
-        toSend[1] = String.valueOf(offId);
+        Client.sendMessage("check if off exists");
+        String toSend = String.valueOf(offId);
         Client.sendObject(toSend);
         String response = Client.receiveMessage();
-        if(response.equals("Yes"))
+        if(response.equals("true"))
             return true;
         return false;
 //        String path = "Resources/Offs/" + offId + ".json";
@@ -545,7 +544,7 @@ public class AdminController {
         }
 
         Client.sendMessage("Add Sale");
-        Client.receiveMessage();
+        //Client.receiveMessage();
 
         Client.sendObject(sale);
         String response = Client.receiveMessage();
