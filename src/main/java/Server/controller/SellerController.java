@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Client.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -32,11 +33,12 @@ public class SellerController {
     }
 
     public static String showSellerInfo() throws ExceptionsLibrary.NoAccountException {
+        String adminUsername = Client.receiveMessage();
         Gson gson = new GsonBuilder().serializeNulls().create();
         if (getSeller() == null) {
             throw new ExceptionsLibrary.NoAccountException();
         }
-        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        Seller seller = (Seller) GetDataFromDatabase.getAccount(adminUsername);
         setSeller(seller);
         String data = gson.toJson(seller);
         return data;

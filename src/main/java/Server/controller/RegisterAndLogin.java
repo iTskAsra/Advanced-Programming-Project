@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Client.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -67,6 +68,21 @@ public class RegisterAndLogin {
         }
     }
 
+    public static void registerAdmin() {
+        String data = Client.receiveMessage();
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        Admin admin = gson.fromJson(data, Admin.class);
+        File file = new File("Resources/Accounts/Admin/" + admin.getUsername() + ".json");
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(data);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Client.sendMessage("Success!");
+    }
+
     public static void registerAdmin(String data) {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Admin admin = gson.fromJson(data, Admin.class);
@@ -91,19 +107,20 @@ public class RegisterAndLogin {
         } else return !new File(folder3, username + ".json").exists();
     }
 
-    public static String login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException {
+    public static void login() throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException {
+        HashMap<String, String> dataToLogin = (HashMap<String, String>) Client.receiveObject();
         Account account = GetDataFromDatabase.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
                 if (account.getRole().equals("Customer")) {
                     CustomerController customerController = new CustomerController((Customer) account);
-                    return account.getRole();
+                    Client.sendMessage(account.getRole());
                 } else if (account.getRole().equals("Seller")) {
                     SellerController sellerController = new SellerController((Seller) account);
-                    return account.getRole();
+                    Client.sendMessage(account.getRole());
                 } else if (account.getRole().equals("Admin")) {
                     AdminController adminController = new AdminController((Admin) account);
-                    return account.getRole();
+                    Client.sendMessage(account.getRole());
                 }
             } else {
                 throw new ExceptionsLibrary.WrongPasswordException();
@@ -111,6 +128,20 @@ public class RegisterAndLogin {
         } else {
             throw new ExceptionsLibrary.WrongUsernameException();
         }
-        return null;
+        Client.sendObject(null);
+    }
+
+
+    public static void checkUsername() {
+        String username = Client.receiveMessage();
+        File folder1 = new File("Resources/Accounts/Customer/");
+        File folder2 = new File("Resources/Accounts/Admin/");
+        File folder3 = new File("Resources/Accounts/Seller/");
+        if (new File(folder1, username + ".json").exists()) {
+            Client.sendObject(false);
+        } else if (new File(folder2, username + ".json").exists()) {
+            Client.sendObject(true);
+        } else  Client.sendObject(!new File(folder3, username + ".json").exists());
     }
 }
+

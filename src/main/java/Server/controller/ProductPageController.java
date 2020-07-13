@@ -1,11 +1,13 @@
 package Server.controller;
 
+import Client.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
 import view.Base.Main;
 
 import java.util.ArrayList;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class ProductPageController {
     private static Product product;
@@ -30,17 +32,21 @@ public class ProductPageController {
 
     public static void addToCart() throws ExceptionsLibrary.SelectASeller, ExceptionsLibrary.NotEnoughNumberAvailableException {
         if (getProduct().getSeller() == null) {
-            throw new ExceptionsLibrary.SelectASeller();
+            Client.sendObject(new ExceptionsLibrary.SelectASeller());
+            return;
         } else {
             if (getProduct().getAvailability() >= 1) {
                 CartController.getCartProducts().put(getProduct(), 1);
             } else {
-                throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
+                Client.sendObject(new ExceptionsLibrary.NotEnoughNumberAvailableException());
+                return;
             }
         }
+        Client.sendMessage("Success!");
     }
 
-    public static void selectSeller(String sellerUsername) throws ExceptionsLibrary.NoAccountException {
+    public static void selectSeller() throws ExceptionsLibrary.NoAccountException {
+        String sellerUsername = Client.receiveMessage();
         Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerUsername);
         product.setSeller(seller);
     }
@@ -49,7 +55,8 @@ public class ProductPageController {
         return getProduct();
     }
 
-    public static Product[] compare(int productId) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.CategoriesNotMatch {
+    public static void compare() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.CategoriesNotMatch {
+        int productId = (int) Client.receiveObject();
         Product[] products = new Product[2];
         products[0] = getProduct();
         Product product1 = GetDataFromDatabase.getProduct(productId);
@@ -57,14 +64,17 @@ public class ProductPageController {
         if (!products[0].getCategory().getName().equals(products[1].getCategory().getName())){
             throw new ExceptionsLibrary.CategoriesNotMatch();
         }
-        return products;
+        Client.sendObject(products);
     }
 
-    public static ArrayList<Comment> comments() {
-        return getProduct().getProductComments();
+    public static void comments() {
+        Client.sendObject (((Product) Client.receiveObject()).getProductComments());
     }
 
-    public static void addComment(String title, String commentText) throws ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
+    public static void addComment() throws ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
+        Object[] receivedData = (Object[]) Client.receiveObject();
+        String title = (String) receivedData[0];
+        String commentText = (String) receivedData[1];
         if (Main.checkLoggedIn() != null) {
             Comment comment = new Comment(CustomerController.getCustomer().getUsername(), getProduct(), commentText, RequestOrCommentCondition.PENDING_TO_ACCEPT, isBoughtByCommenter(CustomerController.getCustomer(), getProduct()), title);
             comment.setBoughtByCommenter(isBoughtByCommenter(CustomerController.getCustomer(), getProduct()));
@@ -73,9 +83,11 @@ public class ProductPageController {
             SetDataToDatabase.updateSellerOfProduct(getProduct(),0);
         }
         else {
-            throw new ExceptionsLibrary.NotLoggedInException();
+            Client.sendObject(new ExceptionsLibrary.NotLoggedInException());
+            return;
         }
 
+        Client.sendMessage("Success!");
     }
 
     public static boolean isBoughtByCommenter(Customer customer, Product product) {
@@ -87,6 +99,20 @@ public class ProductPageController {
             }
         }
         return false;
+    }
+
+    public static void isBoughtByCommenter() {
+        Object[] receivedData = (Object[]) Client.receiveObject();
+        Customer customer = (Customer) receivedData[0];
+        Product product = (Product) receivedData[1];
+        for (BuyLog i : customer.getCustomerLog()) {
+            for (String[] j : i.getLogProducts()) {
+                if (Integer.parseInt(j[0]) == product.getProductId()) {
+                    Client.sendObject(true);
+                }
+            }
+        }
+        Client.sendObject(false);
     }
 
 

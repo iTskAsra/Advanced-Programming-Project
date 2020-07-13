@@ -89,11 +89,9 @@ public class ProductPageController {
         String func = "Compare";
         Client.sendMessage(func);
 
-        Object[] toSend = new Object[2];
-        toSend[0] = getProduct();
-        toSend[1] = productId;
 
-        Client.sendObject(toSend);
+
+        Client.sendObject(productId);
         Object response = Client.receiveObject();
 
         if (response instanceof ExceptionsLibrary.NoProductException)
