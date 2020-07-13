@@ -492,6 +492,29 @@ public class AdminController {
         SetDataToDatabase.setSale(sale);
     }
 
+    public static void addSale(Sale sale) {
+        while (checkSaleCode(sale.getSaleCode())) {
+            sale.setSaleCode(Sale.getRandomSaleCode());
+        }
+        if (sale.getSaleAccounts().size() == 0){
+            try {
+                sale.getSaleAccounts().clear();
+                sale.getSaleAccounts().addAll(AdminController.showAllUsersLocal());
+            } catch (ExceptionsLibrary.NoAccountException e) {
+                e.printStackTrace();
+            }
+        }
+        for (Account i : sale.getSaleAccounts()) {
+            if (i.getSaleCodes() == null) {
+                i.setSaleCodes(new ArrayList<>());
+            }
+            i.getSaleCodes().add(sale);
+            SetDataToDatabase.setAccount(i);
+        }
+
+        SetDataToDatabase.setSale(sale);
+    }
+
     public static void showAllUsers() throws ExceptionsLibrary.NoAccountException {
         String customerPath = "Resources/Accounts/Customer";
         String sellerPath = "Resources/Accounts/Seller";
