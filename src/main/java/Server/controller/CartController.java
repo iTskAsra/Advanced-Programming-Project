@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Client.Client;
 import controller.SetDataToDatabase;
 import model.*;
 
@@ -15,7 +16,7 @@ public class CartController {
     private static Customer cartCustomer;
     private static HashMap<String, String> receiverInfo;
     private static double saleDiscount = 0.00;
-    private static double totalPriceWithoutSale = showTotalPrice();
+    private static double totalPriceWithoutSale = showTotalPriceLocal();
     private static double totalPriceWithSale = 0.00;
 
 
@@ -46,7 +47,7 @@ public class CartController {
     }
 
     public static double getTotalPriceWithoutSale() {
-        setTotalPriceWithoutSale(showTotalPrice());
+        setTotalPriceWithoutSale(showTotalPriceLocal());
         return totalPriceWithoutSale;
     }
 
@@ -85,21 +86,23 @@ public class CartController {
         return getCartProducts();
     }
 
-    public static void increaseProduct(Product product) throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NotEnoughNumberAvailableException {
+    public static void increaseProduct() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NotEnoughNumberAvailableException {
+        Product product = (Product) Client.receiveObject();
         for (Product i : getCartProducts().keySet()) {
             if (i.getProductId() == product.getProductId()) {
                 if (i.getAvailability() >= cartProducts.get(i) + 1) {
                     cartProducts.put(i, cartProducts.get(i) + 1);
                     return;
                 } else {
-                    throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
+                    Client.sendObject(new ExceptionsLibrary.NotEnoughNumberAvailableException());
                 }
             }
         }
-        throw new ExceptionsLibrary.NoProductException();
+        Client.sendObject(new ExceptionsLibrary.NoProductException());
     }
 
-    public static void decreaseProduct(int productId) throws ExceptionsLibrary.NoProductException {
+    public static void decreaseProduct() throws ExceptionsLibrary.NoProductException {
+        int productId = Integer.parseInt(Client.receiveMessage());
         for (Product i : getCartProducts().keySet()) {
             if (i.getProductId() == productId) {
                 if (cartProducts.get(i) == 1) {
@@ -110,21 +113,22 @@ public class CartController {
                 return;
             }
         }
-        throw new ExceptionsLibrary.NoProductException();
+        Client.sendObject(new ExceptionsLibrary.NoProductException());
     }
 
-    public static Product viewCartProductDetails(int productId) throws ExceptionsLibrary.NoProductException {
+    public static void viewCartProductDetails() throws ExceptionsLibrary.NoProductException {
+        int productId = Integer.parseInt(Client.receiveMessage());
         Product product = null;
         try {
             product = GetDataFromDatabase.getProduct(productId);
-            return product;
-        } catch (ExceptionsLibrary.NoProductException e) {
-            throw new ExceptionsLibrary.NoProductException();
+            Client.sendObject(product);        }
+        catch (ExceptionsLibrary.NoProductException e) {
+            Client.sendObject(new ExceptionsLibrary.NoProductException());
         }
 
     }
 
-    public static double showTotalPrice() {
+    public static double showTotalPriceLocal() {
         Double totalPrice = 0.00;
         getCartProducts();
         for (Product i : cartProducts.keySet()) {
@@ -133,18 +137,31 @@ public class CartController {
         return totalPrice;
     }
 
-    public static void receiverProcess(HashMap<String, String> data) throws ExceptionsLibrary.NotLoggedInException {
+    public static void showTotalPrice() {
+        Double totalPrice = 0.00;
+        getCartProducts();
+        for (Product i : cartProducts.keySet()) {
+            totalPrice += (i.getPriceWithOff() * cartProducts.get(i));
+        }
+        Client.sendMessage(String.valueOf(totalPrice));
+    }
+
+    public static void receiverProcess() throws ExceptionsLibrary.NotLoggedInException {
+        HashMap<String, String> data = (HashMap<String, String>) Client.receiveObject();
+
         if (getCartCustomer() == null && CustomerController.getCustomer() == null) {
-            throw new ExceptionsLibrary.NotLoggedInException();
+            Client.sendObject(new ExceptionsLibrary.NotLoggedInException());
         } else if (getCartCustomer() == null && CustomerController.getCustomer() != null) {
             setCartCustomer(CustomerController.getCustomer());
         }
         setReceiverInfo(data);
+        Client.sendMessage("Success!");
     }
 
-    public static void discountApply(String saleCode) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException {
+    public static void discountApply() throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException {
+        String saleCode = Client.receiveMessage();
         if (saleCode == null) {
-            setTotalPriceWithoutSale(showTotalPrice());
+            setTotalPriceWithoutSale(showTotalPriceLocal());
             setSaleDiscount(0.00);
             setTotalPriceWithSale();
             return;
@@ -164,29 +181,38 @@ public class CartController {
                         for (Sale j : cartCustomer.getSaleCodes()) {
                             if (j.getSaleCode().equals(saleCode)) {
                                 if (j.getValidTimes() >= 1) {
-                                    if (sale.getSaleMaxAmount() <= (sale.getSalePercent() * showTotalPrice() / 100)) {
+                                    if (sale.getSaleMaxAmount() <= (sale.getSalePercent() * showTotalPriceLocal() / 100)) {
                                         setSaleDiscount(sale.getSaleMaxAmount());
                                     } else {
-                                        setSaleDiscount(sale.getSalePercent() * showTotalPrice() / 100);
+                                        setSaleDiscount(sale.getSalePercent() * showTotalPriceLocal() / 100);
                                     }
                                     j.setValidTimes(j.getValidTimes() - 1);
                                     setTotalPriceWithSale();
                                 } else {
-                                    throw new ExceptionsLibrary.UsedAllValidTimesException();
+                                    Client.sendObject(new ExceptionsLibrary.UsedAllValidTimesException());
                                 }
                             }
                         }
 
                     } else {
-                        throw new ExceptionsLibrary.SaleExpiredException();
+                        Client.sendObject(new ExceptionsLibrary.SaleExpiredException());
                     }
                 } else {
-                    throw new ExceptionsLibrary.SaleNotStartedYetException();
+                    Client.sendObject(new ExceptionsLibrary.SaleNotStartedYetException());
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void getOffFromHashMap() {
+        HashMap<Product, Integer> products = (HashMap<Product, Integer>) Client.receiveObject();
+        Double offAmount = 0.00;
+        for (Product i : products.keySet()) {
+            offAmount += ((i.getPrice() - i.getPriceWithOff())*products.get(i));
+        }
+        Client.sendMessage(String.valueOf(offAmount));
     }
 
     public static double getOffFromHashMap(HashMap<Product, Integer> products) {
@@ -203,6 +229,15 @@ public class CartController {
             amount += (i.getPriceWithOff()*products.get(i));
         }
         return amount;
+    }
+
+    public static void amountOfMoneyFromSell() {
+        HashMap<Product, Integer> products = (HashMap<Product, Integer>) Client.receiveObject();
+        Double amount = 0.00;
+        for (Product i : products.keySet()) {
+            amount += (i.getPriceWithOff()*products.get(i));
+        }
+        Client.sendMessage(String.valueOf(amount));
     }
 
     public static void purchase() throws controller.ExceptionsLibrary.NoProductException, controller.ExceptionsLibrary.NoAccountException, controller.ExceptionsLibrary.CreditNotSufficientException {
@@ -255,8 +290,10 @@ public class CartController {
             }
             cartProducts.clear();
         } else {
-            throw new controller.ExceptionsLibrary.CreditNotSufficientException();
+            Client.sendObject(new controller.ExceptionsLibrary.CreditNotSufficientException());
         }
+
+        Client.sendMessage("Success!");
     }
 
 

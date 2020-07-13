@@ -8,6 +8,7 @@ import model.Seller;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -119,7 +120,7 @@ public class AllProductsPanelController {
 
     public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
         getResult().clear();
-        ArrayList<Product> products = getAllProducts();
+        ArrayList<Product> products = getAllProductsLocal();
         for (int count = 0; count < getCurrentFilters().size(); count++) {
             String i = getCurrentFilters().get(count);
             String[] splitFilters = i.split("--");
@@ -284,6 +285,109 @@ public class AllProductsPanelController {
         }
     }
 
+
+    private static void getProductRemoved() {
+
+        Object[] receivedData = (Object[]) Client.receiveObject();
+
+        Product product = (Product) receivedData[0];
+        String feature = (String) receivedData[1];
+
+        ArrayList<String> featuresToString = new ArrayList<>();
+        for (Feature j : product.getCategoryFeatures()){
+            featuresToString.add(j.toString());
+        }
+        if (featuresToString.contains(feature)) {
+            Client.sendMessage("false");
+        } else {
+            Client.sendMessage("true");
+        }
+    }
+
+
+    private static void checkPreviousFilters() throws ExceptionsLibrary.NoAccountException {
+        int count = Integer.parseInt(Client.receiveMessage());
+        for (int l = 0; l < count; l++) {
+            String i = getCurrentFilters().get(l);
+            String[] splitFilters = i.split("--");
+            switch (splitFilters[0]) {
+                case "Search":
+                    Iterator<Product> iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (!(tempProduct.getName().equalsIgnoreCase(splitFilters[1]))) {
+                            iterator.remove();
+                        }
+                    }
+                    break;
+                case "Category":
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (!(tempProduct.getCategory().getName().equalsIgnoreCase(splitFilters[1]))) {
+                            if (!getCurrentFilters().contains("Category--" + tempProduct.getCategory().getName())) {
+                                iterator.remove();
+                            }
+                        }
+                    }
+                    break;
+                case "Price":
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        boolean isInRange = tempProduct.getPriceWithOff() >= Double.parseDouble(splitFilters[1]) && tempProduct.getPriceWithOff() <= Double.parseDouble(splitFilters[2]);
+                        if (!isInRange) {
+                            iterator.remove();
+                        }
+                    }
+                    break;
+                case "Brand":
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (!(tempProduct.getCompany().equalsIgnoreCase(splitFilters[1]))) {
+                            if (!getCurrentFilters().contains("Brand--" + tempProduct.getCompany())) {
+                                iterator.remove();
+                            }
+                        }
+                    }
+                    break;
+                case "Seller":
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        for (Seller k : sellersOfThisProduct(tempProduct)) {
+                            if (!getCurrentFilters().contains("Seller--" + k.getUsername())) {
+                                iterator.remove();
+                            }
+                        }
+                    }
+                    break;
+                case "Availability":
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (tempProduct.getAvailability() == 0) {
+                            iterator.remove();
+                        }
+                    }
+                    break;
+                case "Feature":
+                    String feature = new Feature(splitFilters[2],splitFilters[3]).toString();
+                    iterator = getResult().iterator();
+                    while (iterator.hasNext()) {
+                        Product tempProduct = iterator.next();
+                        if (getProductRemoved(tempProduct, feature)) {
+                            iterator.remove();
+                        }
+                    }
+                    break;
+            }
+        }
+
+        Client.sendMessage("Success!");
+    }
+
     private static void checkPreviousFilters(int count) throws ExceptionsLibrary.NoAccountException {
         for (int l = 0; l < count; l++) {
             String i = getCurrentFilters().get(l);
@@ -364,6 +468,33 @@ public class AllProductsPanelController {
         }
     }
 
+    private static void sellersOfThisProduct() throws ExceptionsLibrary.NoAccountException {
+        Product product = (Product) Client.receiveObject();
+        ArrayList<Seller> sellers = new ArrayList<>();
+        String path = "Resources/Accounts/Seller";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String username = fileName.replace(".json", "");
+            Seller seller = (Seller) GetDataFromDatabase.getAccount(username);
+            for (Product j : seller.getSellerProducts()) {
+                if (j.getProductId() == product.getProductId()) {
+                    sellers.add(seller);
+                }
+            }
+        }
+        Client.sendObject(sellers);
+    }
+
     private static ArrayList<Seller> sellersOfThisProduct(Product product) throws ExceptionsLibrary.NoAccountException {
         ArrayList<Seller> sellers = new ArrayList<>();
         String path = "Resources/Accounts/Seller";
@@ -390,7 +521,7 @@ public class AllProductsPanelController {
         return sellers;
     }
 
-    public static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
+    public static ArrayList<Product> getAllProductsLocal() throws ExceptionsLibrary.NoProductException {
         ArrayList<Product> allProducts = new ArrayList<>();
         String path = "Resources/Products";
         File folder = new File(path);
@@ -410,6 +541,28 @@ public class AllProductsPanelController {
         }
         return allProducts;
     }
+
+    public static void getAllProducts() throws ExceptionsLibrary.NoProductException {
+        ArrayList<Product> allProducts = new ArrayList<>();
+        String path = "Resources/Products";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            int productId = Integer.parseInt(fileName.replace(".json", ""));
+            allProducts.add(GetDataFromDatabase.getProduct(productId));
+        }
+        Client.sendObject(allProducts);
+    }
+
 
     public static ArrayList<String> showCurrentFilters() {
         return getCurrentFilters();
@@ -443,9 +596,9 @@ public class AllProductsPanelController {
         getCurrentSort().add("name");
     }
 
-    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
+    public static void showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
         if (getCurrentFilters().size() == 0) {
-            setResult(getAllProducts());
+            setResult(getAllProductsLocal());
         } else {
             filterAnAvailableFilter();
         }
@@ -479,7 +632,7 @@ public class AllProductsPanelController {
                 return 0;
             }
         });
-        return getResult();
+        Client.sendObject(getResult());
     }
 
     public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
@@ -499,6 +652,31 @@ public class AllProductsPanelController {
             }
         }
         return false;
+    }
+
+    public static void goToProductPage() throws ExceptionsLibrary.NoProductException {
+        int productId = Integer.parseInt(Client.receiveMessage());
+        Product product = null;
+        try {
+            product = GetDataFromDatabase.getProduct(productId);
+        } catch (ExceptionsLibrary.NoProductException e) {
+            throw new ExceptionsLibrary.NoProductException();
+        }
+        Client.sendObject(product);
+    }
+
+    private static void isFeature() {
+        Object[] receivedData = (Object[]) Client.receiveObject();
+        Product i =null;
+        String j = null;
+        i = (Product) receivedData[0];
+        j = (String) receivedData[1];
+        for (Feature k : i.getCategoryFeatures()) {
+            if (k.getParameter().equals(j)) {
+                Client.sendMessage("true");
+            }
+        }
+        Client.sendMessage("false");
     }
 
 

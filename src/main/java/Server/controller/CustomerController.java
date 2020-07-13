@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Client.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -23,18 +24,19 @@ public class CustomerController {
         CustomerController.customer = customer;
     }
 
-    public static String showCustomerInfo() throws ExceptionsLibrary.NoAccountException {
+    public static void showCustomerInfo() throws ExceptionsLibrary.NoAccountException {
         Gson gson = new GsonBuilder().serializeNulls().create();
         if (getCustomer() == null) {
-            throw new ExceptionsLibrary.NoAccountException();
+            Client.sendObject(new ExceptionsLibrary.NoAccountException());
         }
-        Customer customer = (Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername());
+        Customer customer = (Customer) GetDataFromDatabase.getAccount(Client.receiveMessage());
         setCustomer(customer);
         String data = gson.toJson(customer);
-        return data;
+        Client.sendMessage(data);
     }
 
-    public static void editCustomerInfo(HashMap<String, String> dataToEdit) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException {
+    public static void editCustomerInfo() throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException {
+        HashMap<String, String> dataToEdit = (HashMap<String, String>) Client.receiveObject();
         Customer customer = (Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
@@ -51,42 +53,47 @@ public class CustomerController {
         Gson gson = new GsonBuilder().serializeNulls().create();
         setCustomer(customer);
         SetDataToDatabase.setAccount(getCustomer());
+        Client.sendMessage("Success!");
     }
 
-    public static double showCustomerBalance() {
-        return getCustomer().getCredit();
+    public static void showCustomerBalance() {
+        Client.sendObject(getCustomer().getCredit()); ;
     }
 
-    public static ArrayList<Sale> showDiscountCodes() {
-        return getCustomer().getSaleCodes();
+    public static void showDiscountCodes() {
+        Client.sendObject(getCustomer().getSaleCodes());
     }
 
-    public static ArrayList<BuyLog> showCustomerLogs() {
+    public static void showCustomerLogs() {
         try {
             setCustomer((Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername()));
         } catch (ExceptionsLibrary.NoAccountException e) {
             e.printStackTrace();
         }
-        return getCustomer().getCustomerLog();
+        Client.sendObject(getCustomer().getCustomerLog());
     }
 
-    public static BuyLog showCustomerLogDetail(int logId) throws ExceptionsLibrary.NoLogException {
+    public static void showCustomerLogDetail() throws ExceptionsLibrary.NoLogException {
+        int logId = Integer.parseInt(Client.receiveMessage());
         for (BuyLog i : getCustomer().getCustomerLog()) {
             if (i.getLogId() == logId) {
-                return i;
+                Client.sendObject(i);
             }
         }
-        throw new ExceptionsLibrary.NoLogException();
+        Client.sendObject(new ExceptionsLibrary.NoLogException());
     }
 
-    public static void rateProduct(int productId, double rateScore) throws ExceptionsLibrary.NoProductException {
+    public static void rateProduct() throws ExceptionsLibrary.NoProductException {
+        Object[] receivedData = (Object[]) Client.receiveObject();
+        int productId = (int) receivedData[0];
+        double rateScore = (double) receivedData[1];
         Product product = GetDataFromDatabase.getProduct(productId);
         if (product != null) {
             Rate rate = new Rate(getCustomer(), product, rateScore);
             product.getRates().add(rate);
             SetDataToDatabase.setProduct(product);
         } else {
-            throw new ExceptionsLibrary.NoProductException();
+            Client.sendObject(new ExceptionsLibrary.NoProductException());
         }
     }
 

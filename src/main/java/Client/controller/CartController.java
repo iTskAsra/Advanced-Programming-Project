@@ -106,10 +106,8 @@ public class CartController {
         String func = "Increase Product";
         Client.sendMessage(func);
 
-        Object[] toSend = new Object[2];
-        toSend[0] = getCart();
-        toSend[1] = product;
-        Client.sendObject(toSend);
+
+        Client.sendObject(product);
 
         Object response = Client.receiveObject();
 
