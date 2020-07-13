@@ -466,7 +466,7 @@ public class OffPageController {
     public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
         ArrayList<Product> products = new ArrayList<Product>();
 
-        String func = "Show Product";
+        String func = "Show Products";
         Client.sendMessage(func);
 
         Object response = Client.receiveObject();
