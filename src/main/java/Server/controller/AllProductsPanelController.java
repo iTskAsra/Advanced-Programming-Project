@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Client.Client;
 import model.Category;
 import model.Feature;
 import model.Product;
@@ -73,7 +74,7 @@ public class AllProductsPanelController {
         AllProductsPanelController.currentFilters = currentFilters;
     }
 
-    public static ArrayList<String> viewCategories() {
+    public static void viewCategories() {
         String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -90,10 +91,10 @@ public class AllProductsPanelController {
             String fileName = i.getName();
             categoriesName.add(fileName.replace(".json", ""));
         }
-        return categoriesName;
+        Client.sendObject(categoriesName);
     }
 
-    public static ArrayList<String> showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
+    public static void showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
         ArrayList<String> allAvailableFilters = new ArrayList();
         String path = "Resources/Category";
         File folder = new File(path);
@@ -113,7 +114,7 @@ public class AllProductsPanelController {
             Category category = GetDataFromDatabase.getCategory(categoryName);
         }
         setAvailableFilters(allAvailableFilters);
-        return allAvailableFilters;
+        Client.sendObject(allAvailableFilters);
     }
 
     public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {

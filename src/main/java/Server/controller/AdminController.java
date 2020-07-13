@@ -771,7 +771,8 @@ public class AdminController {
         }
     }
 
-    public static void addCategory(String categoryDetails) throws ExceptionsLibrary.CategoryExistsWithThisName {
+    public static void addCategory() throws ExceptionsLibrary.CategoryExistsWithThisName {
+        String categoryDetails = Client.receiveMessage();
         Gson gson = new GsonBuilder().serializeNulls().create();
         Category category = gson.fromJson(categoryDetails, Category.class);
         if (!checkCategoryName(category.getName())) {
@@ -787,17 +788,19 @@ public class AdminController {
                 e.printStackTrace();
             }
         } else {
-            throw new ExceptionsLibrary.CategoryExistsWithThisName();
+            Client.sendObject(new ExceptionsLibrary.CategoryExistsWithThisName());
         }
     }
 
-    public static String viewSaleCodeDetails(String saleCode) throws ExceptionsLibrary.NoSaleException {
+    public static void viewSaleCodeDetails() throws ExceptionsLibrary.NoSaleException {
+        String saleCode = Client.receiveMessage();
         Sale sale = GetDataFromDatabase.getSale(saleCode);
         Gson gson = new GsonBuilder().serializeNulls().create();
-        return gson.toJson(sale);
+        Client.sendMessage(gson.toJson(sale));
     }
 
-    public static void removeSaleCode(String saleCode) throws ExceptionsLibrary.NoSaleException {
+    public static void removeSaleCode() throws ExceptionsLibrary.NoSaleException {
+        String saleCode = Client.receiveMessage();
         try {
             Sale sale = GetDataFromDatabase.getSale(saleCode);
             FileFilter fileFilter = new FileFilter() {
@@ -880,9 +883,32 @@ public class AdminController {
             File file = new File(path);
             file.delete();
         } catch (ExceptionsLibrary.NoSaleException e) {
-            throw new ExceptionsLibrary.NoSaleException();
+            Client.sendObject(new ExceptionsLibrary.NoSaleException());
         }
 
+    }
+
+    public static void checkCategoryName() {
+        String categoryName = Client.receiveMessage();
+        String path = "Resources/Category";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String fileCategoryName = fileName.replace(".json", "");
+            if (categoryName.equals(fileCategoryName)) {
+                Client.sendMessage("true");
+            }
+        }
+        Client.sendMessage("false");
     }
 
     public static boolean checkCategoryName(String categoryName) {
@@ -929,6 +955,31 @@ public class AdminController {
         return false;
     }
 
+    public static void checkSaleCode() {
+        String saleCode = Client.receiveMessage();
+        String path = "Resources/Sales";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String fileSaleCode = fileName.replace(".json", "");
+            if (saleCode.equals(fileSaleCode)) {
+                Client.sendMessage("true");
+
+            }
+        }
+        Client.sendMessage("false");
+
+    }
+
 
     public static boolean checkIfProductExist(int productId) {
         String path = "Resources/Products/" + productId + ".json";
@@ -937,6 +988,17 @@ public class AdminController {
             return false;
         } else {
             return true;
+        }
+    }
+
+    public static void checkIfProductExist() {
+        int productId = Integer.parseInt(Client.receiveMessage());
+        String path = "Resources/Products/" + productId + ".json";
+        File file = new File(path);
+        if (!file.exists()) {
+            Client.sendMessage("false");
+        } else {
+            Client.sendMessage("true");
         }
     }
 
@@ -950,7 +1012,7 @@ public class AdminController {
         }
     }
 
-    public static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
+    public static void getAllProducts() throws ExceptionsLibrary.NoProductException {
         ArrayList<Product> allProducts = new ArrayList<>();
         String path = "Resources/Products";
         File folder = new File(path);
@@ -968,7 +1030,7 @@ public class AdminController {
             int productId = Integer.parseInt(fileName.replace(".json", ""));
             allProducts.add(GetDataFromDatabase.getProduct(productId));
         }
-        return allProducts;
+        Client.sendObject(allProducts);
     }
 
 }
