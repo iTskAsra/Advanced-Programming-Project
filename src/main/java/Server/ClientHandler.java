@@ -41,6 +41,7 @@ public class ClientHandler extends Thread {
         String generatedToken = generateToken();
         try {
             out.writeUTF(generatedToken);
+            System.out.println(generatedToken);
         } catch (IOException e) {
             e.printStackTrace();
         }
