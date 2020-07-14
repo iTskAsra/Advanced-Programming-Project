@@ -1,5 +1,6 @@
 package Server.controller;
 
+import Client.Client;
 import model.*;
 
 import java.io.File;
@@ -71,7 +72,7 @@ public class OffPageController {
         OffPageController.currentFilters = currentFilters;
     }
 
-    public static ArrayList<String> viewCategories() {
+    public static void viewCategories() {
         String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -88,10 +89,10 @@ public class OffPageController {
             String fileName = i.getName();
             categoriesName.add(fileName.replace(".json", ""));
         }
-        return categoriesName;
+        Client.sendObject(categoriesName);
     }
 
-    public static ArrayList<String> showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
+    public static void showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
         ArrayList<String> allAvailableFilters = new ArrayList();
         String path = "Resources/Category";
         File folder = new File(path);
@@ -111,12 +112,12 @@ public class OffPageController {
             Category category = GetDataFromDatabase.getCategory(categoryName);
         }
         setAvailableFilters(allAvailableFilters);
-        return allAvailableFilters;
+        Client.sendObject(allAvailableFilters);
     }
 
     public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
         getResult().clear();
-        ArrayList<Product> products = getOffProducts();
+        ArrayList<Product> products = getOffProductsLocal();
         for (int count = 0; count < getCurrentFilters().size(); count++) {
             String i = getCurrentFilters().get(count);
             String[] splitFilters = i.split("--");
@@ -244,7 +245,8 @@ public class OffPageController {
                         featuresToString.add(j.toString());
                     }
                     if (!featuresToString.contains(featureCategoryToString)) {
-                        throw new ExceptionsLibrary.NoFeatureWithThisName();
+                        Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                        return;
                     }
                     for (Product j : products) {
                         if (j.getCategory().getName().equalsIgnoreCase(category.getName())) {
@@ -266,7 +268,7 @@ public class OffPageController {
                     break;
             }
         }
-
+        Client.sendMessage("Success!");
     }
 
     private static boolean getProductRemoved(Product product, String feature) {
@@ -278,6 +280,21 @@ public class OffPageController {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private static void getProductRemoved() {
+        Object[] receivedData = (Object[]) Client.receiveObject();
+        Product product = (Product) receivedData[0];
+        String feature = (String) receivedData[1];
+        ArrayList<String> featuresToString = new ArrayList<>();
+        for (Feature j : product.getCategoryFeatures()){
+            featuresToString.add(j.toString());
+        }
+        if (featuresToString.contains(feature)) {
+            Client.sendObject(false);
+        } else {
+            Client.sendObject(false);
         }
     }
 
@@ -388,6 +405,33 @@ public class OffPageController {
     }
 
 
+    private static void sellersOfThisProduct() throws ExceptionsLibrary.NoAccountException {
+        Product product = (Product) Client.receiveObject();
+        ArrayList<Seller> sellers = new ArrayList<>();
+        String path = "Resources/Accounts/Seller";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            String username = fileName.replace(".json", "");
+            Seller seller = (Seller) GetDataFromDatabase.getAccount(username);
+            for (Product j : seller.getSellerProducts()) {
+                if (j.getProductId() == product.getProductId()) {
+                    sellers.add(seller);
+                }
+            }
+        }
+        Client.sendObject(sellers);
+    }
+
     public static ArrayList<String> showCurrentFilters() {
         return getCurrentFilters();
     }
@@ -420,9 +464,9 @@ public class OffPageController {
         getCurrentSort().add("name");
     }
 
-    public static ArrayList<Product> showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
+    public static ArrayList<Product> showProductsLocal() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
         if (getCurrentFilters().size() == 0) {
-            setResult(getOffProducts());
+            setResult(getOffProductsLocal());
         } else {
             filterAnAvailableFilter();
         }
@@ -459,23 +503,66 @@ public class OffPageController {
         return getResult();
     }
 
-    public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
+    public static void showProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
+        if (getCurrentFilters().size() == 0) {
+            setResult(getOffProductsLocal());
+        } else {
+            filterAnAvailableFilter();
+        }
+        Collections.sort(getResult(), new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                try {
+                    Field field = Product.class.getDeclaredField(getCurrentSort().get(0));
+                    field.setAccessible(true);
+                    if (getCurrentSort().get(0).equalsIgnoreCase("name") || getCurrentSort().get(0).equalsIgnoreCase("company")) {
+                        String o1Name = (String) field.get(o1);
+                        String o2Name = (String) field.get(o2);
+                        return o1Name.compareTo(o2Name);
+                    } else if (getCurrentSort().get(0).equalsIgnoreCase("date")) {
+                        Date o1Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o1));
+                        Date o2Date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse((String) field.get(o2));
+                        return o1Date.compareTo(o2Date);
+                    } else if (getCurrentSort().get(0).equalsIgnoreCase("priceWithOff")) {
+                        Double o1Price = (Double) field.get(o1);
+                        Double o2Price = (Double) field.get(o2);
+                        return o1Price.compareTo(o2Price);
+                    } else if (getCurrentSort().get(0).equalsIgnoreCase("availability") || getCurrentSort().get(0).equalsIgnoreCase("productId")) {
+                        Integer o1Availability = (Integer) field.get(o1);
+                        Integer o2Availability = (Integer) field.get(o2);
+                        return o1Availability.compareTo(o2Availability);
+                    }
+
+                } catch (NoSuchFieldException | IllegalAccessException | ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+        Client.sendObject(getResult());
+    }
+
+    public static void goToProductPage() throws ExceptionsLibrary.NoProductException {
+        int productId = Integer.parseInt(Client.receiveMessage());
         Product product = null;
         try {
             product = GetDataFromDatabase.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
-            throw new ExceptionsLibrary.NoProductException();
+            Client.sendObject(new ExceptionsLibrary.NoProductException());
         }
-        return product;
+        Client.sendObject(product);
     }
 
-    private static boolean isFeature(Product i, String j) {
+    private static void isFeature() {
+        Object[] receivedData = (Object[]) Client.receiveObject();
+        Product i = (Product) receivedData[0];
+        String j = (String) receivedData[1];
         for (Feature k : i.getCategoryFeatures()) {
             if (k.getParameter().equals(j)) {
-                return true;
+                Client.sendObject(true);
             }
         }
-        return false;
+        Client.sendObject(false);
     }
 
 
@@ -502,7 +589,30 @@ public class OffPageController {
         }
     }
 
-    private static ArrayList<Product> getOffProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
+    private static void getOffProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
+        ArrayList<Product> allProducts = new ArrayList<>();
+        String path = "Resources/Products";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            int productId = Integer.parseInt(fileName.replace(".json", ""));
+            if (isInOff(productId)) {
+                allProducts.add(GetDataFromDatabase.getProduct(productId));
+            }
+        }
+        Client.sendObject(allProducts);
+    }
+
+    private static ArrayList<Product> getOffProductsLocal() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
         ArrayList<Product> allProducts = new ArrayList<>();
         String path = "Resources/Products";
         File folder = new File(path);
@@ -555,7 +665,41 @@ public class OffPageController {
         return false;
     }
 
-    public static Off offDetails(int productId) throws ExceptionsLibrary.NoOffException {
+
+    public static void isInOff() {
+        int productId = Integer.parseInt(Client.receiveMessage());
+        String path = "Resources/Offs";
+        File folder = new File(path);
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file1) {
+                if (file1.getName().endsWith(".json")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        for (File i : folder.listFiles(fileFilter)) {
+            String fileName = i.getName();
+            int offId = Integer.parseInt(fileName.replace(".json", ""));
+            Off off = null;
+            try {
+                off = GetDataFromDatabase.getOff(offId);
+            } catch (ExceptionsLibrary.NoOffException e) {
+                e.printStackTrace();
+            }
+            for (String j : off.getOffProducts()){
+                if (j.equals(String.valueOf(productId))){
+                    Client.sendObject(true);
+                }
+            }
+        }
+        Client.sendObject(false);
+    }
+
+
+    public static void offDetails() throws ExceptionsLibrary.NoOffException {
+        int productId = Integer.parseInt(Client.receiveMessage());
         String path = "Resources/Offs";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -573,11 +717,11 @@ public class OffPageController {
             Off off = GetDataFromDatabase.getOff(offId);
             for (String j : off.getOffProducts()){
                 if (j.equals(String.valueOf(productId))){
-                    return off;
+                    Client.sendObject(off);
                 }
             }
         }
-        return null;
+        Client.sendObject(null);
     }
 
 }
