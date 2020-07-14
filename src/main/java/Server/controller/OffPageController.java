@@ -271,7 +271,7 @@ public class OffPageController {
         Client.sendMessage("Success!");
     }
 
-    private static boolean getProductRemoved(Product product, String feature) {
+    public static boolean getProductRemoved(Product product, String feature) {
         ArrayList<String> featuresToString = new ArrayList<>();
         for (Feature j : product.getCategoryFeatures()){
             featuresToString.add(j.toString());
@@ -283,7 +283,7 @@ public class OffPageController {
         }
     }
 
-    private static void getProductRemoved() {
+    public static void getProductRemoved() {
         Object[] receivedData = (Object[]) Client.receiveObject();
         Product product = (Product) receivedData[0];
         String feature = (String) receivedData[1];
@@ -298,7 +298,7 @@ public class OffPageController {
         }
     }
 
-    private static void checkPreviousFilters(int count) throws ExceptionsLibrary.NoAccountException {
+    public static void checkPreviousFilters(int count) throws ExceptionsLibrary.NoAccountException {
         for (int l = 0; l < count; l++) {
             String i = getCurrentFilters().get(l);
             String[] splitFilters = i.split("--");
@@ -378,7 +378,7 @@ public class OffPageController {
         }
     }
 
-    private static ArrayList<Seller> sellersOfThisProduct(Product product) throws ExceptionsLibrary.NoAccountException {
+    public static ArrayList<Seller> sellersOfThisProduct(Product product) throws ExceptionsLibrary.NoAccountException {
         ArrayList<Seller> sellers = new ArrayList<>();
         String path = "Resources/Accounts/Seller";
         File folder = new File(path);
@@ -405,7 +405,7 @@ public class OffPageController {
     }
 
 
-    private static void sellersOfThisProduct() throws ExceptionsLibrary.NoAccountException {
+    public static void sellersOfThisProduct() throws ExceptionsLibrary.NoAccountException {
         Product product = (Product) Client.receiveObject();
         ArrayList<Seller> sellers = new ArrayList<>();
         String path = "Resources/Accounts/Seller";
@@ -553,7 +553,7 @@ public class OffPageController {
         Client.sendObject(product);
     }
 
-    private static void isFeature() {
+    public static void isFeature() {
         Object[] receivedData = (Object[]) Client.receiveObject();
         Product i = (Product) receivedData[0];
         String j = (String) receivedData[1];
@@ -589,7 +589,7 @@ public class OffPageController {
         }
     }
 
-    private static void getOffProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
+    public static void getOffProducts() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
         ArrayList<Product> allProducts = new ArrayList<>();
         String path = "Resources/Products";
         File folder = new File(path);
@@ -612,7 +612,7 @@ public class OffPageController {
         Client.sendObject(allProducts);
     }
 
-    private static ArrayList<Product> getOffProductsLocal() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
+    public static ArrayList<Product> getOffProductsLocal() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
         ArrayList<Product> allProducts = new ArrayList<>();
         String path = "Resources/Products";
         File folder = new File(path);

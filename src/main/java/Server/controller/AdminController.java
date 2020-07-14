@@ -1026,13 +1026,14 @@ public class AdminController {
         }
     }
 
-    public static boolean checkIfRequestExist(int requestId) {
+    public static void checkIfRequestExist() {
+        int requestId = Integer.parseInt(Client.receiveMessage());
         String path = "Resources/Requests/" + requestId + ".json";
         File file = new File(path);
         if (!file.exists()) {
-            return false;
+            Client.sendObject(false);
         } else {
-            return true;
+            Client.sendObject(true);
         }
     }
 
