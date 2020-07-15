@@ -80,7 +80,7 @@ public class AllProductsPanelController {
     public static ArrayList<String> viewCategories() {
         ArrayList<String> categoriesName = new ArrayList();
 
-        String func = "View Categories";
+        String func = "View Categories APC";
         Client.sendMessage(func);
 
         categoriesName = (ArrayList<String>) Client.receiveObject();
@@ -106,7 +106,7 @@ public class AllProductsPanelController {
     public static ArrayList<String> showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
         ArrayList<String> allAvailableFilters = new ArrayList();
 
-        String func = "Show Available Filters";
+        String func = "Show Available Filters APC";
         Client.sendMessage(func);
 
         Object response = Client.receiveObject();
@@ -294,7 +294,7 @@ public class AllProductsPanelController {
 
     private static boolean getProductRemoved(Product product, String feature) {
 
-        String func = "Get Product Removed";
+        String func = "Get Product Removed APC";
         Client.sendMessage(func);
 
         Object[] toSend = new Object[2];
@@ -536,7 +536,7 @@ public class AllProductsPanelController {
     public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
         Product product = null;
 
-        String func = "Go To Product Page";
+        String func = "Go To Product Page APC";
         Client.sendMessage(func);
 
         Client.sendMessage(String.valueOf(productId));

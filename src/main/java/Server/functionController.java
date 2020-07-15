@@ -6,7 +6,7 @@ import model.Admin;
 
 public class functionController {
 
-    public static void handleFunction (String command) throws ExceptionsLibrary.NoAccountException {
+    public static void handleFunction (String command) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException, ExceptionsLibrary.NoRequestException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NotEnoughNumberAvailableException, ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException, ExceptionsLibrary.UsedAllValidTimesException, controller.ExceptionsLibrary.CreditNotSufficientException, controller.ExceptionsLibrary.NoProductException, controller.ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoLogException, ExceptionsLibrary.NoOffException, ExceptionsLibrary.SelectASeller, ExceptionsLibrary.CategoriesNotMatch, ExceptionsLibrary.CannotChangeThisFeature {
 
         switch (command) {
             case "show Admin Info" : {
@@ -85,23 +85,19 @@ public class functionController {
                 AdminController.checkIfRequestExist();
                 break;
             }
-            case "Get All Products" : {
+            case "Get All Products Admin" : {
                 AdminController.getAllProducts();
                 break;
             }
-            case "" : {
-                AllProductsPanelController.();
-                break;
-            }
-            case "View Categories" : {
+            case "View Categories APC" : {
                 AllProductsPanelController.viewCategories();
                 break;
             }
-            case "Show Available Filters" : {
+            case "Show Available Filters APC" : {
                 AllProductsPanelController.showAvailableFilters();
                 break;
             }
-            case "Get Product Removed" : {
+            case "Get Product Removed APC" : {
                 AllProductsPanelController.getProductRemoved();
                 break;
             }
@@ -113,7 +109,7 @@ public class functionController {
                 AllProductsPanelController.getAllProducts();
                 break;
             }
-            case "Go To Product Page" : {
+            case "Go To Product Page APC" : {
                 AllProductsPanelController.goToProductPage();
                 break;
             }

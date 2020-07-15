@@ -1174,7 +1174,7 @@ public class AdminController {
     public static ArrayList<Product> getAllProducts() throws ExceptionsLibrary.NoProductException {
         ArrayList<Product> allProducts = new ArrayList<>();
 
-        String func = "Get All Products";
+        String func = "Get All Products Admin";
         Client.sendMessage(func);
 
         Object response = Client.receiveObject();
