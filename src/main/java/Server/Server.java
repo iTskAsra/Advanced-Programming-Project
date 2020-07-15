@@ -6,25 +6,32 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Server {
 
+
+public class Server {
+    
     public static ArrayList<String> listOfTokens = new ArrayList<>();
 
-    static final int PORT = 8080;
+    static final int DNS_PORT = 8080;
+    private static ServerSocket server;
 
-
-    public static void main(String args[]) {
-        ServerSocket serverSocket = null;
-        Socket socket = null;
-
+    static {
         try {
-            serverSocket = new ServerSocket(PORT);
-            socket = serverSocket.accept();
+            server = new ServerSocket(DNS_PORT);
         } catch (IOException e) {
             e.printStackTrace();
-
         }
-        new ClientHandler(socket).start();
+    }
+
+
+
+    public static void main(String args[]) throws IOException {
+
+
+
+        while (true){
+            Socket socket = server.accept();
+        }
 
     }
 }

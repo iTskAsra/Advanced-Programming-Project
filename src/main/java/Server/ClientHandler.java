@@ -18,7 +18,13 @@ public class ClientHandler extends Thread {
         this.socket = clientSocket;
     }
 
+
+
     public void run() {
+
+        int freePort  = findFreePort();
+
+
 
         try {
             os = new ObjectOutputStream(socket.getOutputStream());
@@ -39,7 +45,6 @@ public class ClientHandler extends Thread {
         }
         String line;
         String generatedToken = generateToken();
-        System.out.println("kasra");
         try {
             out.writeUTF(generatedToken);
             System.out.println(generatedToken);
@@ -116,6 +121,21 @@ public class ClientHandler extends Thread {
             builder.append(ALPHA_NUMERIC_STRING.charAt(character));
         }
         return builder.toString();
+    }
+
+
+    private int findFreePort() {
+        ServerSocket tmp;
+        int freePort = -1;
+        for (int i = 1; i < 9999; ++i) {
+            try {
+                tmp = new ServerSocket(i);
+                freePort = i;
+                tmp.close();
+                break;
+            } catch (IOException e) { /* This port is inuse */}
+        }
+        return freePort;
     }
 }
 
