@@ -19,19 +19,12 @@ public class Server {
 
         try {
             serverSocket = new ServerSocket(PORT);
+            socket = serverSocket.accept();
         } catch (IOException e) {
             e.printStackTrace();
 
         }
-        while (true) {
-            try {
-                socket = serverSocket.accept();
-            } catch (IOException e) {
-                System.out.println("I/O error: " + e);
-            }
-            // new thread for a client
-            new ClientHandler(socket).start();
-        }
+        new ClientHandler(socket).start();
 
     }
 }

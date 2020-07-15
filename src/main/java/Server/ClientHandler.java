@@ -39,6 +39,7 @@ public class ClientHandler extends Thread {
         }
         String line;
         String generatedToken = generateToken();
+        System.out.println("kasra");
         try {
             out.writeUTF(generatedToken);
             System.out.println(generatedToken);
