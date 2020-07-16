@@ -9,29 +9,30 @@ import java.util.HashMap;
 
 
 public class Server {
-    
-    public static ArrayList<String> listOfTokens = new ArrayList<>();
-
-    static final int DNS_PORT = 8080;
-    private static ServerSocket server;
-
-    static {
-        try {
-            server = new ServerSocket(DNS_PORT);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
     public static void main(String args[]) throws IOException {
 
-
-
-        while (true){
-            Socket socket = server.accept();
+        ArrayList<String> listOfTokens = new ArrayList<>();
+        ServerSocket server = null;
+        Socket socket = null;
+        try {
+            server = new ServerSocket(4445);
+            System.out.println("Socket Created");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        while (true) {
+            try {
+                socket = server.accept();
+                System.out.println("connection Established");
+                ClientHandler ch = new ClientHandler(socket);
+                System.out.println("Starting Thread:");
+                ch.start();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

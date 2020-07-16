@@ -1,4 +1,6 @@
 package Server;
+import Server.controller.ExceptionsLibrary;
+
 import java.io.*;
 import java.lang.Thread;
 import java.net.ServerSocket;
@@ -7,8 +9,8 @@ import java.net.Socket;
 public class ClientHandler extends Thread {
     protected Socket socket;
     private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    public static ObjectOutputStream os;
-    public static ObjectInputStream is;
+    ObjectOutputStream os;
+    ObjectInputStream is;
     InputStream inp = null;
     DataInputStream brinp = null;
     DataOutputStream out = null;
@@ -21,22 +23,22 @@ public class ClientHandler extends Thread {
 
 
     public void run() {
-
-        int freePort  = findFreePort();
-
-
-
+        System.out.println("Running Client Thread!");
         try {
             os = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("OS initialized");
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
+            System.out.println("Initializing IS");
             is = new ObjectInputStream(socket.getInputStream());
+            System.out.println("IS initialized");
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
+            System.out.println("Getting Input");
             inp = socket.getInputStream();
             brinp = new DataInputStream(new BufferedInputStream(inp));
             out = new DataOutputStream(socket.getOutputStream());
@@ -45,6 +47,7 @@ public class ClientHandler extends Thread {
         }
         String line;
         String generatedToken = generateToken();
+        System.out.println("Token Generated!");
         try {
             out.writeUTF(generatedToken);
             System.out.println(generatedToken);
@@ -54,10 +57,56 @@ public class ClientHandler extends Thread {
         while (true) {
             try {
                 line = brinp.readUTF();
-                handleClientRequest(line);
+                functionController.handleFunction(line);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
+            } catch (ExceptionsLibrary.ChangeUsernameException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NotLoggedInException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NoLogException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.UsernameAlreadyExists usernameAlreadyExists) {
+                usernameAlreadyExists.printStackTrace();
+            } catch (ExceptionsLibrary.NoRequestException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NotEnoughNumberAvailableException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
+                noFeatureWithThisName.printStackTrace();
+            } catch (controller.ExceptionsLibrary.CreditNotSufficientException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.SaleNotStartedYetException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.SelectASeller selectASeller) {
+                selectASeller.printStackTrace();
+            } catch (ExceptionsLibrary.CategoriesNotMatch categoriesNotMatch) {
+                categoriesNotMatch.printStackTrace();
+            } catch (ExceptionsLibrary.NoCategoryException e) {
+                e.printStackTrace();
+            } catch (controller.ExceptionsLibrary.NoProductException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NoOffException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.CategoryExistsWithThisName categoryExistsWithThisName) {
+                categoryExistsWithThisName.printStackTrace();
+            } catch (controller.ExceptionsLibrary.NoAccountException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NoAccountException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.CannotChangeThisFeature cannotChangeThisFeature) {
+                cannotChangeThisFeature.printStackTrace();
+            } catch (ExceptionsLibrary.NoProductException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.UsedAllValidTimesException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NoSaleException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
+                noFilterWithThisName.printStackTrace();
+            } catch (ExceptionsLibrary.SaleExpiredException e) {
+                e.printStackTrace();
             }
         }
     }

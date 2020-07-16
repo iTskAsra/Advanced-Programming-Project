@@ -17,13 +17,16 @@ public class Client {
 
 
     public static void run() throws IOException {
-        clientSocket = new Socket("localhost", 8080);
+        System.out.println("Running Client!");
+        clientSocket = new Socket("localhost", 4445);
         dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-        token = dataInputStream.readUTF();
         dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
         dataOutputStream = new DataOutputStream(new DataOutputStream(clientSocket.getOutputStream()));
         os = new ObjectOutputStream(clientSocket.getOutputStream());
         is = new ObjectInputStream(clientSocket.getInputStream());
+        token = dataInputStream.readUTF();
+        System.out.println("Streams Initialized and Assigned!");
+        System.out.println(token);
     }
 
     public static void sendMessage(String string){

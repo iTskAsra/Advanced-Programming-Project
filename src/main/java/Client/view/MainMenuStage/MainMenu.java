@@ -24,14 +24,13 @@ public class MainMenu extends Application {
     public MainMenu() throws IOException {
     }
 
-    public static void main(String[] args) {launch(args);
+    public static void main(String[] args) throws IOException {
+        Client.run();
+        launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
-        Client.run();
-
         GetDataFromDatabase.setResources();
         try {
             SetPeriodicSales.setPeriodicSales();
