@@ -1,6 +1,8 @@
 package Client.model;
 
 
+import model.Wallet;
+
 import java.util.ArrayList;
 
 public class Seller extends Account {
@@ -17,6 +19,7 @@ public class Seller extends Account {
         this.sellerLogs = new ArrayList<>();
         this.sellerOffs = new ArrayList<>();
     }
+
 
     public String getCompanyName() {
         return companyName;

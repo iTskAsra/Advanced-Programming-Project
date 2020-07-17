@@ -1,14 +1,23 @@
 package model;
 
 
+
+import Server.model.Account;
+import Server.model.Off;
+import Server.model.Product;
+import Server.model.Sale;
+import Server.model.SellLog;
+
+
 import java.util.ArrayList;
 
 public class Seller extends Account {
-    public static ArrayList<Seller> allSellers;
+    public static ArrayList<Server.model.Seller> allSellers;
     private String companyName;
     private ArrayList<Product> sellerProducts;
     private ArrayList<SellLog> sellerLogs;
     private ArrayList<Off> sellerOffs;
+    private Wallet wallet;
 
     public Seller(String username, String password, String role, String firstName, String lastName, String email, String phoneNumber, ArrayList<Sale> saleCodes, double credit, String companyName, ArrayList<Product> sellerProducts, ArrayList<SellLog> sellerLogs, ArrayList<Off> sellerOffs) {
         super(username, password, role, firstName, lastName, email, phoneNumber, saleCodes, credit);
@@ -16,6 +25,11 @@ public class Seller extends Account {
         this.sellerProducts = new ArrayList<>();
         this.sellerLogs = new ArrayList<>();
         this.sellerOffs = new ArrayList<>();
+        this.wallet = new Wallet(this, credit);
+    }
+
+    public Wallet getWallet() {
+        return wallet;
     }
 
     public String getCompanyName() {
