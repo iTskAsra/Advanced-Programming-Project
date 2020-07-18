@@ -1,8 +1,7 @@
 package Client.ClientView.MainMenuStage;
 
-import controller.AdminController;
-import controller.CustomerController;
-import controller.SellerController;
+
+import Client.ClientController.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,7 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import view.Base.Main;
-import view.HelpWindow.Help;
+import Client.ClientView.HelpWindow.*;
 
 import java.io.File;
 import java.io.IOException;
