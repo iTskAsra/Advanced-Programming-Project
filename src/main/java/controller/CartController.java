@@ -219,7 +219,7 @@ public class CartController {
                 productDetails[3] = String.valueOf(getCartProducts().get(i));
                 cartProducts.add(productDetails);
             }
-            BuyLog buyLog = new BuyLog(dateNow, getTotalPriceWithSale(), getSaleDiscount(), cartProducts, "Delivered", getReceiverInfo());
+            BuyLog buyLog = new BuyLog(dateNow, getTotalPriceWithSale(), getSaleDiscount(), cartProducts, DeliveryCondition.NOT_SENT, getReceiverInfo());
             getCartCustomer().getCustomerLog().add(buyLog);
             getCartCustomer().setCredit(getCartCustomer().getCredit() - getTotalPriceWithSale());
             SetDataToDatabase.setAccount(getCartCustomer());
