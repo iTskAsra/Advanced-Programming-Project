@@ -1,5 +1,7 @@
 package Server;
 
+import Bank.BankClient;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,11 +12,17 @@ import java.util.HashMap;
 
 public class Server {
 
+    public static BankClient.ClientImplementation clientImplementation;
+
     public static void main(String args[]) throws IOException {
 
         ArrayList<String> listOfTokens = new ArrayList<>();
         ServerSocket server = null;
         Socket socket = null;
+
+        BankClient bankClient = new BankClient();
+        clientImplementation = new BankClient.ClientImplementation();
+
         try {
             server = new ServerSocket(4445);
             System.out.println("Socket Created");
@@ -34,5 +42,13 @@ public class Server {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static BankClient.ClientImplementation getClientImplementation() {
+        return clientImplementation;
+    }
+
+    public static void setClientImplementation(BankClient.ClientImplementation clientImplementation) {
+        Server.clientImplementation = clientImplementation;
     }
 }

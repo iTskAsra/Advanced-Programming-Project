@@ -1,5 +1,5 @@
 package Server;
-import Server.controller.ExceptionsLibrary;
+import Server.ServerController.ExceptionsLibrary;
 
 import java.io.*;
 import java.lang.Thread;
@@ -57,7 +57,7 @@ public class ClientHandler extends Thread {
         while (true) {
             try {
                 line = brinp.readUTF();
-                functionController.handleFunction(line);
+                FunctionController.handleFunction(line);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;

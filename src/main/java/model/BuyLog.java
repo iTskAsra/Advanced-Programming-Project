@@ -11,9 +11,9 @@ public class BuyLog {
     private double discountApplied;
     private HashMap<String, String> receiverInfo;
     private ArrayList<String[]> logProducts;
-    private String deliveryCondition;
+    private DeliveryCondition deliveryCondition;
 
-    public BuyLog(String logDate, double value, double discountApplied, ArrayList<String[]> logProducts, String deliveryCondition, HashMap<String, String> receiverInfo) {
+    public BuyLog(String logDate, double value, double discountApplied, ArrayList<String[]> logProducts, DeliveryCondition deliveryCondition, HashMap<String, String> receiverInfo) {
         Random random = new Random();
         this.logId = random.nextInt(1000000);
         this.logDate = logDate;
@@ -72,11 +72,11 @@ public class BuyLog {
         this.logProducts = logProducts;
     }
 
-    public String getDeliveryCondition() {
+    public DeliveryCondition getDeliveryCondition() {
         return deliveryCondition;
     }
 
-    public void setDeliveryCondition(String deliveryCondition) {
+    public void setDeliveryCondition(DeliveryCondition deliveryCondition) {
         this.deliveryCondition = deliveryCondition;
     }
 }

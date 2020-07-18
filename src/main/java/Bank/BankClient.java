@@ -1,10 +1,7 @@
 package Bank;
 
-import controller.ExceptionsLibrary;
-
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class BankClient {
 
@@ -12,16 +9,19 @@ public class BankClient {
         new ClientImplementation().run();
     }
 
-    static class ClientImplementation {
+    public static class ClientImplementation {
         public final int PORT = 8090;
         public final String IP = "127.0.0.1";
+        public final int SHOP_SERVER_PORT = 9000;
 
         private DataOutputStream outputStream;
         private DataInputStream inputStream;
+        private DataOutputStream shopOutputStream;
+        private DataInputStream shopInputStream;
 
         private String token;
 
-        public void ConnectToBankServer() throws IOException {
+        public void connectToBankServer() throws IOException {
             try {
                 Socket socket = new Socket(IP, PORT);
                 outputStream = new DataOutputStream(socket.getOutputStream());
@@ -31,11 +31,12 @@ public class BankClient {
             }
         }
 
-        public void StartListeningOnInput() {
+
+        public void startListeningOnInput() {
             new Thread(() -> {
                 while (true) {
                     try {
-                        System.out.println(inputStream.readUTF());
+                        shopOutputStream.writeUTF(inputStream.readUTF());
                     } catch (IOException e) {
                         System.out.println("disconnected");
                         System.exit(0);
@@ -44,7 +45,7 @@ public class BankClient {
             }).start();
         }
 
-        public void SendMessage(String msg) throws IOException {
+        public void sendMessage(String msg) throws IOException {
             try {
                 outputStream.writeUTF(msg);
             } catch (IOException e) {
@@ -54,11 +55,11 @@ public class BankClient {
 
         public void run() {
             try {
-                ConnectToBankServer();
-                StartListeningOnInput();
-                Scanner scanner = new Scanner(System.in);
+                connectToBankServer();
+                startListeningOnInput();
                 while (true) {
-                    SendMessage(scanner.nextLine());
+                    String messageToSend = shopInputStream.readUTF();
+                    sendMessage(messageToSend);
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());

@@ -2,17 +2,17 @@ package model;
 
 
 
-import Server.model.Account;
-import Server.model.Off;
-import Server.model.Product;
-import Server.model.Sale;
-import Server.model.SellLog;
+import model.Account;
+import model.Off;
+import model.Product;
+import model.Sale;
+import model.SellLog;
 
 
 import java.util.ArrayList;
 
 public class Seller extends Account {
-    public static ArrayList<Server.model.Seller> allSellers;
+    public static ArrayList<model.Seller> allSellers;
     private String companyName;
     private ArrayList<Product> sellerProducts;
     private ArrayList<SellLog> sellerLogs;

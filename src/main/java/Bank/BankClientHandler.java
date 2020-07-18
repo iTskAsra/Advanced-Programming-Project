@@ -483,6 +483,21 @@ public class BankClientHandler extends Thread {
         if (!checkUsername(splitInputs[1])) {
             BankAccount bankAccount = getBankAccountWithUsername(splitInputs[1]);
             if (splitInputs[2].equals(bankAccount.getPassword())) {
+                if (tokens.containsValue(splitInputs[1])){
+                    try {
+                        String token = null;
+                        for (String i : tokens.keySet()){
+                            if (tokens.get(i).equals(splitInputs[1])){
+                                token = i;
+                            }
+                        }
+                        dataOutputStream.writeUTF(token);
+                        dataOutputStream.flush();
+                        return;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 String token = generateToken();
                 tokens.put(token, bankAccount.getUsername());
                 class TokenTimer extends TimerTask {
