@@ -1,7 +1,6 @@
 package Server.ServerController;
 
 import Client.Client;
-import controller.SetDataToDatabase;
 import model.*;
 
 import java.text.DateFormat;
@@ -120,7 +119,7 @@ public class CartController {
         int productId = Integer.parseInt(Client.receiveMessage());
         Product product = null;
         try {
-            product = GetDataFromDatabase.getProduct(productId);
+            product = GetDataFromDatabaseServerSide.getProduct(productId);
             Client.sendObject(product);        }
         catch (ExceptionsLibrary.NoProductException e) {
             Client.sendObject(new ExceptionsLibrary.NoProductException());
@@ -170,7 +169,7 @@ public class CartController {
             setSaleDiscount(amount);
             setTotalPriceWithSale();
         } else {
-            Sale sale = GetDataFromDatabase.getSale(saleCode);
+            Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             try {
                 Date startDate = simpleDateFormat.parse(sale.getStartDate());
@@ -240,7 +239,7 @@ public class CartController {
         Client.sendMessage(String.valueOf(amount));
     }
 
-    public static void purchase() throws controller.ExceptionsLibrary.NoProductException, controller.ExceptionsLibrary.NoAccountException, controller.ExceptionsLibrary.CreditNotSufficientException {
+    public static void purchase() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.CreditNotSufficientException {
         if (getTotalPriceWithSale() <= getCartCustomer().getCredit()) {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -281,7 +280,7 @@ public class CartController {
                     SetDataToDatabase.setProduct(j);
                     SetDataToDatabase.updateSellerOfProduct(j, 0);
                 }
-                Seller newSeller = (Seller) controller.GetDataFromDatabase.getAccount(k);
+                Seller newSeller = (Seller) GetDataFromDatabaseServerSide.getAccount(k);
                 SellLog sellLog = new SellLog(dateNow, amountOfMoneyFromSell(productSellers.get(k)), getOffFromHashMap(productSellers.get(k)), productSeller, getCartCustomer().getUsername(), "Sent");
                 newSeller.setCredit(newSeller.getCredit() + amountOfMoneyFromSell(productSellers.get(newSeller.getUsername())));
                 newSeller.getSellerLogs().add(sellLog);
@@ -290,7 +289,7 @@ public class CartController {
             }
             cartProducts.clear();
         } else {
-            Client.sendObject(new controller.ExceptionsLibrary.CreditNotSufficientException());
+            Client.sendObject(new ExceptionsLibrary.CreditNotSufficientException());
         }
 
         Client.sendMessage("Success!");

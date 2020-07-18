@@ -2,7 +2,6 @@ package Client.ClientController;
 
 import Client.Client;
 import Client.ClientView.Cart.Cart;
-import controller.ExceptionsLibrary;
 import model.*;
 
 import java.util.HashMap;

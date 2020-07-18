@@ -1,8 +1,9 @@
 package Client.ClientView.Cart;
 
-import controller.CartController;
-import controller.CustomerController;
-import controller.ExceptionsLibrary;
+import Client.ClientController.*;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.Cart.ProductElement.ProductElement;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,9 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Product;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.Cart.ProductElement.ProductElement;
+
 
 import java.io.File;
 import java.io.IOException;

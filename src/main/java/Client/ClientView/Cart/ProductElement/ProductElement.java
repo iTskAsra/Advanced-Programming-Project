@@ -1,7 +1,6 @@
 package Client.ClientView.Cart.ProductElement;
 
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
+import Client.ClientController.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

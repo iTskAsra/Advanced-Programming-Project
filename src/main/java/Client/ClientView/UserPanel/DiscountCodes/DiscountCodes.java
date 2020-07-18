@@ -1,6 +1,6 @@
 package Client.ClientView.UserPanel.DiscountCodes;
 
-import controller.CustomerController;
+import Client.ClientController.CustomerController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

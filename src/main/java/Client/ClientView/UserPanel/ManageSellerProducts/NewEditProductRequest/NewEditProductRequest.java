@@ -1,8 +1,11 @@
 package Client.ClientView.UserPanel.ManageSellerProducts.NewEditProductRequest;
 
-import controller.AdminController;
-import controller.ExceptionsLibrary;
-import controller.SellerController;
+import Client.ClientController.AdminController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.SellerController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.MainMenuStage.CheckFields;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -14,10 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.*;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.Base.Main;
-import view.MainMenuStage.CheckFields;
 
 import java.net.URL;
 import java.util.ArrayList;

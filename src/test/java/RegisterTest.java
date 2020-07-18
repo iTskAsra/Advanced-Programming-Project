@@ -1,16 +1,13 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controller.GetDataFromDatabase;
 import controller.RegisterAndLogin;
 import model.Account;
 import model.Customer;
-import model.Seller;
 import org.junit.Assert;
 import org.junit.Test;
 import controller.ExceptionsLibrary;
 
 import java.io.File;
-import java.util.HashMap;
 
 
 public class RegisterTest {

@@ -8,7 +8,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.SellLog;
-import view.UserPanel.SellLog.SellLogDetails.SellLogDetails;
 
 import java.io.File;
 import java.io.IOException;

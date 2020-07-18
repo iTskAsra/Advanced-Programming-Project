@@ -1,5 +1,6 @@
 package Client.ClientView.AlertBox.MessageBox;
 
+import Client.Client;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -7,8 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import view.AlertBox.MessageBox.AlertBox;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,7 +15,7 @@ import java.net.URL;
 
 public class AlertBoxStart {
     public static void messageRun(String title,String message) {
-        view.AlertBox.MessageBox.AlertBox.setAlertTitle(title);
+        Client.ClientView.AlertBox.MessageBox.AlertBox.setAlertTitle(title);
         AlertBox.setMessage(message);
         Stage stage = new Stage();
         File file = new File("src/main/java/view/AlertBox/MessageBox/AlertBox.fxml");

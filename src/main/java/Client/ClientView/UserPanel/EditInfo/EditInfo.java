@@ -1,9 +1,11 @@
 package Client.ClientView.UserPanel.EditInfo;
 
-import controller.AdminController;
-import controller.CustomerController;
-import controller.ExceptionsLibrary;
-import controller.SellerController;
+import Client.ClientController.AdminController;
+import Client.ClientController.CustomerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.SellerController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,9 +13,6 @@ import javafx.stage.Stage;
 import model.Admin;
 import model.Customer;
 import model.Seller;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.Base.Main;
 
 import java.net.URL;
 import java.util.HashMap;

@@ -1,7 +1,11 @@
 package Client.ClientView.UserPanel.ManageSellerProducts;
 
-import controller.ExceptionsLibrary;
-import controller.SellerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.SellerController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.UserPanel.ManageSellerProducts.NewEditProductRequest.NewEditProductRequest;
+import Client.ClientView.UserPanel.ManageSellerProducts.ProductBuyers.ProductBuyers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,10 +18,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Product;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.UserPanel.ManageSellerProducts.NewEditProductRequest.NewEditProductRequest;
-import view.UserPanel.ManageSellerProducts.ProductBuyers.ProductBuyers;
 
 import java.io.File;
 import java.io.IOException;

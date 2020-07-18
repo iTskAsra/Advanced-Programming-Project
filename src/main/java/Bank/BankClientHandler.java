@@ -2,8 +2,6 @@ package Bank;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controller.GetDataFromDatabase;
-import model.Account;
 
 import java.io.*;
 import java.net.Socket;

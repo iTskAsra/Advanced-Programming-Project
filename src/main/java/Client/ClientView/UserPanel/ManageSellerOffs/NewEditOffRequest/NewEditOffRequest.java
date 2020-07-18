@@ -1,15 +1,15 @@
 package Client.ClientView.UserPanel.ManageSellerOffs.NewEditOffRequest;
 
-import controller.ExceptionsLibrary;
-import controller.SellerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.SellerController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.MainMenuStage.CheckFields;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.*;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.MainMenuStage.CheckFields;
 
 import java.net.URL;
 import java.time.LocalDate;

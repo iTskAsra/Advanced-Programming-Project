@@ -1,9 +1,14 @@
 package Client.ClientView.Purchase;
 
-import controller.CartController;
-import controller.CustomerController;
-import controller.ExceptionsLibrary;
-import controller.SetPeriodicSales;
+
+import Client.ClientController.CartController;
+import Client.ClientController.CustomerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.MainMenuStage.CheckFields;
+import Client.ClientView.UserPanel.BuyLog.BuyLogDetails.BuyLogDetailsStart;
+//import Server.ServerController.SetPeriodicSales;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,10 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.BuyLog;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.MainMenuStage.CheckFields;
-import view.UserPanel.BuyLog.BuyLogDetails.BuyLogDetailsStart;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -196,7 +198,12 @@ public class Purchase implements Initializable {
     }
 
     private BuyLog getLastLog() {
-        ArrayList<BuyLog> buyLogs = CustomerController.showCustomerLogs();
+        ArrayList<BuyLog> buyLogs = null;
+        try {
+            buyLogs = CustomerController.showCustomerLogs();
+        } catch (ExceptionsLibrary.NoAccountException e) {
+            e.printStackTrace();
+        }
         return buyLogs.get(buyLogs.size()-1);
     }
 }

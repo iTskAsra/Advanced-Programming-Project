@@ -1,6 +1,7 @@
 package Client.ClientView.UserPanel.SellLog;
 
-import controller.SellerController;
+import Client.ClientController.SellerController;
+import Client.ClientView.UserPanel.SellLog.SellLogDetails.SellLogDetailsStart;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,7 +11,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.SellLog;
-import view.UserPanel.SellLog.SellLogDetails.SellLogDetailsStart;
 
 import java.io.IOException;
 import java.net.URL;

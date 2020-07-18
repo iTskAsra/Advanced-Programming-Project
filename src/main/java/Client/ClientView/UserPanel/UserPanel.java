@@ -1,8 +1,9 @@
 package Client.ClientView.UserPanel;
 
-import controller.AdminController;
-import controller.CustomerController;
-import controller.SellerController;
+import Client.ClientController.AdminController;
+import Client.ClientController.CustomerController;
+import Client.ClientController.SellerController;
+import Client.ClientView.HelpWindow.Help;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,9 +17,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Customer;
 import model.Seller;
-import view.Base.Main;
-import view.HelpWindow.Help;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

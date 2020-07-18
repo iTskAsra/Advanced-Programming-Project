@@ -75,8 +75,6 @@ public class ClientHandler extends Thread {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.NoFeatureWithThisName noFeatureWithThisName) {
                 noFeatureWithThisName.printStackTrace();
-            } catch (controller.ExceptionsLibrary.CreditNotSufficientException e) {
-                e.printStackTrace();
             } catch (ExceptionsLibrary.SaleNotStartedYetException e) {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.SelectASeller selectASeller) {
@@ -85,20 +83,16 @@ public class ClientHandler extends Thread {
                 categoriesNotMatch.printStackTrace();
             } catch (ExceptionsLibrary.NoCategoryException e) {
                 e.printStackTrace();
-            } catch (controller.ExceptionsLibrary.NoProductException e) {
+            } catch (ExceptionsLibrary.NoProductException e) {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.NoOffException e) {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.CategoryExistsWithThisName categoryExistsWithThisName) {
                 categoryExistsWithThisName.printStackTrace();
-            } catch (controller.ExceptionsLibrary.NoAccountException e) {
-                e.printStackTrace();
             } catch (ExceptionsLibrary.NoAccountException e) {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.CannotChangeThisFeature cannotChangeThisFeature) {
                 cannotChangeThisFeature.printStackTrace();
-            } catch (ExceptionsLibrary.NoProductException e) {
-                e.printStackTrace();
             } catch (ExceptionsLibrary.UsedAllValidTimesException e) {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.NoSaleException e) {
@@ -106,6 +100,8 @@ public class ClientHandler extends Thread {
             } catch (ExceptionsLibrary.NoFilterWithThisName noFilterWithThisName) {
                 noFilterWithThisName.printStackTrace();
             } catch (ExceptionsLibrary.SaleExpiredException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.CreditNotSufficientException e) {
                 e.printStackTrace();
             }
         }

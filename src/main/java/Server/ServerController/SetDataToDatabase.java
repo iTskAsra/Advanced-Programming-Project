@@ -108,7 +108,7 @@ public class SetDataToDatabase {
         if (code == 0) {
             for (File i : sellers.listFiles(fileFilter)) {
                 String sellerName = i.getName().replace(".json", "");
-                Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerName);
+                Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(sellerName);
                 Iterator iterator = seller.getSellerProducts().iterator();
                 boolean isAdd = false;
                 while (iterator.hasNext()) {
@@ -126,7 +126,7 @@ public class SetDataToDatabase {
         } else if (code == 1) {
             for (File i : sellers.listFiles(fileFilter)) {
                 String sellerName = i.getName().replace(".json", "");
-                Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerName);
+                Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(sellerName);
                 Iterator iterator = seller.getSellerProducts().iterator();
                 while (iterator.hasNext()) {
                     Product tempProduct = (Product) iterator.next();
@@ -138,7 +138,7 @@ public class SetDataToDatabase {
                     iterator = j.getOffProducts().iterator();
                     while (iterator.hasNext()) {
                         String tempProductID = (String) iterator.next();
-                        Product tempProduct = GetDataFromDatabase.getProduct(Integer.parseInt(tempProductID));
+                        Product tempProduct = GetDataFromDatabaseServerSide.getProduct(Integer.parseInt(tempProductID));
                         if (tempProduct.getProductId() == product.getProductId()) {
                             iterator.remove();
                         }
@@ -151,9 +151,9 @@ public class SetDataToDatabase {
     }
 
     public static void removeOff(int offId) throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
-        Off off = GetDataFromDatabase.getOff(offId);
+        Off off = GetDataFromDatabaseServerSide.getOff(offId);
         for (String i : off.getOffProducts()){
-            Product product = GetDataFromDatabase.getProduct(Integer.parseInt(i));
+            Product product = GetDataFromDatabaseServerSide.getProduct(Integer.parseInt(i));
             product.setPriceWithOff(product.getPrice());
             SetDataToDatabase.setProduct(product);
             SetDataToDatabase.updateSellerOfProduct(product,0);
@@ -171,7 +171,7 @@ public class SetDataToDatabase {
         };
         for (File i : sellerFolder.listFiles(fileFilter)){
             String sellerUsername = i.getName().replace(".json","");
-            Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerUsername);
+            Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(sellerUsername);
             Iterator iterator = seller.getSellerOffs().iterator();
             while (iterator.hasNext()){
                 Off tempOff = (Off) iterator.next();

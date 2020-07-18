@@ -1,6 +1,12 @@
 package Client.ClientView.ProductPage;
 
-import controller.*;
+import Client.ClientController.CustomerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.GetDataFromDatabase;
+import Client.ClientController.ProductPageController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.MainMenuStage.CheckFields;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,10 +23,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.*;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.Base.Main;
-import view.MainMenuStage.CheckFields;
 
 
 import java.io.File;
@@ -239,7 +241,7 @@ public class ProductPage implements Initializable {
             ProductPageController.selectSeller(GetDataFromDatabase.findSellersFromProductId(ProductPageController.getProduct().getProductId()).get(0).getUsername());
             ProductPageController.addToCart();
             AlertBoxStart.messageRun("Message","Added to cart!");
-        } catch (ExceptionsLibrary.SelectASeller | ExceptionsLibrary.NotEnoughNumberAvailableException | ExceptionsLibrary.NoAccountException e) {
+        } catch (ExceptionsLibrary.SelectASeller | ExceptionsLibrary.NotEnoughNumberAvailableException | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoAccountException e) {
             ErrorBoxStart.errorRun(e);
         }
     }

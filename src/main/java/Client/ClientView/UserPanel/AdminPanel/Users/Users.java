@@ -1,7 +1,10 @@
 package Client.ClientView.UserPanel.AdminPanel.Users;
 
-import controller.AdminController;
-import controller.ExceptionsLibrary;
+import Client.ClientController.AdminController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.RegisterAndLoginStage.Register.RegisterScene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,10 +17,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Account;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.RegisterAndLoginStage.Register.RegisterScene;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

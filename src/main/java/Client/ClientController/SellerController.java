@@ -1,7 +1,6 @@
 package Client.ClientController;
 
 import Client.Client;
-import controller.ExceptionsLibrary;
 import model.*;
 
 import java.util.ArrayList;

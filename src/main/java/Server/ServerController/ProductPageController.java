@@ -4,7 +4,7 @@ import Client.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
-import view.Base.Main;
+
 
 public class ProductPageController {
     private static Product product;
@@ -44,7 +44,7 @@ public class ProductPageController {
 
     public static void selectSeller() throws ExceptionsLibrary.NoAccountException {
         String sellerUsername = Client.receiveMessage();
-        Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerUsername);
+        Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(sellerUsername);
         product.setSeller(seller);
     }
 
@@ -56,7 +56,7 @@ public class ProductPageController {
         int productId = (int) Client.receiveObject();
         Product[] products = new Product[2];
         products[0] = getProduct();
-        Product product1 = GetDataFromDatabase.getProduct(productId);
+        Product product1 = GetDataFromDatabaseServerSide.getProduct(productId);
         products[1] = product1;
         if (!products[0].getCategory().getName().equals(products[1].getCategory().getName())){
             throw new ExceptionsLibrary.CategoriesNotMatch();

@@ -3,7 +3,6 @@ package Client.ClientController;
 import Client.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controller.ExceptionsLibrary;
 import model.*;
 
 import java.util.*;

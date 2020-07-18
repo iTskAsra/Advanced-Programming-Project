@@ -1,7 +1,10 @@
 package Client.ClientView.UserPanel.ManageSellerOffs;
 
-import controller.ExceptionsLibrary;
-import controller.SellerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.SellerController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.UserPanel.ManageSellerOffs.NewEditOffRequest.NewEditOffRequest;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,9 +19,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Off;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.UserPanel.ManageSellerOffs.NewEditOffRequest.NewEditOffRequest;
 
 import java.io.File;
 import java.io.IOException;

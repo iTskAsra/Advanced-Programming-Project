@@ -1,7 +1,10 @@
 package Client.ClientView.ProductPage.Compare;
 
-import controller.ExceptionsLibrary;
-import controller.ProductPageController;
+
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.ProductPageController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.MainMenuStage.CheckFields;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,8 +19,6 @@ import javafx.stage.Stage;
 import model.Feature;
 import model.Product;
 import model.Rate;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.MainMenuStage.CheckFields;
 
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -1,8 +1,11 @@
 package Client.ClientView.UserPanel.AdminPanel.Categories;
 
-import controller.AdminController;
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
+import Client.ClientController.AdminController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.GetDataFromDatabase;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.UserPanel.AdminPanel.Categories.NewEditCategories.NewEditCategories;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,9 +18,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Category;
 import model.Feature;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.UserPanel.AdminPanel.Categories.NewEditCategories.NewEditCategories;
 
 import java.io.File;
 import java.io.IOException;

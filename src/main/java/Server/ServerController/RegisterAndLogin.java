@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class RegisterAndLogin {
-    public static void register(String dataToRegister) throws ExceptionsLibrary.AdminExist, ExceptionsLibrary.UsernameAlreadyExists {
+    public static void register() throws ExceptionsLibrary.AdminExist, ExceptionsLibrary.UsernameAlreadyExists {
+
+        String dataToRegister = Client.receiveMessage();
+
         Gson gson = new GsonBuilder().serializeNulls().create();
         Account account = gson.fromJson(dataToRegister, Account.class);
         String username = account.getUsername();
@@ -22,11 +25,13 @@ public class RegisterAndLogin {
         String accountPath = "Resources/Accounts/" + role + "/" + username + ".json";
         File file = new File(accountPath);
         if (!checkUsername(username)) {
-            throw new ExceptionsLibrary.UsernameAlreadyExists();
+            Client.sendObject(new ExceptionsLibrary.UsernameAlreadyExists());
+            return;
         } else {
             if (role.equals("Admin")) {
                 if (new File("Resources/Accounts/Admin").listFiles().length != 0) {
-                    throw new ExceptionsLibrary.AdminExist();
+                    Client.sendObject(new ExceptionsLibrary.AdminExist());
+                    return;
                 } else {
                     String firstAdminPath = "Resources/Accounts/Admin" + account.getUsername() + ".json";
                     try {
@@ -66,6 +71,7 @@ public class RegisterAndLogin {
                 }
             }
         }
+        Client.sendObject("Done");
     }
 
     public static void registerAdmin() {
@@ -80,7 +86,6 @@ public class RegisterAndLogin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Client.sendMessage("Success!");
     }
 
     public static void registerAdmin(String data) {
@@ -96,37 +101,31 @@ public class RegisterAndLogin {
         }
     }
 
-    public static boolean checkUsername(String username) {
-        File folder1 = new File("Resources/Accounts/Customer/");
-        File folder2 = new File("Resources/Accounts/Admin/");
-        File folder3 = new File("Resources/Accounts/Seller/");
-        if (new File(folder1, username + ".json").exists()) {
-            return false;
-        } else if (new File(folder2, username + ".json").exists()) {
-            return false;
-        } else return !new File(folder3, username + ".json").exists();
-    }
-
     public static void login() throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException {
         HashMap<String, String> dataToLogin = (HashMap<String, String>) Client.receiveObject();
-        Account account = GetDataFromDatabase.getAccount(dataToLogin.get("username"));
+        Account account = GetDataFromDatabaseServerSide.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
                 if (account.getRole().equals("Customer")) {
                     CustomerController customerController = new CustomerController((Customer) account);
                     Client.sendMessage(account.getRole());
+                    return;
                 } else if (account.getRole().equals("Seller")) {
                     SellerController sellerController = new SellerController((Seller) account);
                     Client.sendMessage(account.getRole());
+                    return;
                 } else if (account.getRole().equals("Admin")) {
                     AdminController adminController = new AdminController((Admin) account);
                     Client.sendMessage(account.getRole());
+                    return;
                 }
             } else {
-                throw new ExceptionsLibrary.WrongPasswordException();
+                Client.sendObject(new ExceptionsLibrary.WrongPasswordException());
+                return;
             }
         } else {
-            throw new ExceptionsLibrary.WrongUsernameException();
+            Client.sendObject(new ExceptionsLibrary.WrongUsernameException());
+            return;
         }
         Client.sendObject(null);
     }
@@ -142,6 +141,18 @@ public class RegisterAndLogin {
         } else if (new File(folder2, username + ".json").exists()) {
             Client.sendObject(true);
         } else  Client.sendObject(!new File(folder3, username + ".json").exists());
+    }
+
+    public static boolean checkUsername(String username) {
+
+        File folder1 = new File("Resources/Accounts/Customer/");
+        File folder2 = new File("Resources/Accounts/Admin/");
+        File folder3 = new File("Resources/Accounts/Seller/");
+        if (new File(folder1, username + ".json").exists()) {
+            return false;
+        } else if (new File(folder2, username + ".json").exists()) {
+            return true;
+        } else  return !new File(folder3, username + ".json").exists();
     }
 }
 

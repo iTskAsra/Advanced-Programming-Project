@@ -109,7 +109,7 @@ public class OffPageController {
             String fileName = i.getName();
             String categoryName = fileName.replace(".json", "");
             allAvailableFilters.add(categoryName);
-            Category category = GetDataFromDatabase.getCategory(categoryName);
+            Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
         }
         setAvailableFilters(allAvailableFilters);
         Client.sendObject(allAvailableFilters);
@@ -197,7 +197,7 @@ public class OffPageController {
                     checkPreviousFilters(count);
                     break;
                 case "Seller":
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(splitFilters[1]);
+                    Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(splitFilters[1]);
                     for (Product j : seller.getSellerProducts()) {
                         if (!getResult().contains(j)) {
                             getResult().add(j);
@@ -235,7 +235,7 @@ public class OffPageController {
                     break;
                 case "Feature":
                     Category category = null;
-                    category = GetDataFromDatabase.getCategory(splitFilters[1]);
+                    category = GetDataFromDatabaseServerSide.getCategory(splitFilters[1]);
                     Feature feature = new Feature(splitFilters[2], splitFilters[3]);
                     Feature featureCategory = new Feature(splitFilters[2], null);
                     String featureToString = feature.toString();
@@ -394,7 +394,7 @@ public class OffPageController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Seller seller = (Seller) GetDataFromDatabase.getAccount(username);
+            Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(username);
             for (Product j : seller.getSellerProducts()) {
                 if (j.getProductId() == product.getProductId()) {
                     sellers.add(seller);
@@ -422,7 +422,7 @@ public class OffPageController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Seller seller = (Seller) GetDataFromDatabase.getAccount(username);
+            Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(username);
             for (Product j : seller.getSellerProducts()) {
                 if (j.getProductId() == product.getProductId()) {
                     sellers.add(seller);
@@ -546,7 +546,7 @@ public class OffPageController {
         int productId = Integer.parseInt(Client.receiveMessage());
         Product product = null;
         try {
-            product = GetDataFromDatabase.getProduct(productId);
+            product = GetDataFromDatabaseServerSide.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
             Client.sendObject(new ExceptionsLibrary.NoProductException());
         }
@@ -606,7 +606,7 @@ public class OffPageController {
             String fileName = i.getName();
             int productId = Integer.parseInt(fileName.replace(".json", ""));
             if (isInOff(productId)) {
-                allProducts.add(GetDataFromDatabase.getProduct(productId));
+                allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
             }
         }
         Client.sendObject(allProducts);
@@ -629,7 +629,7 @@ public class OffPageController {
             String fileName = i.getName();
             int productId = Integer.parseInt(fileName.replace(".json", ""));
             if (isInOff(productId)) {
-                allProducts.add(GetDataFromDatabase.getProduct(productId));
+                allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
             }
         }
         return allProducts;
@@ -652,7 +652,7 @@ public class OffPageController {
             int offId = Integer.parseInt(fileName.replace(".json", ""));
             Off off = null;
             try {
-                off = GetDataFromDatabase.getOff(offId);
+                off = GetDataFromDatabaseServerSide.getOff(offId);
             } catch (ExceptionsLibrary.NoOffException e) {
                 e.printStackTrace();
             }
@@ -684,7 +684,7 @@ public class OffPageController {
             int offId = Integer.parseInt(fileName.replace(".json", ""));
             Off off = null;
             try {
-                off = GetDataFromDatabase.getOff(offId);
+                off = GetDataFromDatabaseServerSide.getOff(offId);
             } catch (ExceptionsLibrary.NoOffException e) {
                 e.printStackTrace();
             }
@@ -714,7 +714,7 @@ public class OffPageController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             int offId = Integer.parseInt(fileName.replace(".json", ""));
-            Off off = GetDataFromDatabase.getOff(offId);
+            Off off = GetDataFromDatabaseServerSide.getOff(offId);
             for (String j : off.getOffProducts()){
                 if (j.equals(String.valueOf(productId))){
                     Client.sendObject(off);

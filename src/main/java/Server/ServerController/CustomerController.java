@@ -28,7 +28,7 @@ public class CustomerController {
         if (getCustomer() == null) {
             Client.sendObject(new ExceptionsLibrary.NoAccountException());
         }
-        Customer customer = (Customer) GetDataFromDatabase.getAccount(Client.receiveMessage());
+        Customer customer = (Customer) GetDataFromDatabaseServerSide.getAccount(Client.receiveMessage());
         setCustomer(customer);
         String data = gson.toJson(customer);
         Client.sendMessage(data);
@@ -36,7 +36,7 @@ public class CustomerController {
 
     public static void editCustomerInfo() throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException {
         HashMap<String, String> dataToEdit = (HashMap<String, String>) Client.receiveObject();
-        Customer customer = (Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername());
+        Customer customer = (Customer) GetDataFromDatabaseServerSide.getAccount(getCustomer().getUsername());
         for (String i : dataToEdit.keySet()) {
             try {
                 if (i.equals("username")) {
@@ -65,7 +65,7 @@ public class CustomerController {
 
     public static void showCustomerLogs() {
         try {
-            setCustomer((Customer) GetDataFromDatabase.getAccount(getCustomer().getUsername()));
+            setCustomer((Customer) GetDataFromDatabaseServerSide.getAccount(getCustomer().getUsername()));
         } catch (ExceptionsLibrary.NoAccountException e) {
             e.printStackTrace();
         }
@@ -86,7 +86,7 @@ public class CustomerController {
         Object[] receivedData = (Object[]) Client.receiveObject();
         int productId = (int) receivedData[0];
         double rateScore = (double) receivedData[1];
-        Product product = GetDataFromDatabase.getProduct(productId);
+        Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         if (product != null) {
             Rate rate = new Rate(getCustomer(), product, rateScore);
             product.getRates().add(rate);

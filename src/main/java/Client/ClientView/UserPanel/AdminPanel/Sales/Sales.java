@@ -1,8 +1,11 @@
 package Client.ClientView.UserPanel.AdminPanel.Sales;
 
-import controller.AdminController;
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
+import Client.ClientController.AdminController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.GetDataFromDatabase;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import Client.ClientView.MainMenuStage.CheckFields;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,9 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Account;
 import model.Sale;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.MainMenuStage.CheckFields;
 
 import java.io.IOException;
 import java.net.URL;

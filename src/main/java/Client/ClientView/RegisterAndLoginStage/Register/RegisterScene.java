@@ -1,10 +1,12 @@
 package Client.ClientView.RegisterAndLoginStage.Register;
 
+import Client.ClientController.AdminController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.RegisterAndLoginController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controller.AdminController;
-import controller.ExceptionsLibrary;
-import controller.RegisterAndLogin;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -15,9 +17,6 @@ import javafx.stage.Stage;
 import model.Admin;
 import model.Customer;
 import model.Seller;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ public class RegisterScene implements Initializable {
             Gson gson = new GsonBuilder().serializeNulls().create();
             String data = gson.toJson(customer);
             try {
-                RegisterAndLogin.register(data);
+                RegisterAndLoginController.register(data);
                 close();
                 AlertBoxStart.messageRun("Message", "Successfully Registered!");
             } catch (ExceptionsLibrary.AdminExist | ExceptionsLibrary.UsernameAlreadyExists e) {
@@ -105,7 +104,7 @@ public class RegisterScene implements Initializable {
             Gson gson = new GsonBuilder().serializeNulls().create();
             String data = gson.toJson(seller);
             try {
-                RegisterAndLogin.register(data);
+                RegisterAndLoginController.register(data);
                 close();
                 AlertBoxStart.messageRun("Message", "Request Sent!");
             } catch (ExceptionsLibrary.AdminExist | ExceptionsLibrary.UsernameAlreadyExists e) {

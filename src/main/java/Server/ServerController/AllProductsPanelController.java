@@ -111,7 +111,7 @@ public class AllProductsPanelController {
             String fileName = i.getName();
             String categoryName = fileName.replace(".json", "");
             allAvailableFilters.add(categoryName);
-            Category category = GetDataFromDatabase.getCategory(categoryName);
+            Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
         }
         setAvailableFilters(allAvailableFilters);
         Client.sendObject(allAvailableFilters);
@@ -199,7 +199,7 @@ public class AllProductsPanelController {
                     checkPreviousFilters(count);
                     break;
                 case "Seller":
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(splitFilters[1]);
+                    Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(splitFilters[1]);
                     for (Product j : seller.getSellerProducts()) {
                         if (!getResult().contains(j)) {
                             getResult().add(j);
@@ -237,7 +237,7 @@ public class AllProductsPanelController {
                     break;
                 case "Feature":
                     Category category = null;
-                    category = GetDataFromDatabase.getCategory(splitFilters[1]);
+                    category = GetDataFromDatabaseServerSide.getCategory(splitFilters[1]);
                     Feature feature = new Feature(splitFilters[2], splitFilters[3]);
                     Feature featureCategory = new Feature(splitFilters[2], null);
                     String featureToString = feature.toString();
@@ -484,7 +484,7 @@ public class AllProductsPanelController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Seller seller = (Seller) GetDataFromDatabase.getAccount(username);
+            Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(username);
             for (Product j : seller.getSellerProducts()) {
                 if (j.getProductId() == product.getProductId()) {
                     sellers.add(seller);
@@ -510,7 +510,7 @@ public class AllProductsPanelController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Seller seller = (Seller) GetDataFromDatabase.getAccount(username);
+            Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(username);
             for (Product j : seller.getSellerProducts()) {
                 if (j.getProductId() == product.getProductId()) {
                     sellers.add(seller);
@@ -536,7 +536,7 @@ public class AllProductsPanelController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             int productId = Integer.parseInt(fileName.replace(".json", ""));
-            allProducts.add(GetDataFromDatabase.getProduct(productId));
+            allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
         }
         return allProducts;
     }
@@ -557,7 +557,7 @@ public class AllProductsPanelController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             int productId = Integer.parseInt(fileName.replace(".json", ""));
-            allProducts.add(GetDataFromDatabase.getProduct(productId));
+            allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
         }
         Client.sendObject(allProducts);
     }
@@ -637,7 +637,7 @@ public class AllProductsPanelController {
     public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
         Product product = null;
         try {
-            product = GetDataFromDatabase.getProduct(productId);
+            product = GetDataFromDatabaseServerSide.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
             throw new ExceptionsLibrary.NoProductException();
         }
@@ -657,7 +657,7 @@ public class AllProductsPanelController {
         int productId = Integer.parseInt(Client.receiveMessage());
         Product product = null;
         try {
-            product = GetDataFromDatabase.getProduct(productId);
+            product = GetDataFromDatabaseServerSide.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
             throw new ExceptionsLibrary.NoProductException();
         }

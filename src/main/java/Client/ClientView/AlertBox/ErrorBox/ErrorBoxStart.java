@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import view.AlertBox.ErrorBox.AlertBox;
 
 import java.io.File;
 import java.io.IOException;

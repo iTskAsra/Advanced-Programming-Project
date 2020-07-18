@@ -37,7 +37,7 @@ public class AdminController {
             Client.sendObject(new ExceptionsLibrary.NoAccountException());
         }
         String username = Client.receiveMessage();
-        Admin admin = (Admin) GetDataFromDatabase.getAccount(username);
+        Admin admin = (Admin) GetDataFromDatabaseServerSide.getAccount(username);
         setAdmin(admin);
         String data = gson.toJson(admin);
         Client.sendMessage(data);
@@ -47,7 +47,7 @@ public class AdminController {
         Object[] receivedItems = (Object[])Client.receiveObject();
 
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedItems[1];
-        Admin admin = (Admin) GetDataFromDatabase.getAccount((String)receivedItems[0]);
+        Admin admin = (Admin) GetDataFromDatabaseServerSide.getAccount((String)receivedItems[0]);
 
 
         for (String i : dataToEdit.keySet()) {
@@ -85,7 +85,7 @@ public class AdminController {
         for (File i : file.listFiles(fileFilter)) {
             String fileName = i.getName();
             String requestId = fileName.replace(".json", "");
-            Request request = GetDataFromDatabase.getRequest(Integer.parseInt(requestId));
+            Request request = GetDataFromDatabaseServerSide.getRequest(Integer.parseInt(requestId));
             if (request.getRequestCondition().equals(RequestOrCommentCondition.PENDING_TO_ACCEPT)) {
                 allRequests.add(request);
             }
@@ -96,7 +96,7 @@ public class AdminController {
     public static void showRequest() throws ExceptionsLibrary.NoRequestException {
 
         int requestId = Integer.parseInt(Client.receiveMessage());
-        Request request = GetDataFromDatabase.getRequest(requestId);
+        Request request = GetDataFromDatabaseServerSide.getRequest(requestId);
         if (request != null) {
             if (request.getRequestCondition().equals(RequestOrCommentCondition.PENDING_TO_ACCEPT)) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
@@ -115,7 +115,7 @@ public class AdminController {
         Object[] receivedArray = (Object[]) Client.receiveObject();
         int requestId = (int) receivedArray[0];
         boolean acceptStatus = (boolean) receivedArray[1];
-        Request request = GetDataFromDatabase.getRequest(requestId);
+        Request request = GetDataFromDatabaseServerSide.getRequest(requestId);
         Gson gson = new GsonBuilder().serializeNulls().create();
         switch (request.getRequestType()) {
             case ADD_OFF:
@@ -127,7 +127,7 @@ public class AdminController {
                         off.setOffId(random.nextInt(1000000));
                     }
                     String offDetails = gson.toJson(off);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
+                    Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(request.getRequestSeller());
                     seller.getSellerOffs().add(off);
                     try {
                         String offPath = "Resources/Offs/" + off.getOffId() + ".json";
@@ -138,7 +138,7 @@ public class AdminController {
                         fileWriter.close();
                         SetDataToDatabase.setAccount(seller);
                         for (String i :off.getOffProducts()){
-                            Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
+                            Product temp = GetDataFromDatabaseServerSide.getProduct(Integer.parseInt(i));
                             temp.setPriceWithOff(temp.getPrice()-off.getOffAmount());
                             SetDataToDatabase.setProduct(temp);
                             SetDataToDatabase.updateSellerOfProduct(temp,0);
@@ -161,7 +161,7 @@ public class AdminController {
                     Off off = gson.fromJson(request.getRequestDescription(), Off.class);
                     off.setOffCondition(ProductOrOffCondition.ACCEPTED);
                     String offDetails = gson.toJson(off);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
+                    Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(request.getRequestSeller());
                     Iterator iterator = seller.getSellerOffs().iterator();
                     while (iterator.hasNext()) {
                         Off tempOff = (Off) iterator.next();
@@ -172,7 +172,7 @@ public class AdminController {
                     seller.getSellerOffs().add(off);
                     SetDataToDatabase.setAccount(seller);
                     for (String i :off.getOffProducts()){
-                        Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
+                        Product temp = GetDataFromDatabaseServerSide.getProduct(Integer.parseInt(i));
                         temp.setPriceWithOff(temp.getPrice()-off.getOffAmount());
                         SetDataToDatabase.setProduct(temp);
                         SetDataToDatabase.updateSellerOfProduct(temp,0);
@@ -204,7 +204,7 @@ public class AdminController {
                         product.setProductId(random.nextInt(1000000));
                     }
                     String productDetails = gson.toJson(product);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
+                    Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(request.getRequestSeller());
                     seller.getSellerProducts().add(product);
                     try {
                         String productPath = "Resources/Products/" + product.getProductId() + ".json";
@@ -231,7 +231,7 @@ public class AdminController {
                     Product product = gson.fromJson(request.getRequestDescription(), Product.class);
                     product.setProductCondition(ProductOrOffCondition.ACCEPTED);
                     String productDetails = gson.toJson(product);
-                    Seller seller = (Seller) GetDataFromDatabase.getAccount(request.getRequestSeller());
+                    Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(request.getRequestSeller());
                     Iterator iterator = seller.getSellerProducts().iterator();
                     while (iterator.hasNext()) {
                         Product tempProduct = (Product) iterator.next();
@@ -342,7 +342,7 @@ public class AdminController {
         for (File i : file.listFiles(fileFilter)) {
             String fileName = i.getName();
             String saleCode = fileName.replace(".json", "");
-            Sale sale = GetDataFromDatabase.getSale(saleCode);
+            Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
             allSales.add(sale);
         }
         Client.sendObject(allSales);
@@ -352,7 +352,7 @@ public class AdminController {
         Object[] receivedData = (Object[]) Client.receiveObject();
         String saleCode = (String)receivedData[0];
         HashMap<String, String> dataToEdit = (HashMap)receivedData[0];
-        Sale sale = GetDataFromDatabase.getSale(saleCode);
+        Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
         for (String i : dataToEdit.keySet()) {
             try {
                 if (i.equalsIgnoreCase("saleId")){
@@ -535,20 +535,20 @@ public class AdminController {
         for (File i : customerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Account account = GetDataFromDatabase.getAccount(username);
+            Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
         for (File i : sellerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Account account = GetDataFromDatabase.getAccount(username);
+            Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
 
         for (File i : adminFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Account account = GetDataFromDatabase.getAccount(username);
+            Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
         Client.sendObject(list);
@@ -574,20 +574,20 @@ public class AdminController {
         for (File i : customerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Account account = GetDataFromDatabase.getAccount(username);
+            Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
         for (File i : sellerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Account account = GetDataFromDatabase.getAccount(username);
+            Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
 
         for (File i : adminFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Account account = GetDataFromDatabase.getAccount(username);
+            Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
         return list;
@@ -609,7 +609,7 @@ public class AdminController {
         for (File i : customerFolder.listFiles(fileFilter)) {
             String fileName = i.getName();
             String username = fileName.replace(".json", "");
-            Account account = GetDataFromDatabase.getAccount(username);
+            Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
         Client.sendObject(list);
@@ -617,14 +617,14 @@ public class AdminController {
 
     public static void showUserDetails() throws ExceptionsLibrary.NoAccountException {
         String username = Client.receiveMessage();
-        Account account = GetDataFromDatabase.getAccount(username);
+        Account account = GetDataFromDatabaseServerSide.getAccount(username);
         Gson gson = new GsonBuilder().serializeNulls().create();
         Client.sendMessage(gson.toJson(account));
     }
 
     public static void deleteUser() throws ExceptionsLibrary.NoAccountException {
         String username = Client.receiveMessage();
-        Account account = GetDataFromDatabase.getAccount(username);
+        Account account = GetDataFromDatabaseServerSide.getAccount(username);
         String path = "Resources/Accounts/" + account.getRole() + "/" + account.getUsername() + ".json";
         File file = new File(path);
         file.delete();
@@ -643,7 +643,7 @@ public class AdminController {
 
     public static void deleteProduct() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         int productId = Integer.parseInt(Client.receiveMessage());
-        Product product = GetDataFromDatabase.getProduct(productId);
+        Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         String path = "Resources/Products/" + product.getProductId() + ".json";
         SetDataToDatabase.updateSellerOfProduct(product,1);
         File file = new File(path);
@@ -666,7 +666,7 @@ public class AdminController {
         for (File i : file.listFiles(fileFilter)) {
             String fileName = i.getName();
             String categoryName = fileName.replace(".json", "");
-            Category category = GetDataFromDatabase.getCategory(categoryName);
+            Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
             allCategories.add(category);
         }
         Client.sendObject(allCategories);
@@ -675,7 +675,7 @@ public class AdminController {
     public static void deleteCategory() throws ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoProductException {
         String categoryName = Client.receiveMessage();
         try {
-            Category category = GetDataFromDatabase.getCategory(categoryName);
+            Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
             FileFilter fileFilter = new FileFilter() {
                 @Override
                 public boolean accept(File file1) {
@@ -717,7 +717,7 @@ public class AdminController {
         Object[] receivedData = (Object[]) Client.receiveObject();
         String categoryName = (String) receivedData[0];
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedData[0];
-        Category category = GetDataFromDatabase.getCategory(categoryName);
+        Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
         String oldName = category.getName();
         for (String i : dataToEdit.keySet()) {
             try {
@@ -817,7 +817,7 @@ public class AdminController {
 
     public static void viewSaleCodeDetails() throws ExceptionsLibrary.NoSaleException {
         String saleCode = Client.receiveMessage();
-        Sale sale = GetDataFromDatabase.getSale(saleCode);
+        Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
         Gson gson = new GsonBuilder().serializeNulls().create();
         Client.sendMessage(gson.toJson(sale));
     }
@@ -825,7 +825,7 @@ public class AdminController {
     public static void removeSaleCode() throws ExceptionsLibrary.NoSaleException {
         String saleCode = Client.receiveMessage();
         try {
-            Sale sale = GetDataFromDatabase.getSale(saleCode);
+            Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
             FileFilter fileFilter = new FileFilter() {
                 @Override
                 public boolean accept(File file1) {
@@ -1052,7 +1052,7 @@ public class AdminController {
         for (File i : folder.listFiles(fileFilter)) {
             String fileName = i.getName();
             int productId = Integer.parseInt(fileName.replace(".json", ""));
-            allProducts.add(GetDataFromDatabase.getProduct(productId));
+            allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
         }
         Client.sendObject(allProducts);
     }

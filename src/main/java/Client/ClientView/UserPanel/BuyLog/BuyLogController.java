@@ -1,6 +1,8 @@
 package Client.ClientView.UserPanel.BuyLog;
 
-import controller.CustomerController;
+import Client.ClientController.CustomerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientView.UserPanel.BuyLog.BuyLogDetails.BuyLogDetailsStart;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,7 +12,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.BuyLog;
-import view.UserPanel.BuyLog.BuyLogDetails.BuyLogDetailsStart;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +42,11 @@ public class BuyLogController implements Initializable {
     }
 
     private void updateTable(){
-        buyLogs = FXCollections.observableArrayList(CustomerController.showCustomerLogs());
+        try {
+            buyLogs = FXCollections.observableArrayList(CustomerController.showCustomerLogs());
+        } catch (ExceptionsLibrary.NoAccountException e) {
+            e.printStackTrace();
+        }
         logId.setCellValueFactory(new PropertyValueFactory<>("logId"));
         logDate.setCellValueFactory(new PropertyValueFactory<>("logDate"));
         value.setCellValueFactory(new PropertyValueFactory<>("value"));

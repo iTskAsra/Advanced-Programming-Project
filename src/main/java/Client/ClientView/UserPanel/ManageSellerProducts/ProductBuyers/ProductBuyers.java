@@ -1,15 +1,15 @@
 package Client.ClientView.UserPanel.ManageSellerProducts.ProductBuyers;
 
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
-import controller.SellerController;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.GetDataFromDatabase;
+import Client.ClientController.SellerController;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import model.Customer;
 import model.SellLog;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
 
 import java.net.URL;
 import java.util.ArrayList;

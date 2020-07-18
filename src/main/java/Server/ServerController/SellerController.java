@@ -38,7 +38,7 @@ public class SellerController {
         if (getSeller() == null) {
             throw new ExceptionsLibrary.NoAccountException();
         }
-        Seller seller = (Seller) GetDataFromDatabase.getAccount(adminUsername);
+        Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(adminUsername);
         setSeller(seller);
         String data = gson.toJson(seller);
         Client.sendMessage(data);
@@ -46,7 +46,7 @@ public class SellerController {
 
     public static void editSellerInfo() throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException {
         HashMap<String, String> dataToEdit = (HashMap<String, String>) Client.receiveObject();
-        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
         for (String i : dataToEdit.keySet()) {
             if (i.equals("username")) {
                 Client.sendObject(new ExceptionsLibrary.ChangeUsernameException());
@@ -85,7 +85,7 @@ public class SellerController {
     }
 
     public static void showSellerProducts() throws ExceptionsLibrary.NoAccountException {
-        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
         Client.sendObject(seller.getSellerProducts());
     }
 
@@ -97,7 +97,7 @@ public class SellerController {
         Object[] receivedData = (Object[]) Client.receiveObject();
         int productId = Integer.parseInt((String) receivedData[0]);
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedData[1];
-        Product product = GetDataFromDatabase.getProduct(productId);
+        Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         if (product != null) {
             for (String i : dataToEdit.keySet()) {
                 try {
@@ -141,7 +141,7 @@ public class SellerController {
 
     public static void removeProductRequest() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         int productId = Integer.parseInt(Client.receiveMessage());
-        Product product = GetDataFromDatabase.getProduct(productId);
+        Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         String productDetails = gson.toJson(product);
         Request request = new Request(productDetails,RequestType.REMOVE_PRODUCT,RequestOrCommentCondition.PENDING_TO_ACCEPT,getSeller().getUsername());
@@ -192,7 +192,7 @@ public class SellerController {
         Object[] receivedData = (Object[]) Client.receiveObject();
         int offId = Integer.parseInt((String) receivedData[0]);
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedData[1];
-        Off off = GetDataFromDatabase.getOff(offId);
+        Off off = GetDataFromDatabaseServerSide.getOff(offId);
         if (off != null) {
             for (Off i : getSeller().getSellerOffs()) {
                 if (i.getOffId() == off.getOffId()) {
@@ -246,7 +246,7 @@ public class SellerController {
         String[] productIds = offProducts.split("\\s*,\\s*");
         for (String i : productIds){
             try {
-                Product temp = GetDataFromDatabase.getProduct(Integer.parseInt(i));
+                Product temp = GetDataFromDatabaseServerSide.getProduct(Integer.parseInt(i));
                 Iterator<Product> iterator = getSeller().getSellerProducts().iterator();
                 while (iterator.hasNext()) {
                     Product tempProduct = iterator.next();
@@ -286,7 +286,7 @@ public class SellerController {
     }
 
     public static void showOffs() throws ExceptionsLibrary.NoAccountException {
-        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
         Client.sendObject(seller.getSellerOffs());
     }
 
@@ -304,7 +304,7 @@ public class SellerController {
         int productId = Integer.parseInt(Client.receiveMessage());
         Product product = null;
         try {
-            product = GetDataFromDatabase.getProduct(productId);
+            product = GetDataFromDatabaseServerSide.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
             e.printStackTrace();
             Client.sendObject(e);
@@ -315,9 +315,9 @@ public class SellerController {
 
     public static void showProductBuyers() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
         int productId = Integer.parseInt(Client.receiveMessage());
-        Product product = GetDataFromDatabase.getProduct(productId);
+        Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         ArrayList<SellLog> buyersLogs = new ArrayList<>();
-        Seller seller = (Seller) GetDataFromDatabase.getAccount(getSeller().getUsername());
+        Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
         for (SellLog i : seller.getSellerLogs()) {
             for (String[] j : i.getLogProducts()) {
                 if (Integer.parseInt(j[0]) == productId) {
@@ -349,7 +349,7 @@ public class SellerController {
         for (File i : file.listFiles(fileFilter)) {
             String fileName = i.getName();
             String categoryName = fileName.replace(".json", "");
-            Category category = GetDataFromDatabase.getCategory(categoryName);
+            Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
             allCategories.add(category);
         }
         Client.sendObject(allCategories);
@@ -394,7 +394,7 @@ public class SellerController {
         for (File i : file.listFiles(fileFilter)) {
             String fileName = i.getName();
             String requestId = fileName.replace(".json", "");
-            Request request = GetDataFromDatabase.getRequest(Integer.parseInt(requestId));
+            Request request = GetDataFromDatabaseServerSide.getRequest(Integer.parseInt(requestId));
             if (request.getRequestSeller().equals(getSeller().getUsername())) {
                 sellerRequests.add(request);
             }

@@ -8,7 +8,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.BuyLog;
-import view.UserPanel.BuyLog.BuyLogDetails.BuyLogDetails;
 
 import java.io.File;
 import java.io.IOException;

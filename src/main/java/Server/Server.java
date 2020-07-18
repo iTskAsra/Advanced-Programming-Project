@@ -2,12 +2,15 @@ package Server;
 
 import Bank.BankClient;
 
+import Server.ServerController.ExceptionsLibrary;
+import Server.ServerController.SetPeriodicSales;
+
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 
 
 public class Server {
@@ -19,6 +22,12 @@ public class Server {
         ArrayList<String> listOfTokens = new ArrayList<>();
         ServerSocket server = null;
         Socket socket = null;
+        try {
+            SetPeriodicSales.setPeriodicSales();
+            SetPeriodicSales.removeExpiredOff();
+        } catch (ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoProductException | ParseException | ExceptionsLibrary.NoOffException e) {
+            e.printStackTrace();
+        }
 
         BankClient bankClient = new BankClient();
         clientImplementation = new BankClient.ClientImplementation();

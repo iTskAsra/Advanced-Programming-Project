@@ -1,6 +1,7 @@
 package Client.ClientView.RegisterAndLoginStage;
 
-import controller.ExceptionsLibrary;
+import Client.ClientController.ExceptionsLibrary;
+import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,9 +11,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.AlertBox.MessageBox.AlertBoxStart;
-import view.Base.Main;
+import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+
+
 
 import java.io.File;
 import java.io.IOException;
@@ -52,8 +53,7 @@ public class RegisterAndLogin {
         dataToSend.put("username",username.getText());
         dataToSend.put("password", password.getText());
         try {
-            controller.RegisterAndLogin.login(dataToSend);
-            AlertBoxStart.messageRun("Message","Successfully Logged In!");
+            Client.ClientView.AlertBox.MessageBox.AlertBoxStart.messageRun("Message","Successfully Logged In!");
             Main.checkLoggedIn();
             close();
         } catch (ExceptionsLibrary.WrongUsernameException | ExceptionsLibrary.WrongPasswordException | ExceptionsLibrary.NoAccountException e) {

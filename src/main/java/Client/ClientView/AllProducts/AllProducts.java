@@ -1,6 +1,10 @@
 package Client.ClientView.AllProducts;
 
-import controller.*;
+import Client.ClientController.*;
+import Client.ClientView.HelpWindow.*;
+import Client.ClientView.AlertBox.ErrorBox.*;
+import Client.ClientView.AlertBox.MessageBox.*;
+import Client.ClientView.MainMenuStage.CheckFields;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,10 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import model.*;
-import view.AlertBox.ErrorBox.ErrorBoxStart;
-import view.Base.Main;
-import view.HelpWindow.Help;
-import view.MainMenuStage.CheckFields;
+
 
 import java.io.File;
 import java.io.FileInputStream;

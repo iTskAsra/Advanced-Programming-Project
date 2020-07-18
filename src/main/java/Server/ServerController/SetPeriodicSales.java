@@ -1,5 +1,6 @@
 package Server.ServerController;
 
+import Client.Client;
 import model.Account;
 import model.Customer;
 import model.Off;
@@ -66,7 +67,7 @@ public class SetPeriodicSales {
                         File i = listFiles[count];
                         String fileName = i.getName();
                         String username = fileName.replace(".json", "");
-                        Customer customer = (Customer) GetDataFromDatabase.getAccount(username);
+                        Customer customer = (Customer) GetDataFromDatabaseServerSide.getAccount(username);
                         saleAccounts.add(customer);
                     }
                 }
@@ -97,14 +98,17 @@ public class SetPeriodicSales {
             }
         };
         int number = customerFolder.listFiles(fileFilter).length;
+        Client.sendObject(number);
         return number;
     }
 
     private static boolean offsSet() {
         File file = new File("Resources/Offs");
         if (file.exists()){
+            Client.sendObject(true);
             return true;
         }
+        Client.sendObject(false);
         return false;
     }
 
@@ -133,7 +137,7 @@ public class SetPeriodicSales {
             };
             for (File i : offsFolder.listFiles(fileFilter)) {
                 String offId = i.getName().replace(".json", "");
-                Off off = GetDataFromDatabase.getOff(Integer.parseInt(offId));
+                Off off = GetDataFromDatabaseServerSide.getOff(Integer.parseInt(offId));
                 Date offEndDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(off.getEndDate());
                 Date date = new Date();
                 if (date.compareTo(offEndDate) >= 0){

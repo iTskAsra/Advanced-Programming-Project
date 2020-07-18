@@ -1,8 +1,6 @@
 package Client.ClientController;
 
 import Client.Client;
-import controller.ExceptionsLibrary;
-import controller.GetDataFromDatabase;
 import model.Category;
 import model.Feature;
 import model.Product;
