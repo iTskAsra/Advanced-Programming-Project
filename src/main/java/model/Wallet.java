@@ -6,37 +6,30 @@ import model.Seller;
 
 public class Wallet {
 
-    private Customer customer = null;
-    private Seller seller = null;
+    private Account account;
     private double balance;
+    private int bankAccountId;
     private static double leastAmount = 0;
 
-
-    public Wallet(Customer customer, double balance) {
-        this.customer = customer;
+    public Wallet(Account account, double balance) {
+        this.account = account;
         this.balance = balance;
     }
 
-    public Wallet(Seller seller, double balance) {
-        this.seller = seller;
-        this.balance = balance;
+    public Account getAccount() {
+        return account;
     }
 
-
-    public Customer getCustomer() {
-        return customer;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public int getBankAccountId() {
+        return bankAccountId;
     }
 
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
+    public void setBankAccountId(int bankAccountId) {
+        this.bankAccountId = bankAccountId;
     }
 
     public double getBalance() {
