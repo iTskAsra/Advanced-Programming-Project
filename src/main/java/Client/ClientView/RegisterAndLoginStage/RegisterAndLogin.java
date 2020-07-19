@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
+import view.Base.Main;
 
 
 
@@ -52,13 +53,9 @@ public class RegisterAndLogin {
         HashMap<String,String> dataToSend = new HashMap();
         dataToSend.put("username",username.getText());
         dataToSend.put("password", password.getText());
-        try {
-            Client.ClientView.AlertBox.MessageBox.AlertBoxStart.messageRun("Message","Successfully Logged In!");
-            Main.checkLoggedIn();
-            close();
-        } catch (ExceptionsLibrary.WrongUsernameException | ExceptionsLibrary.WrongPasswordException | ExceptionsLibrary.NoAccountException e) {
-            ErrorBoxStart.errorRun(e);
-        }
+        AlertBoxStart.messageRun("Message","Successfully Logged In!");
+        Main.checkLoggedIn();
+        close();
     }
 
 }

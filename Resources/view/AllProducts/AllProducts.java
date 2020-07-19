@@ -1,6 +1,5 @@
 package view.AllProducts;
 
-import controller.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

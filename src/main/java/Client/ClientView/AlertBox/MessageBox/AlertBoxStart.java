@@ -15,7 +15,7 @@ import java.net.URL;
 
 public class AlertBoxStart {
     public static void messageRun(String title,String message) {
-        Client.ClientView.AlertBox.MessageBox.AlertBox.setAlertTitle(title);
+        AlertBox.setAlertTitle(title);
         AlertBox.setMessage(message);
         Stage stage = new Stage();
         File file = new File("src/main/java/view/AlertBox/MessageBox/AlertBox.fxml");

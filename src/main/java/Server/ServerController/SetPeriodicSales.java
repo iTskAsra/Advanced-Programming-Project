@@ -98,17 +98,17 @@ public class SetPeriodicSales {
             }
         };
         int number = customerFolder.listFiles(fileFilter).length;
-        Client.sendObject(number);
+        //Client.sendObject(number);
         return number;
     }
 
     private static boolean offsSet() {
         File file = new File("Resources/Offs");
         if (file.exists()){
-            Client.sendObject(true);
+            //Client.sendObject(true);
             return true;
         }
-        Client.sendObject(false);
+        //Client.sendObject(false);
         return false;
     }
 
@@ -148,3 +148,5 @@ public class SetPeriodicSales {
         }
     }
 }
+
+//TODO check comm

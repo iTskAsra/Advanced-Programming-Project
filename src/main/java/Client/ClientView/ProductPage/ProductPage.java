@@ -23,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.*;
+import view.Base.Main;
 
 
 import java.io.File;
@@ -241,7 +242,7 @@ public class ProductPage implements Initializable {
             ProductPageController.selectSeller(GetDataFromDatabase.findSellersFromProductId(ProductPageController.getProduct().getProductId()).get(0).getUsername());
             ProductPageController.addToCart();
             AlertBoxStart.messageRun("Message","Added to cart!");
-        } catch (ExceptionsLibrary.SelectASeller | ExceptionsLibrary.NotEnoughNumberAvailableException | ExceptionsLibrary.NoAccountException | ExceptionsLibrary.NoAccountException e) {
+        } catch (ExceptionsLibrary.SelectASeller | ExceptionsLibrary.NotEnoughNumberAvailableException | ExceptionsLibrary.NoAccountException e) {
             ErrorBoxStart.errorRun(e);
         }
     }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class MainMenu extends Menu {
     public MainMenu() {
-        super("Main Menu", null);
+        super("view.Base.Main Menu", null);
         HashMap<Integer, Menu> submenus = new HashMap<>();
         if (Main.checkLoggedIn() != null){
             if (Main.checkLoggedIn().equals("Customer")){
@@ -80,7 +80,7 @@ public class MainMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("------------------------------");
-                System.out.printf("Main Menu\nHere you can login and logout,\nview your account details,\nsearch for products and offs\nand see your cart\n");
+                System.out.printf("view.Base.Main Menu\nHere you can login and logout,\nview your account details,\nsearch for products and offs\nand see your cart\n");
                 System.out.println("------------------------------");
             }
 

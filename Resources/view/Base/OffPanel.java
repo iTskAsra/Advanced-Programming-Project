@@ -1,6 +1,5 @@
 package view.Base;
 
-import controller.*;
 import model.Off;
 import controller.ProductPageController;
 import java.util.ArrayList;

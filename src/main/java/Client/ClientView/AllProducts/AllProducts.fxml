@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="950.0" prefWidth="1700.0" stylesheets="@AllProductsStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AllProducts.AllProducts">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="950.0" prefWidth="1700.0" stylesheets="@AllProductsStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.ClientView.AllProducts.AllProducts">
    <children>
       <Label id="label" layoutX="698.0" layoutY="33.0" text="Products" />
       <ScrollPane fx:id="scrollPane" layoutX="31.0" layoutY="182.0" prefHeight="700.0" prefWidth="1200.0">

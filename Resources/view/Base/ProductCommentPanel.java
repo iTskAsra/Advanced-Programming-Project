@@ -67,7 +67,7 @@ public class ProductCommentPanel extends Menu {
             @Override
             public void run() {
                 System.out.println("Enter title :");
-                String title =Main.scanInput("String");
+                String title = Main.scanInput("String");
                 System.out.println("Enter text :");
                 String text = Main.scanInput("String");
                 try {

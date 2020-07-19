@@ -3,6 +3,7 @@ package Client.ClientView.UserPanel.AdminPanel;
 import Client.ClientController.AdminController;
 import Client.ClientController.CustomerController;
 import Client.ClientController.SellerController;
+import Client.ClientView.HelpWindow.Help;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Admin;
+import view.Base.Main;
 
 import java.io.File;
 import java.io.IOException;

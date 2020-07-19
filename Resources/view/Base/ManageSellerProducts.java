@@ -1,6 +1,5 @@
 package view.Base;
 
-import controller.*;
 import model.*;
 
 import java.util.ArrayList;

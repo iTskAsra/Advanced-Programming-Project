@@ -22,7 +22,7 @@ public class OffSellerController {
         data.put("username","a");
         data.put("password","b");
         RegisterAndLogin.login(data);
-        Off off = new Off(null,ProductOrOffCondition.ACCEPTED, Main.localDateTime.format(Main.dateTimeFormatter),"2020-10-10 23:59",50);
+        Off off = new Off(null,ProductOrOffCondition.ACCEPTED, view.Base.Main.localDateTime.format(view.Base.Main.dateTimeFormatter),"2020-10-10 23:59",50);
         HashMap<String,String> dataToEdit = new HashMap<>();
         dataToEdit.put("endDate","2020-12-12 01:00");
         SellerController.editOffRequest(5048,dataToEdit);
@@ -34,7 +34,7 @@ public class OffSellerController {
         data.put("username","a");
         data.put("password","b");
         RegisterAndLogin.login(data);
-        Off off = new Off(null,ProductOrOffCondition.ACCEPTED, Main.localDateTime.format(Main.dateTimeFormatter),"2020-10-10 23:59",50);
+        Off off = new Off(null,ProductOrOffCondition.ACCEPTED, view.Base.Main.localDateTime.format(view.Base.Main.dateTimeFormatter),"2020-10-10 23:59",50);
         Gson gson = new GsonBuilder().serializeNulls().create();
         String offData = gson.toJson(off);
         SellerController.addOffRequest(offData);

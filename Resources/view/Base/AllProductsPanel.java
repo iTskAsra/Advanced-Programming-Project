@@ -1,6 +1,5 @@
 package view.Base;
 
-import controller.*;
 import model.Category;
 import model.Feature;
 import model.Product;

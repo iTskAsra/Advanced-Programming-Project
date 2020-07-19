@@ -1,5 +1,5 @@
 .root{
-    -fx-background-image: url("../GraphicContent/MainMenu/Background.jpg");
+    -fx-background-image: url("../MainMenu/Background.jpg");
 }
 .normal-button{
     -fx-background-color: dodgerblue;

@@ -2,6 +2,8 @@ package Client.ClientView.OffPanel;
 
 import Client.ClientController.*;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.HelpWindow.Help;
+import Client.ClientView.MainMenuStage.CheckFields;
 import Server.ServerController.SetPeriodicSales;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -25,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import model.*;
+import view.Base.Main;
 
 
 import java.io.File;
@@ -378,7 +381,7 @@ public class OffPanel implements Initializable {
                     try {
                         SetPeriodicSales.removeExpiredOff();
                         updateFilterList();
-                    } catch (ParseException | ExceptionsLibrary.NoProductException | ExceptionsLibrary.NoAccountException noOffException) {
+                    } catch (ParseException noOffException) {
                         noOffException.printStackTrace();
                     } catch (Server.ServerController.ExceptionsLibrary.NoOffException ex) {
                         ex.printStackTrace();

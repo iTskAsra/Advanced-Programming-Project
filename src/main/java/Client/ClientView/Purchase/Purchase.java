@@ -134,7 +134,7 @@ public class Purchase implements Initializable {
         next.setOnAction( e -> {
             String saleCode;
             if (CartController.getTotalPriceWithoutSale() >= 1000000 && CartController.getSaleDiscount() == 0) {
-                Double saleAmount = SetPeriodicSales.randomOff();
+                /*Double saleAmount = SetPeriodicSales.randomOff();
                 int saleAmountRounded = (int) Math.round(saleAmount);
                 AlertBoxStart.messageRun("Sale","Your cart value is greater or equal to 1,000,000 so you will get a " + saleAmountRounded + " off!");
                 saleCode = "Off:" + saleAmountRounded;
@@ -142,7 +142,8 @@ public class Purchase implements Initializable {
                     CartController.discountApply(saleCode);
                 } catch (ExceptionsLibrary.NoSaleException | ExceptionsLibrary.UsedAllValidTimesException | ExceptionsLibrary.SaleExpiredException | ExceptionsLibrary.SaleNotStartedYetException exception) {
                     ErrorBoxStart.errorRun(exception);
-                }
+                }*/
+                //TODO check
             }
             state3();
         });

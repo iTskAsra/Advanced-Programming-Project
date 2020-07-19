@@ -1,6 +1,5 @@
 package view.Base;
 
-import controller.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

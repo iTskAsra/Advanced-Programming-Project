@@ -133,7 +133,7 @@ public class ProductPageController {
         if (response instanceof ExceptionsLibrary.NoProductException)
             throw new ExceptionsLibrary.NoProductException();
 
-//        if (Main.checkLoggedIn() != null) {
+//        if (view.Base.Main.checkLoggedIn() != null) {
 //            Comment comment = new Comment(controller.CustomerController.getCustomer().getUsername(), getProduct(), commentText, RequestOrCommentCondition.PENDING_TO_ACCEPT, isBoughtByCommenter(controller.CustomerController.getCustomer(), getProduct()), title);
 //            comment.setBoughtByCommenter(isBoughtByCommenter(CustomerController.getCustomer(), getProduct()));
 //            getProduct().getProductComments().add(comment);
