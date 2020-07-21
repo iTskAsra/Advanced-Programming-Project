@@ -44,7 +44,7 @@ public class Cart implements Initializable {
         products.getChildren().clear();
         for (Product i : CartController.getCartProducts().keySet()){
             FXMLLoader loader = new FXMLLoader();
-            File file = new File("src/main/java/view/Cart/ProductElement/ProductElement.fxml");
+            File file = new File("src/main/java/Client/ClientView/Cart/ProductElement/ProductElement.fxml");
             URL urlFile = null;
             try {
                 urlFile = file.toURI().toURL();
@@ -110,7 +110,7 @@ public class Cart implements Initializable {
             return;
         }
         Stage stage = (Stage) totalPrice.getScene().getWindow();
-        File file = new File("src/main/java/view/Purchase/Purchase.fxml");
+        File file = new File("src/main/java/Client/ClientView/Purchase/Purchase.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

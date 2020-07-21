@@ -90,7 +90,7 @@ public class ManageSellerProducts implements Initializable {
         NewEditProductRequest.setEditProduct((Product) table.getSelectionModel().getSelectedItem());
         NewEditProductRequest.setNewProduct(false);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/ManageSellerProducts/NewEditProductRequest/NewEditProductRequest.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/ManageSellerProducts/NewEditProductRequest/NewEditProductRequest.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -123,7 +123,7 @@ public class ManageSellerProducts implements Initializable {
         Product temp = (Product) table.getSelectionModel().getSelectedItem();
         ProductBuyers.setProductId(temp.getProductId());
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/ManageSellerProducts/ProductBuyers/ProductBuyers.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/ManageSellerProducts/ProductBuyers/ProductBuyers.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

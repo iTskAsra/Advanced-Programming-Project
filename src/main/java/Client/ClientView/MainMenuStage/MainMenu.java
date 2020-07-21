@@ -35,7 +35,7 @@ public class MainMenu extends Application {
         if (adminNotExists()) {
             RegisterScene.setAdmin(true);
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/RegisterAndLoginStage/Register/RegisterScene.fxml");
+            File file = new File("src/main/java/Client/ClientView/RegisterAndLoginStage/Register/RegisterScene.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);

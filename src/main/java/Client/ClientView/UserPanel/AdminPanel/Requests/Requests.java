@@ -97,7 +97,7 @@ public class Requests implements Initializable {
         }
         RequestDetails.setRequest(temp);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/AdminPanel/Requests/RequestDetails/RequestDetails.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Requests/RequestDetails/RequestDetails.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

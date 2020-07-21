@@ -40,7 +40,7 @@ public class RegisterAndLogin {
 
     public void registerButtonClicked() throws IOException {
         Stage stage = (Stage) close.getScene().getWindow();
-        File file = new File("src/main/java/view/RegisterAndLoginStage/Register/RegisterScene.fxml");
+        File file = new File("src/main/java/Client/ClientView/RegisterAndLoginStage/Register/RegisterScene.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

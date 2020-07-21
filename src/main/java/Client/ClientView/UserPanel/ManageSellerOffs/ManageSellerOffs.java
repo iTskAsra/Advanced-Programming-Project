@@ -87,7 +87,7 @@ public class ManageSellerOffs implements Initializable {
         NewEditOffRequest.setEditOff((Off) table.getSelectionModel().getSelectedItem());
         NewEditOffRequest.setNewOff(false);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/ManageSellerOffs/NewEditOffRequest/NewEditOffRequest.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/ManageSellerOffs/NewEditOffRequest/NewEditOffRequest.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

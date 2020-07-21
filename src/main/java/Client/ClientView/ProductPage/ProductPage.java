@@ -226,7 +226,7 @@ public class ProductPage implements Initializable {
 
     public void compareButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/ProductPage/Compare/Compare.fxml");
+        File file = new File("src/main/java/Client/ClientView/ProductPage/Compare/Compare.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -249,7 +249,7 @@ public class ProductPage implements Initializable {
 
     public void accountButtonClickedNotLoggedIn() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/RegisterAndLoginStage/RegisterAndLogin.fxml");
+        File file = new File("src/main/java/Client/ClientView/RegisterAndLoginStage/RegisterAndLogin.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -263,14 +263,14 @@ public class ProductPage implements Initializable {
     public void accountButtonClickedLoggedIn() throws IOException {
         if (!Main.checkLoggedIn().equals("Admin")) {
             Stage stage = (Stage) Stage.getWindows().get(0);
-            File file = new File("src/main/java/view/UserPanel/UserPanel.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/UserPanel.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
             stage.setScene(scene);
         } else {
             Stage stage = (Stage) Stage.getWindows().get(0);
-            File file = new File("src/main/java/view/UserPanel/AdminPanel/AdminPanel.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/AdminPanel.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="950.0" prefWidth="1700.0" stylesheets="@ProductPageStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ProductPage.ProductPage">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="950.0" prefWidth="1700.0" stylesheets="@ProductPageStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.ClientView.ProductPage.ProductPage">
    <children>
       <Label id="label" fx:id="title" layoutX="776.0" layoutY="21.0" text="Label" />
       <ImageView fx:id="image" fitHeight="500.0" fitWidth="500.0" layoutX="70.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" />

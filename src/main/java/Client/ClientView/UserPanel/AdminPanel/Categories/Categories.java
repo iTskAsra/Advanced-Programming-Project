@@ -58,7 +58,7 @@ public class Categories implements Initializable {
     public void addCategoryButtonClicked() throws IOException {
         NewEditCategories.setNewCategory(true);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/AdminPanel/Categories/NewEditCategories/NewEditCategories.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Categories/NewEditCategories/NewEditCategories.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -82,7 +82,7 @@ public class Categories implements Initializable {
             tempCategory = GetDataFromDatabase.getCategory((String) temp.getValue());
             NewEditCategories.setEditCategory(tempCategory);
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/UserPanel/AdminPanel/Categories/NewEditCategories/NewEditCategories.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Categories/NewEditCategories/NewEditCategories.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);

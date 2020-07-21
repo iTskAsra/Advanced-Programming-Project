@@ -255,7 +255,7 @@ public class AllProducts implements Initializable {
 
     public void accountButtonClickedNotLoggedIn() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/RegisterAndLoginStage/RegisterAndLogin.fxml");
+        File file = new File("src/main/java/Client/ClientView/RegisterAndLoginStage/RegisterAndLogin.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -269,14 +269,14 @@ public class AllProducts implements Initializable {
     public void accountButtonClickedLoggedIn() throws IOException {
         if (!Main.checkLoggedIn().equals("Admin")) {
             Stage stage = (Stage) login.getScene().getWindow();
-            File file = new File("src/main/java/view/UserPanel/UserPanel.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/UserPanel.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
             stage.setScene(scene);
         } else {
             Stage stage = (Stage) login.getScene().getWindow();
-            File file = new File("src/main/java/view/UserPanel/AdminPanel/AdminPanel.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/AdminPanel.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -340,7 +340,7 @@ public class AllProducts implements Initializable {
                         product = AllProductsPanelController.goToProductPage(Integer.parseInt(vBox.getId()));
                         ProductPageController.setProduct(product);
                         Stage stage = new Stage();
-                        File file = new File("src/main/java/view/ProductPage/ProductPage.fxml");
+                        File file = new File("src/main/java/Client/ClientView/ProductPage/ProductPage.fxml");
                         URL url = file.toURI().toURL();
                         Parent root = FXMLLoader.load(url);
                         Scene scene = new Scene(root);
@@ -459,7 +459,7 @@ public class AllProducts implements Initializable {
 
     public void backButtonClicked() throws IOException {
         Stage stage = (Stage) tilePane.getScene().getWindow();
-        File file = new File("src/main/java/view/MainMenuStage/MainMenu.fxml");
+        File file = new File("src/main/java/Client/ClientView/MainMenuStage/MainMenu.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -469,7 +469,7 @@ public class AllProducts implements Initializable {
     public void helpButtonClicked() throws IOException {
         Help.setMessage("Here you can see products, sort and filter them, you can filter them by features value by double-clicking on the feature and see your current filters and delete them by double-clicking on them and you can see categories too!");
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/HelpWindow/Help.fxml");
+        File file = new File("src/main/java/Client/ClientView/HelpWindow/Help.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

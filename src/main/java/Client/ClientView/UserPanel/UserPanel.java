@@ -63,7 +63,7 @@ public class UserPanel implements Initializable {
 
     public void back() throws IOException {
         Stage stage = (Stage) back.getScene().getWindow();
-        File file = new File("src/main/java/view/MainMenuStage/MainMenu.fxml");
+        File file = new File("src/main/java/Client/ClientView/MainMenuStage/MainMenu.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -83,7 +83,7 @@ public class UserPanel implements Initializable {
             Help.setMessage("Here is the panel for Sellers.\nYou can see the personal or company information, view sales history, manage, add or remove products and also you can see categories, offs or balances.\n");
         }
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/HelpWindow/Help.fxml");
+        File file = new File("src/main/java/Client/ClientView/HelpWindow/Help.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -112,7 +112,7 @@ public class UserPanel implements Initializable {
 
     public void editInfoButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/EditInfo/EditInfo.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/EditInfo/EditInfo.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -127,7 +127,7 @@ public class UserPanel implements Initializable {
     public void buySellLogButtonClicked() throws IOException {
         if (Main.checkLoggedIn().equals("Customer")) {
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/UserPanel/BuyLog/BuyLog.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/BuyLog/BuyLog.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -139,7 +139,7 @@ public class UserPanel implements Initializable {
         }
         else {
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/UserPanel/SellLog/SellLog.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/SellLog/SellLog.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -154,7 +154,7 @@ public class UserPanel implements Initializable {
     public void discountOrOffButtonClicked() throws IOException {
         if (Main.checkLoggedIn().equals("Customer")) {
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/UserPanel/DiscountCodes/DiscountCodes.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/DiscountCodes/DiscountCodes.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -166,7 +166,7 @@ public class UserPanel implements Initializable {
         }
         else {
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/UserPanel/ManageSellerOffs/ManageSellerOffs.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/ManageSellerOffs/ManageSellerOffs.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -211,7 +211,7 @@ public class UserPanel implements Initializable {
     public void cartButtonClicked() throws IOException {
         if (Main.checkLoggedIn().equals("Customer")) {
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/Cart/Cart.fxml");
+            File file = new File("src/main/java/Client/ClientView/Cart/Cart.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -223,7 +223,7 @@ public class UserPanel implements Initializable {
         }
         else {
             Stage stage = new Stage();
-            File file = new File("src/main/java/view/UserPanel/ManageSellerProducts/ManageSellerProducts.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/ManageSellerProducts/ManageSellerProducts.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -237,7 +237,7 @@ public class UserPanel implements Initializable {
 
     public void requests() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/RequestsStatus/RequestsStatus.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/RequestsStatus/RequestsStatus.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

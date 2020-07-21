@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@UserPanelStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserPanel.UserPanel">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@UserPanelStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.ClientView.UserPanel.UserPanel">
    <children>
       <Button id="back" fx:id="back" layoutX="85.0" layoutY="861.0" mnemonicParsing="false" onAction="#back" styleClass="normal-button" text="Back" />
       <Button id="logout" fx:id="logout" layoutX="335.0" layoutY="861.0" mnemonicParsing="false" onAction="#logout" styleClass="normal-button" text="Logout" />

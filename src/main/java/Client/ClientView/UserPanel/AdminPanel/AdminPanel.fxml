@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@AdminPanelStyle.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.UserPanel.AdminPanel.AdminPanel">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@AdminPanelStyle.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.ClientView.UserPanel.AdminPanel.AdminPanel">
    <children>
       <Button id="back" fx:id="back" layoutX="85.0" layoutY="861.0" mnemonicParsing="false" onAction="#back" styleClass="normal-button" text="Back" />
       <Button id="logout" fx:id="logout" layoutX="335.0" layoutY="861.0" mnemonicParsing="false" onAction="#logout" styleClass="normal-button" text="Logout" />
