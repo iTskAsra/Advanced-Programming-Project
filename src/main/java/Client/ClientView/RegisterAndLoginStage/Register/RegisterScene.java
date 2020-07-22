@@ -125,6 +125,7 @@ public class RegisterScene implements Initializable {
 
     }
 
+
     private void checkInputs() throws ExceptionsLibrary.NotAcceptableFormatInput {
         boolean emailCheck = email.getText().matches("\\w+@\\w+.\\w+");
         boolean phoneNumberCheck = phoneNumber.getText().matches("\\d+");

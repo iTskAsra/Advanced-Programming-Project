@@ -1,7 +1,9 @@
 package Client.ClientView.RegisterAndLoginStage;
 
 import Client.ClientController.ExceptionsLibrary;
+import Client.ClientController.RegisterAndLoginController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
+import Client.ClientView.RegisterAndLoginStage.Register.RegisterScene;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,9 +55,15 @@ public class RegisterAndLogin {
         HashMap<String,String> dataToSend = new HashMap();
         dataToSend.put("username",username.getText());
         dataToSend.put("password", password.getText());
-        AlertBoxStart.messageRun("Message","Successfully Logged In!");
-        Main.checkLoggedIn();
-        close();
+        try {
+            RegisterAndLoginController.login(dataToSend);
+            AlertBoxStart.messageRun("Message", "Successfully Logged In!");
+            Main.checkLoggedIn();
+            close();
+        }
+        catch (ExceptionsLibrary.WrongPasswordException | ExceptionsLibrary.WrongUsernameException | ExceptionsLibrary.NoAccountException e){
+            ErrorBoxStart.errorRun(e);
+        }
     }
 
 }
