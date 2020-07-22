@@ -34,7 +34,7 @@ public class MainMenuController implements Initializable {
     public void helpButtonClicked() throws IOException {
         Help.setMessage("Here you can login and logout,\nview your account details,\nsearch for products and offs,\nand see your cart\n");
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/HelpWindow/Help.fxml");
+        File file = new File("src/main/java/Client/ClientView/HelpWindow/Help.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -47,7 +47,7 @@ public class MainMenuController implements Initializable {
 
     public void accountButtonClickedNotLoggedIn() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/RegisterAndLoginStage/RegisterAndLogin.fxml");
+        File file = new File("src/main/java/Client/ClientView/RegisterAndLoginStage/RegisterAndLogin.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -61,14 +61,14 @@ public class MainMenuController implements Initializable {
     public void accountButtonClickedLoggedIn() throws IOException {
         if (!Main.checkLoggedIn().equals("Admin")) {
             Stage stage = (Stage) account.getScene().getWindow();
-            File file = new File("src/main/java/view/UserPanel/UserPanel.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/UserPanel.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
             stage.setScene(scene);
         } else {
             Stage stage = (Stage) account.getScene().getWindow();
-            File file = new File("src/main/java/view/UserPanel/AdminPanel/AdminPanel.fxml");
+            File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/AdminPanel.fxml");
             URL url = file.toURI().toURL();
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
@@ -87,7 +87,7 @@ public class MainMenuController implements Initializable {
 
     public void offsButtonClicked() throws IOException {
         Stage stage = (Stage) account.getScene().getWindow();
-        File file = new File("src/main/java/view/OffPanel/OffPanel.fxml");
+        File file = new File("src/main/java/Client/ClientView/OffPanel/OffPanel.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -113,7 +113,7 @@ public class MainMenuController implements Initializable {
 
     public void cartButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/Cart/Cart.fxml");
+        File file = new File("src/main/java/Client/ClientView/Cart/Cart.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

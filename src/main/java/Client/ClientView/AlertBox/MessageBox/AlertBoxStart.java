@@ -18,7 +18,7 @@ public class AlertBoxStart {
         AlertBox.setAlertTitle(title);
         AlertBox.setMessage(message);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/AlertBox/MessageBox/AlertBox.fxml");
+        File file = new File("src/main/java/Client/ClientView/AlertBox/MessageBox/AlertBox.fxml");
         URL url = null;
         try {
             url = file.toURI().toURL();

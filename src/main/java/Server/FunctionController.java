@@ -4,7 +4,7 @@ import Server.ServerController.*;
 
 public class FunctionController {
 
-    public static void handleFunction (String command) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException, ExceptionsLibrary.NoRequestException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NotEnoughNumberAvailableException, ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoLogException, ExceptionsLibrary.NoOffException, ExceptionsLibrary.SelectASeller, ExceptionsLibrary.CategoriesNotMatch, ExceptionsLibrary.CannotChangeThisFeature {
+    public static void handleFunction (String command) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException, ExceptionsLibrary.NoRequestException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NotEnoughNumberAvailableException, ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoLogException, ExceptionsLibrary.NoOffException, ExceptionsLibrary.SelectASeller, ExceptionsLibrary.CategoriesNotMatch, ExceptionsLibrary.CannotChangeThisFeature, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
 
         //System.out.println(command);
 
@@ -312,6 +312,10 @@ public class FunctionController {
             }
             case "Show Seller Requests" : {
                 SellerController.showSellerRequests();
+                break;
+            }
+            case "Log in" : {
+                RegisterAndLogin.login();
                 break;
             }
 

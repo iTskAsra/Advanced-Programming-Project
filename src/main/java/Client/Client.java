@@ -34,7 +34,7 @@ public class Client {
         //string += token;
 
         try {
-            System.out.println("Client Said: "+message);
+            System.out.println("Client Said: "+string);
             dataOutputStream.writeUTF(string);
             dataOutputStream.flush();
         } catch (IOException e) {
@@ -48,16 +48,17 @@ public class Client {
         try {
             message = dataInputStream.readUTF();
             System.out.println("Server Said: "+message);
-            return message;
+            //return message;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return message;
     }
 
     public static void sendObject(Object sent){
 
         try {
+            System.out.println(sent);
             os.writeObject(sent);
             os.flush();
         } catch (IOException e) {
@@ -66,15 +67,16 @@ public class Client {
     }
 
     public static Object receiveObject(){
-
+        Object object = null;
         try {
-            return is.readObject();
+            object = is.readObject();
+            System.out.println(object);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return object;
     }
 }

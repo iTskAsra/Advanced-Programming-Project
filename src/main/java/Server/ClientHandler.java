@@ -100,6 +100,10 @@ public class ClientHandler extends Thread {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.CreditNotSufficientException e) {
                 e.printStackTrace();
+            } catch (ExceptionsLibrary.WrongUsernameException e) {
+                e.printStackTrace();
+            } catch (ExceptionsLibrary.WrongPasswordException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -132,6 +136,7 @@ public class ClientHandler extends Thread {
         Object object = null;
         try {
             object = is.readObject();
+            System.out.println(object);
             return object;
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
@@ -142,6 +147,7 @@ public class ClientHandler extends Thread {
 
     public static void sendObject(Object object){
         try {
+            System.out.println(object);
             os.writeObject(object);
             os.flush();
         }catch (IOException e) {

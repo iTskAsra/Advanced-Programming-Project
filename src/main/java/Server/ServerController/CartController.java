@@ -142,7 +142,7 @@ public class CartController {
         for (Product i : cartProducts.keySet()) {
             totalPrice += (i.getPriceWithOff() * cartProducts.get(i));
         }
-        ClientHandler.sendMessage(String.valueOf(totalPrice));
+        ClientHandler.sendObject(totalPrice);
     }
 
     public static void receiverProcess() throws ExceptionsLibrary.NotLoggedInException {
