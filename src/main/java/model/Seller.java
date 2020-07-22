@@ -11,7 +11,7 @@ import model.SellLog;
 
 import java.util.ArrayList;
 
-public class Seller extends Account {
+public class Seller extends Account implements java.io.Serializable {
     public static ArrayList<model.Seller> allSellers;
     private String companyName;
     private ArrayList<Product> sellerProducts;

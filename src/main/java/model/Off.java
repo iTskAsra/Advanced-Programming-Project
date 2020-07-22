@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Off {
+public class Off implements java.io.Serializable {
     private int offId;
     private ArrayList<String> offProducts;
     private ProductOrOffCondition offCondition;

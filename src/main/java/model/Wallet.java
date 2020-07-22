@@ -4,7 +4,7 @@ import model.Customer;
 import model.Seller;
 
 
-public class Wallet {
+public class Wallet implements java.io.Serializable {
 
     private Account account;
     private double balance;

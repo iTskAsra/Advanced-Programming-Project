@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Product {
+public class Product implements java.io.Serializable {
     private int productId;
     private ProductOrOffCondition productCondition;
     private String name;

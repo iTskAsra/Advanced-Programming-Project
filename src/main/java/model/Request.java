@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Request {
+public class Request implements java.io.Serializable {
     private int requestId;
     private String requestDescription;
     private RequestType requestType;

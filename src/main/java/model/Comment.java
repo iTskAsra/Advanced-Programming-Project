@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Comment {
+public class Comment implements java.io.Serializable {
     public static ArrayList<Comment> allComments;
     private String commenterAccount;
     private transient Product commentProduct;

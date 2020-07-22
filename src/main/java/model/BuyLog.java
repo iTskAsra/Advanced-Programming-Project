@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class BuyLog {
+public class BuyLog implements java.io.Serializable {
     private int logId;
     private String logDate;
     private double value;

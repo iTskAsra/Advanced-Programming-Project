@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Category {
+public class Category implements java.io.Serializable {
     public static ArrayList<Category> allCategories;
     private String name;
     private ArrayList<Feature> features;

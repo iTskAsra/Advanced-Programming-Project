@@ -495,7 +495,8 @@ public class AllProductsPanelController {
         } else {
             filterAnAvailableFilter();
         }
-        Collections.sort(getResult(), new Comparator<Product>() {
+        Collections.sort
+                (getResult(), new Comparator<Product>() {
             @Override
             public int compare(Product o1, Product o2) {
                 try {

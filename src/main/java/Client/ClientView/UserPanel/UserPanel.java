@@ -179,7 +179,7 @@ public class UserPanel implements Initializable {
     }
 
     private void updateScene() {
-        if (Main.checkLoggedIn().equals("Customer")) {
+        if (view.Base.Main.checkLoggedIn().equals("Customer")) {
             Customer customer = CustomerController.getCustomer();
             name.setText("Welcome " + customer.getFirstName() + " " + customer.getLastName() + "!");
             username.setText(customer.getUsername());

@@ -1,6 +1,6 @@
 package model;
 
-public class Feature {
+public class Feature implements java.io.Serializable {
     private String parameter;
     private String parameterValue;
 

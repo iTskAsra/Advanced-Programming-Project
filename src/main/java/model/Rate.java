@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Rate {
+public class Rate implements java.io.Serializable {
     public static ArrayList<Rate> allRates;
     private Account rateAccount;
     private double rateScore;

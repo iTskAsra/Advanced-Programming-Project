@@ -3,7 +3,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Account {
+public class Account implements java.io.Serializable {
     public static ArrayList<Account> allAccounts;
     private String username;
     private String password;

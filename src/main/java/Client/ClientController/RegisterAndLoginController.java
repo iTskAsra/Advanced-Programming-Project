@@ -23,7 +23,7 @@ public class RegisterAndLoginController {
             return;
     }
 
-    public static String login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException{
+    public static void login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException{
 
         String func = "Log in";
         Client.sendMessage(func);
@@ -39,7 +39,7 @@ public class RegisterAndLoginController {
         else if (response instanceof ExceptionsLibrary.NoAccountException)
             throw new ExceptionsLibrary.NoAccountException();
         else
-            return (String) response;
+            view.Base.Main.setStatus((String) response);
     }
 
     public static void registerAdmin (String data){

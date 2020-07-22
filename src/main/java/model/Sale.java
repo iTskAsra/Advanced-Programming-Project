@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Sale {
+public class Sale implements java.io.Serializable {
     public static ArrayList<Sale> allSales;
     private String saleCode;
     private String startDate;
