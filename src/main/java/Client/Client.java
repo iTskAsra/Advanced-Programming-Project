@@ -33,32 +33,24 @@ public class Client {
         //string += " ";
         //string += token;
 
-        try {
-            System.out.println("Client Said: "+string);
-            dataOutputStream.writeUTF(string);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Client Said: "+string);
+        sendObject(string);
     }
 
     public static String receiveMessage(){
 
         String message = null;
-        try {
-            message = dataInputStream.readUTF();
-            System.out.println("Server Said: "+message);
-            //return message;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        message = (String) receiveObject();
+        System.out.println("Server Said: "+message);
+
+        //return message;
         return message;
     }
 
     public static void sendObject(Object sent){
 
         try {
-            System.out.println(sent);
+            System.out.println("Client Said: "+sent);
             os.writeObject(sent);
             os.flush();
         } catch (IOException e) {
@@ -70,7 +62,7 @@ public class Client {
         Object object = null;
         try {
             object = is.readObject();
-            System.out.println(object);
+            System.out.println("Server Said: "+object);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

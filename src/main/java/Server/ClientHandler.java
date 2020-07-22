@@ -110,25 +110,15 @@ public class ClientHandler extends Thread {
 
 
     public static void sendMessage(String dataToWrite){
-        try {
-            System.out.println("Server Said: "+dataToWrite);
-            out.writeUTF(dataToWrite);
-            out.flush();
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Server Said: "+dataToWrite);
+        sendObject(dataToWrite);
+        //out.writeUTF(dataToWrite);
+        //out.flush();
     }
 
     public static String receiveMessage() {
         String readData = null;
-        try {
-            readData = brinp.readUTF();
-            System.out.println("Client Said: "+readData);
-            //return readData;
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-
+        readData = (String) receiveObject();
         return readData;
     }
 
@@ -136,7 +126,7 @@ public class ClientHandler extends Thread {
         Object object = null;
         try {
             object = is.readObject();
-            System.out.println(object);
+            System.out.println("Client Said: "+object);
             return object;
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
@@ -147,7 +137,7 @@ public class ClientHandler extends Thread {
 
     public static void sendObject(Object object){
         try {
-            System.out.println(object);
+            System.out.println("Server Said: "+object);
             os.writeObject(object);
             os.flush();
         }catch (IOException e) {
