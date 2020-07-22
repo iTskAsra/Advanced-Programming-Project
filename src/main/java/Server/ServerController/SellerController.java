@@ -1,6 +1,6 @@
 package Server.ServerController;
 
-import Client.Client;
+import Server.ClientHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -33,7 +33,7 @@ public class SellerController {
     }
 
     public static void showSellerInfo() throws ExceptionsLibrary.NoAccountException {
-        String adminUsername = Client.receiveMessage();
+        String adminUsername = ClientHandler.receiveMessage();
         Gson gson = new GsonBuilder().serializeNulls().create();
         if (getSeller() == null) {
             throw new ExceptionsLibrary.NoAccountException();
@@ -41,15 +41,15 @@ public class SellerController {
         Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(adminUsername);
         setSeller(seller);
         String data = gson.toJson(seller);
-        Client.sendMessage(data);
+        ClientHandler.sendMessage(data);
     }
 
     public static void editSellerInfo() throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException {
-        HashMap<String, String> dataToEdit = (HashMap<String, String>) Client.receiveObject();
+        HashMap<String, String> dataToEdit = (HashMap<String, String>) ClientHandler.receiveObject();
         Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
         for (String i : dataToEdit.keySet()) {
             if (i.equals("username")) {
-                Client.sendObject(new ExceptionsLibrary.ChangeUsernameException());
+                ClientHandler.sendObject(new ExceptionsLibrary.ChangeUsernameException());
             }
             try {
                 try {
@@ -57,13 +57,13 @@ public class SellerController {
                     field.setAccessible(true);
                     field.set(seller, dataToEdit.get(i));
                 } catch (NoSuchFieldException e) {
-                    Client.sendObject(e);
+                    ClientHandler.sendObject(e);
                     Field field = Seller.class.getDeclaredField(i);
                     field.setAccessible(true);
                     field.set(seller, dataToEdit.get(i));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
             }
         }
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -76,7 +76,7 @@ public class SellerController {
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
-            Client.sendObject(e);
+            ClientHandler.sendObject(e);
         }
     }
 
@@ -86,7 +86,7 @@ public class SellerController {
 
     public static void showSellerProducts() throws ExceptionsLibrary.NoAccountException {
         Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
-        Client.sendObject(seller.getSellerProducts());
+        ClientHandler.sendObject(seller.getSellerProducts());
     }
 
     public static ArrayList<SellLog> showSellerLogs() {
@@ -94,7 +94,7 @@ public class SellerController {
     }
 
     public static void editProductRequest() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.CannotChangeThisFeature {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         int productId = Integer.parseInt((String) receivedData[0]);
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedData[1];
         Product product = GetDataFromDatabaseServerSide.getProduct(productId);
@@ -102,7 +102,7 @@ public class SellerController {
             for (String i : dataToEdit.keySet()) {
                 try {
                     if (i.equalsIgnoreCase("productId")){
-                        Client.sendObject(new ExceptionsLibrary.CannotChangeThisFeature());
+                        ClientHandler.sendObject(new ExceptionsLibrary.CannotChangeThisFeature());
                     }
                     Field field = Product.class.getDeclaredField(i);
                     if (i.equals("price")) {
@@ -116,7 +116,7 @@ public class SellerController {
                         field.set(product, dataToEdit.get(i));
                     }
                 } catch (NoSuchFieldException | IllegalAccessException e) {
-                    Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                    ClientHandler.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
                 }
             }
             Gson gsonProduct = new GsonBuilder().serializeNulls().create();
@@ -132,15 +132,15 @@ public class SellerController {
                 fileWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                Client.sendObject(e);
+                ClientHandler.sendObject(e);
             }
         } else {
-            Client.sendObject(new ExceptionsLibrary.NoProductException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
         }
     }
 
     public static void removeProductRequest() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         String productDetails = gson.toJson(product);
@@ -159,12 +159,12 @@ public class SellerController {
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
-            Client.sendObject(e);
+            ClientHandler.sendObject(e);
         }
     }
 
     public static void addProductRequest() {
-        Product product = (Product) Client.receiveObject();
+        Product product = (Product) ClientHandler.receiveObject();
         product.setSeller(getSeller());
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
         String productDetails = gson.toJson(product);
@@ -183,13 +183,13 @@ public class SellerController {
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
-            Client.sendObject(e);
+            ClientHandler.sendObject(e);
         }
 
     }
 
     public static void editOffRequest() throws ExceptionsLibrary.NoOffException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.CannotChangeThisFeature {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         int offId = Integer.parseInt((String) receivedData[0]);
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedData[1];
         Off off = GetDataFromDatabaseServerSide.getOff(offId);
@@ -199,7 +199,7 @@ public class SellerController {
                     for (String s : dataToEdit.keySet()) {
                         try {
                             if (s.equalsIgnoreCase("offId")){
-                                Client.sendObject(new ExceptionsLibrary.CannotChangeThisFeature());
+                                ClientHandler.sendObject(new ExceptionsLibrary.CannotChangeThisFeature());
                             }
                             Field field = Off.class.getDeclaredField(s);
                             if (s.equals("offAmount")) {
@@ -210,7 +210,7 @@ public class SellerController {
                                 field.set(off, dataToEdit.get(s));
                             }
                         } catch (NoSuchFieldException | IllegalAccessException e) {
-                            Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                            ClientHandler.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
                         }
                     }
                     off.setOffCondition(ProductOrOffCondition.PENDING_TO_EDIT);
@@ -227,17 +227,17 @@ public class SellerController {
                         return;
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Client.sendObject(e);
+                        ClientHandler.sendObject(e);
                     }
                 }
             }
         } else {
-            Client.sendObject(new ExceptionsLibrary.NoOffException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoOffException());
         }
     }
 
     public static void addOffRequest() throws ExceptionsLibrary.NoProductException {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         Off off = (Off) receivedData[0];
         String offProducts = (String) receivedData[1];
         Gson gsonOff = new GsonBuilder().serializeNulls().create();
@@ -256,7 +256,7 @@ public class SellerController {
                 }
             }
             catch (Exception e){
-                Client.sendObject(new ExceptionsLibrary.NoProductException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
             }
         }
         off.setOffProducts(offProductsList);
@@ -281,40 +281,40 @@ public class SellerController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            Client.sendObject(e);
+            ClientHandler.sendObject(e);
         }
     }
 
     public static void showOffs() throws ExceptionsLibrary.NoAccountException {
         Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
-        Client.sendObject(seller.getSellerOffs());
+        ClientHandler.sendObject(seller.getSellerOffs());
     }
 
     public static void showOffDetails() throws ExceptionsLibrary.NoOffException {
-        int offId = Integer.parseInt(Client.receiveMessage());
+        int offId = Integer.parseInt(ClientHandler.receiveMessage());
         for (Off i : getSeller().getSellerOffs()) {
             if (i.getOffId() == offId) {
-                Client.sendObject(i);
+                ClientHandler.sendObject(i);
             }
         }
-        Client.sendObject(new ExceptionsLibrary.NoOffException());
+        ClientHandler.sendObject(new ExceptionsLibrary.NoOffException());
     }
 
     public static void showProductDetails() throws ExceptionsLibrary.NoProductException {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         Product product = null;
         try {
             product = GetDataFromDatabaseServerSide.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
             e.printStackTrace();
-            Client.sendObject(e);
+            ClientHandler.sendObject(e);
             return;
         }
-        Client.sendObject(product);
+        ClientHandler.sendObject(product);
     }
 
     public static void showProductBuyers() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         ArrayList<SellLog> buyersLogs = new ArrayList<>();
         Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(getSeller().getUsername());
@@ -325,7 +325,7 @@ public class SellerController {
                 }
             }
         }
-        Client.sendObject(buyersLogs);
+        ClientHandler.sendObject(buyersLogs);
     }
 
     public static double showBalance() {
@@ -352,11 +352,11 @@ public class SellerController {
             Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
             allCategories.add(category);
         }
-        Client.sendObject(allCategories);
+        ClientHandler.sendObject(allCategories);
     }
 
     public static void checkIfCategoryExists() {
-        String categoryName = Client.receiveMessage();
+        String categoryName = ClientHandler.receiveMessage();
         String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -372,10 +372,10 @@ public class SellerController {
             String fileName = i.getName();
             String fileCategoryName = fileName.replace(".json", "");
             if (categoryName.equals(fileCategoryName)) {
-                Client.sendObject(true);
+                ClientHandler.sendObject(true);
             }
         }
-        Client.sendObject(false);
+        ClientHandler.sendObject(false);
     }
 
     public static void showSellerRequests() throws ExceptionsLibrary.NoRequestException {
@@ -399,7 +399,7 @@ public class SellerController {
                 sellerRequests.add(request);
             }
         }
-        Client.sendObject(sellerRequests);
+        ClientHandler.sendObject(sellerRequests);
     }
 
 }

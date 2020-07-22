@@ -1,6 +1,7 @@
 package Server.ServerController;
 
-import Client.Client;
+//import Client.Client;
+import Server.ClientHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -34,17 +35,17 @@ public class AdminController {
     public static void showAdminInfo() throws ExceptionsLibrary.NoAccountException {
         Gson gson = new GsonBuilder().serializeNulls().create();
         if (getAdmin() == null) {
-            Client.sendObject(new ExceptionsLibrary.NoAccountException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
         }
-        String username = Client.receiveMessage();
+        String username = ClientHandler.receiveMessage();
         Admin admin = (Admin) GetDataFromDatabaseServerSide.getAccount(username);
         setAdmin(admin);
         String data = gson.toJson(admin);
-        Client.sendMessage(data);
+        ClientHandler.sendMessage(data);
     }
 
     public static void editAdminInfo() throws ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.ChangeUsernameException {
-        Object[] receivedItems = (Object[])Client.receiveObject();
+        Object[] receivedItems = (Object[])ClientHandler.receiveObject();
 
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedItems[1];
         Admin admin = (Admin) GetDataFromDatabaseServerSide.getAccount((String)receivedItems[0]);
@@ -52,21 +53,21 @@ public class AdminController {
 
         for (String i : dataToEdit.keySet()) {
             if (i.equals("username")){
-                Client.sendObject(new ExceptionsLibrary.ChangeUsernameException());
+                ClientHandler.sendObject(new ExceptionsLibrary.ChangeUsernameException());
             }
             try {
                 Field field = Admin.class.getSuperclass().getDeclaredField(i);
                 field.setAccessible(true);
                 field.set(admin, dataToEdit.get(i));
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
 
             }
         }
         Gson gson = new GsonBuilder().serializeNulls().create();
         setAdmin(admin);
         SetDataToDatabase.setAccount(getAdmin());
-        Client.sendMessage("Success!");
+        ClientHandler.sendMessage("Success!");
     }
 
     public static void showAdminRequests() throws ExceptionsLibrary.NoRequestException {
@@ -90,29 +91,29 @@ public class AdminController {
                 allRequests.add(request);
             }
         }
-        Client.sendObject(allRequests);
+        ClientHandler.sendObject(allRequests);
     }
 
     public static void showRequest() throws ExceptionsLibrary.NoRequestException {
 
-        int requestId = Integer.parseInt(Client.receiveMessage());
+        int requestId = Integer.parseInt(ClientHandler.receiveMessage());
         Request request = GetDataFromDatabaseServerSide.getRequest(requestId);
         if (request != null) {
             if (request.getRequestCondition().equals(RequestOrCommentCondition.PENDING_TO_ACCEPT)) {
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 String reuestData = gson.toJson(request);
-                Client.sendMessage(reuestData);
+                ClientHandler.sendMessage(reuestData);
             }
             else {
-                Client.sendObject(new ExceptionsLibrary.NoRequestException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoRequestException());
             }
         } else {
-            Client.sendObject(new ExceptionsLibrary.NoRequestException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoRequestException());
         }
     }
 
     public static void processRequest() throws ExceptionsLibrary.NoRequestException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException {
-        Object[] receivedArray = (Object[]) Client.receiveObject();
+        Object[] receivedArray = (Object[]) ClientHandler.receiveObject();
         int requestId = (int) receivedArray[0];
         boolean acceptStatus = (boolean) receivedArray[1];
         Request request = GetDataFromDatabaseServerSide.getRequest(requestId);
@@ -148,7 +149,7 @@ public class AdminController {
                     } catch (IOException e) {
                         request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
                         SetDataToDatabase.setRequest(request);
-                        Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                        ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
                     }
                 } else {
                     request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
@@ -188,7 +189,7 @@ public class AdminController {
                     } catch (IOException e) {
                         request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
                         SetDataToDatabase.setRequest(request);
-                        Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                        ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
                     }
                 } else {
                     request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
@@ -219,7 +220,7 @@ public class AdminController {
                     } catch (IOException e) {
                         request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
                         SetDataToDatabase.setRequest(request);
-                        Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                        ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
                     }
                 } else {
                     request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
@@ -253,7 +254,7 @@ public class AdminController {
                     } catch (IOException e) {
                         request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
                         SetDataToDatabase.setRequest(request);
-                        Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                        ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
                     }
                 } else {
                     request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
@@ -276,12 +277,12 @@ public class AdminController {
                             request.setRequestCondition(RequestOrCommentCondition.ACCEPTED);
                             SetDataToDatabase.setRequest(request);
                         } catch (IOException e) {
-                            Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                            ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
                         }
                     } else {
                         request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
                         SetDataToDatabase.setRequest(request);
-                        Client.sendObject(new ExceptionsLibrary.UsernameAlreadyExists());
+                        ClientHandler.sendObject(new ExceptionsLibrary.UsernameAlreadyExists());
                     }
                 } else {
                     request.setRequestCondition(RequestOrCommentCondition.NOT_ACCEPTED);
@@ -306,13 +307,13 @@ public class AdminController {
     }
 
     private static void checkIfOffExist() {
-        int offId = Integer.parseInt(Client.receiveMessage());
+        int offId = Integer.parseInt(ClientHandler.receiveMessage());
         String path = "Resources/Offs/" + offId + ".json";
         File file = new File(path);
         if (!file.exists()) {
-            Client.sendMessage("false");
+            ClientHandler.sendMessage("false");
         } else {
-            Client.sendMessage("true");
+            ClientHandler.sendMessage("true");
         }
     }
 
@@ -345,18 +346,18 @@ public class AdminController {
             Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
             allSales.add(sale);
         }
-        Client.sendObject(allSales);
+        ClientHandler.sendObject(allSales);
     }
 
     public static void editSaleInfo() throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.CannotChangeThisFeature {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         String saleCode = (String)receivedData[0];
         HashMap<String, String> dataToEdit = (HashMap)receivedData[0];
         Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
         for (String i : dataToEdit.keySet()) {
             try {
                 if (i.equalsIgnoreCase("saleId")){
-                    Client.sendObject(new ExceptionsLibrary.CannotChangeThisFeature());
+                    ClientHandler.sendObject(new ExceptionsLibrary.CannotChangeThisFeature());
                 }
                 Field field = Sale.class.getDeclaredField(i);
                 if (i.equals("salePercent")) {
@@ -373,7 +374,7 @@ public class AdminController {
                     field.set(sale, dataToEdit.get(i));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
             }
         }
         File customerFolder = new File("Resources/Accounts/Customer");
@@ -469,7 +470,7 @@ public class AdminController {
     }
 
     public static void addSale() {
-        Sale sale = (Sale) Client.receiveObject();
+        Sale sale = (Sale) ClientHandler.receiveObject();
         while (checkSaleCode(sale.getSaleCode())) {
             sale.setSaleCode(Sale.getRandomSaleCode());
         }
@@ -551,7 +552,7 @@ public class AdminController {
             Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
-        Client.sendObject(list);
+        ClientHandler.sendObject(list);
     }
 
     public static ArrayList<Account> showAllUsersLocal() throws ExceptionsLibrary.NoAccountException {
@@ -612,18 +613,18 @@ public class AdminController {
             Account account = GetDataFromDatabaseServerSide.getAccount(username);
             list.add(account);
         }
-        Client.sendObject(list);
+        ClientHandler.sendObject(list);
     }
 
     public static void showUserDetails() throws ExceptionsLibrary.NoAccountException {
-        String username = Client.receiveMessage();
+        String username = ClientHandler.receiveMessage();
         Account account = GetDataFromDatabaseServerSide.getAccount(username);
         Gson gson = new GsonBuilder().serializeNulls().create();
-        Client.sendMessage(gson.toJson(account));
+        ClientHandler.sendMessage(gson.toJson(account));
     }
 
     public static void deleteUser() throws ExceptionsLibrary.NoAccountException {
-        String username = Client.receiveMessage();
+        String username = ClientHandler.receiveMessage();
         Account account = GetDataFromDatabaseServerSide.getAccount(username);
         String path = "Resources/Accounts/" + account.getRole() + "/" + account.getUsername() + ".json";
         File file = new File(path);
@@ -631,18 +632,21 @@ public class AdminController {
     }
 
     public static void addAdminAccount() throws ExceptionsLibrary.UsernameAlreadyExists {
-        String newAdminDetails = Client.receiveMessage();
+        String newAdminDetails = ClientHandler.receiveMessage();
+        System.out.println(newAdminDetails);
         Gson gson = new GsonBuilder().serializeNulls().create();
         Admin admin1 = gson.fromJson(newAdminDetails,Admin.class);
         if (RegisterAndLogin.checkUsername(admin1.getUsername())) {
             RegisterAndLogin.registerAdmin(newAdminDetails);
         } else {
-            throw new ExceptionsLibrary.UsernameAlreadyExists();
+            ClientHandler.sendObject(new ExceptionsLibrary.UsernameAlreadyExists());
+            return;
         }
+        ClientHandler.sendMessage("Success!");
     }
 
     public static void deleteProduct() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         Product product = GetDataFromDatabaseServerSide.getProduct(productId);
         String path = "Resources/Products/" + product.getProductId() + ".json";
         SetDataToDatabase.updateSellerOfProduct(product,1);
@@ -669,11 +673,11 @@ public class AdminController {
             Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
             allCategories.add(category);
         }
-        Client.sendObject(allCategories);
+        ClientHandler.sendObject(allCategories);
     }
 
     public static void deleteCategory() throws ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoProductException {
-        String categoryName = Client.receiveMessage();
+        String categoryName = ClientHandler.receiveMessage();
         try {
             Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
             FileFilter fileFilter = new FileFilter() {
@@ -708,13 +712,13 @@ public class AdminController {
             File file = new File(path);
             file.delete();
         } catch (ExceptionsLibrary.NoCategoryException e) {
-            Client.sendObject(new ExceptionsLibrary.NoCategoryException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoCategoryException());
         }
 
     }
 
     public static void editCategory() throws ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         String categoryName = (String) receivedData[0];
         HashMap<String, String> dataToEdit = (HashMap<String, String>) receivedData[0];
         Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
@@ -735,7 +739,7 @@ public class AdminController {
                     field.set(category, dataToEdit.get(i));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
             }
         }
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -757,7 +761,7 @@ public class AdminController {
                 String oldPath = "Resources/Category/" + oldName + ".json";
                 File file = new File(newPath);
                 if (file.exists()) {
-                    Client.sendObject(new ExceptionsLibrary.CategoryExistsWithThisName());
+                    ClientHandler.sendObject(new ExceptionsLibrary.CategoryExistsWithThisName());
                 }
                 file.createNewFile();
                 FileWriter fileWriter = new FileWriter(newPath);
@@ -789,13 +793,13 @@ public class AdminController {
                 SetDataToDatabase.setProduct(product);
                 SetDataToDatabase.updateSellerOfProduct(product,0);
             } catch (ExceptionsLibrary.NoAccountException | IOException e) {
-                Client.sendObject(e);
+                ClientHandler.sendObject(e);
             }
         }
     }
 
     public static void addCategory() throws ExceptionsLibrary.CategoryExistsWithThisName {
-        String categoryDetails = Client.receiveMessage();
+        String categoryDetails = ClientHandler.receiveMessage();
         Gson gson = new GsonBuilder().serializeNulls().create();
         Category category = gson.fromJson(categoryDetails, Category.class);
         if (!checkCategoryName(category.getName())) {
@@ -811,19 +815,19 @@ public class AdminController {
                 e.printStackTrace();
             }
         } else {
-            Client.sendObject(new ExceptionsLibrary.CategoryExistsWithThisName());
+            ClientHandler.sendObject(new ExceptionsLibrary.CategoryExistsWithThisName());
         }
     }
 
     public static void viewSaleCodeDetails() throws ExceptionsLibrary.NoSaleException {
-        String saleCode = Client.receiveMessage();
+        String saleCode = ClientHandler.receiveMessage();
         Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
         Gson gson = new GsonBuilder().serializeNulls().create();
-        Client.sendMessage(gson.toJson(sale));
+        ClientHandler.sendMessage(gson.toJson(sale));
     }
 
     public static void removeSaleCode() throws ExceptionsLibrary.NoSaleException {
-        String saleCode = Client.receiveMessage();
+        String saleCode = ClientHandler.receiveMessage();
         try {
             Sale sale = GetDataFromDatabaseServerSide.getSale(saleCode);
             FileFilter fileFilter = new FileFilter() {
@@ -906,13 +910,13 @@ public class AdminController {
             File file = new File(path);
             file.delete();
         } catch (ExceptionsLibrary.NoSaleException e) {
-            Client.sendObject(new ExceptionsLibrary.NoSaleException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoSaleException());
         }
 
     }
 
     public static void checkCategoryName() {
-        String categoryName = Client.receiveMessage();
+        String categoryName = ClientHandler.receiveMessage();
         String path = "Resources/Category";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -928,10 +932,10 @@ public class AdminController {
             String fileName = i.getName();
             String fileCategoryName = fileName.replace(".json", "");
             if (categoryName.equals(fileCategoryName)) {
-                Client.sendMessage("true");
+                ClientHandler.sendMessage("true");
             }
         }
-        Client.sendMessage("false");
+        ClientHandler.sendMessage("false");
     }
 
     public static boolean checkCategoryName(String categoryName) {
@@ -979,7 +983,7 @@ public class AdminController {
     }
 
     public static void checkSaleCode() {
-        String saleCode = Client.receiveMessage();
+        String saleCode = ClientHandler.receiveMessage();
         String path = "Resources/Sales";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -995,11 +999,11 @@ public class AdminController {
             String fileName = i.getName();
             String fileSaleCode = fileName.replace(".json", "");
             if (saleCode.equals(fileSaleCode)) {
-                Client.sendMessage("true");
+                ClientHandler.sendObject(true);
 
             }
         }
-        Client.sendMessage("false");
+        ClientHandler.sendObject(false);
 
     }
 
@@ -1015,24 +1019,24 @@ public class AdminController {
     }
 
     public static void checkIfProductExist() {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         String path = "Resources/Products/" + productId + ".json";
         File file = new File(path);
         if (!file.exists()) {
-            Client.sendMessage("false");
+            ClientHandler.sendObject(false);
         } else {
-            Client.sendMessage("true");
+            ClientHandler.sendObject(true);
         }
     }
 
     public static void checkIfRequestExist() {
-        int requestId = Integer.parseInt(Client.receiveMessage());
+        int requestId = Integer.parseInt(ClientHandler.receiveMessage());
         String path = "Resources/Requests/" + requestId + ".json";
         File file = new File(path);
         if (!file.exists()) {
-            Client.sendObject(false);
+            ClientHandler.sendObject(false);
         } else {
-            Client.sendObject(true);
+            ClientHandler.sendObject(true);
         }
     }
 
@@ -1054,7 +1058,7 @@ public class AdminController {
             int productId = Integer.parseInt(fileName.replace(".json", ""));
             allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
         }
-        Client.sendObject(allProducts);
+        ClientHandler.sendObject(allProducts);
     }
 
 }

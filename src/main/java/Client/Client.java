@@ -20,7 +20,6 @@ public class Client {
         System.out.println("Running Client!");
         clientSocket = new Socket("localhost", 4445);
         dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-        dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
         dataOutputStream = new DataOutputStream(new DataOutputStream(clientSocket.getOutputStream()));
         os = new ObjectOutputStream(clientSocket.getOutputStream());
         is = new ObjectInputStream(clientSocket.getInputStream());
@@ -31,9 +30,11 @@ public class Client {
 
     public static void sendMessage(String string){
 
-        string += token;
+        //string += " ";
+        //string += token;
 
         try {
+            System.out.println("Client Said: "+message);
             dataOutputStream.writeUTF(string);
             dataOutputStream.flush();
         } catch (IOException e) {
@@ -43,8 +44,11 @@ public class Client {
 
     public static String receiveMessage(){
 
+        String message = null;
         try {
-            return dataInputStream.readUTF();
+            message = dataInputStream.readUTF();
+            System.out.println("Server Said: "+message);
+            return message;
         } catch (IOException e) {
             e.printStackTrace();
         }

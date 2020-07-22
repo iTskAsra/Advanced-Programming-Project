@@ -1,6 +1,7 @@
 package Server.ServerController;
 
-import Client.Client;
+//import Client.Client;
+import Server.ClientHandler;
 import model.Category;
 import model.Feature;
 import model.Product;
@@ -91,7 +92,7 @@ public class AllProductsPanelController {
             String fileName = i.getName();
             categoriesName.add(fileName.replace(".json", ""));
         }
-        Client.sendObject(categoriesName);
+        ClientHandler.sendObject(categoriesName);
     }
 
     public static void showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
@@ -114,7 +115,7 @@ public class AllProductsPanelController {
             Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
         }
         setAvailableFilters(allAvailableFilters);
-        Client.sendObject(allAvailableFilters);
+        ClientHandler.sendObject(allAvailableFilters);
     }
 
     public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException {
@@ -287,7 +288,7 @@ public class AllProductsPanelController {
 
     public static void getProductRemoved() {
 
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
 
         Product product = (Product) receivedData[0];
         String feature = (String) receivedData[1];
@@ -297,15 +298,15 @@ public class AllProductsPanelController {
             featuresToString.add(j.toString());
         }
         if (featuresToString.contains(feature)) {
-            Client.sendMessage("false");
+            ClientHandler.sendObject(false);
         } else {
-            Client.sendMessage("true");
+            ClientHandler.sendObject(true);
         }
     }
 
 
     public static void checkPreviousFilters() throws ExceptionsLibrary.NoAccountException {
-        int count = Integer.parseInt(Client.receiveMessage());
+        int count = Integer.parseInt(ClientHandler.receiveMessage());
         for (int l = 0; l < count; l++) {
             String i = getCurrentFilters().get(l);
             String[] splitFilters = i.split("--");
@@ -384,7 +385,7 @@ public class AllProductsPanelController {
             }
         }
 
-        Client.sendMessage("Success!");
+        ClientHandler.sendMessage("Success!");
     }
 
     public static void checkPreviousFilters(int count) throws ExceptionsLibrary.NoAccountException {
@@ -468,7 +469,7 @@ public class AllProductsPanelController {
     }
 
     public static void sellersOfThisProduct() throws ExceptionsLibrary.NoAccountException {
-        Product product = (Product) Client.receiveObject();
+        Product product = (Product) ClientHandler.receiveObject();
         ArrayList<Seller> sellers = new ArrayList<>();
         String path = "Resources/Accounts/Seller";
         File folder = new File(path);
@@ -491,7 +492,7 @@ public class AllProductsPanelController {
                 }
             }
         }
-        Client.sendObject(sellers);
+        ClientHandler.sendObject(sellers);
     }
 
     public static ArrayList<Seller> sellersOfThisProduct(Product product) throws ExceptionsLibrary.NoAccountException {
@@ -559,7 +560,7 @@ public class AllProductsPanelController {
             int productId = Integer.parseInt(fileName.replace(".json", ""));
             allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
         }
-        Client.sendObject(allProducts);
+        ClientHandler.sendObject(allProducts);
     }
 
 
@@ -631,7 +632,7 @@ public class AllProductsPanelController {
                 return 0;
             }
         });
-        Client.sendObject(getResult());
+        ClientHandler.sendObject(getResult());
     }
 
     public static Product goToProductPage(int productId) throws ExceptionsLibrary.NoProductException {
@@ -654,28 +655,28 @@ public class AllProductsPanelController {
     }
 
     public static void goToProductPage() throws ExceptionsLibrary.NoProductException {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         Product product = null;
         try {
             product = GetDataFromDatabaseServerSide.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
             throw new ExceptionsLibrary.NoProductException();
         }
-        Client.sendObject(product);
+        ClientHandler.sendObject(product);
     }
 
     public static void isFeature() {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         Product i =null;
         String j = null;
         i = (Product) receivedData[0];
         j = (String) receivedData[1];
         for (Feature k : i.getCategoryFeatures()) {
             if (k.getParameter().equals(j)) {
-                Client.sendMessage("true");
+                ClientHandler.sendObject(true);
             }
         }
-        Client.sendMessage("false");
+        ClientHandler.sendObject(false);
     }
 
 

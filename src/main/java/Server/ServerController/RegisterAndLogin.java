@@ -1,6 +1,6 @@
 package Server.ServerController;
 
-import Client.Client;
+import Server.ClientHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -16,7 +16,7 @@ import java.util.Random;
 public class RegisterAndLogin {
     public static void register() throws ExceptionsLibrary.AdminExist, ExceptionsLibrary.UsernameAlreadyExists {
 
-        String dataToRegister = Client.receiveMessage();
+        String dataToRegister = ClientHandler.receiveMessage();
 
         Gson gson = new GsonBuilder().serializeNulls().create();
         Account account = gson.fromJson(dataToRegister, Account.class);
@@ -25,12 +25,12 @@ public class RegisterAndLogin {
         String accountPath = "Resources/Accounts/" + role + "/" + username + ".json";
         File file = new File(accountPath);
         if (!checkUsername(username)) {
-            Client.sendObject(new ExceptionsLibrary.UsernameAlreadyExists());
+            ClientHandler.sendObject(new ExceptionsLibrary.UsernameAlreadyExists());
             return;
         } else {
             if (role.equals("Admin")) {
                 if (new File("Resources/Accounts/Admin").listFiles().length != 0) {
-                    Client.sendObject(new ExceptionsLibrary.AdminExist());
+                    ClientHandler.sendObject(new ExceptionsLibrary.AdminExist());
                     return;
                 } else {
                     String firstAdminPath = "Resources/Accounts/Admin" + account.getUsername() + ".json";
@@ -71,11 +71,11 @@ public class RegisterAndLogin {
                 }
             }
         }
-        Client.sendObject("Done");
+        ClientHandler.sendObject("Done");
     }
 
     public static void registerAdmin() {
-        String data = Client.receiveMessage();
+        String data = ClientHandler.receiveMessage();
         Gson gson = new GsonBuilder().serializeNulls().create();
         Admin admin = gson.fromJson(data, Admin.class);
         File file = new File("Resources/Accounts/Admin/" + admin.getUsername() + ".json");
@@ -102,45 +102,45 @@ public class RegisterAndLogin {
     }
 
     public static void login() throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException {
-        HashMap<String, String> dataToLogin = (HashMap<String, String>) Client.receiveObject();
+        HashMap<String, String> dataToLogin = (HashMap<String, String>) ClientHandler.receiveObject();
         Account account = GetDataFromDatabaseServerSide.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
                 if (account.getRole().equals("Customer")) {
                     CustomerController customerController = new CustomerController((Customer) account);
-                    Client.sendMessage(account.getRole());
+                    ClientHandler.sendMessage(account.getRole());
                     return;
                 } else if (account.getRole().equals("Seller")) {
                     SellerController sellerController = new SellerController((Seller) account);
-                    Client.sendMessage(account.getRole());
+                    ClientHandler.sendMessage(account.getRole());
                     return;
                 } else if (account.getRole().equals("Admin")) {
                     AdminController adminController = new AdminController((Admin) account);
-                    Client.sendMessage(account.getRole());
+                    ClientHandler.sendMessage(account.getRole());
                     return;
                 }
             } else {
-                Client.sendObject(new ExceptionsLibrary.WrongPasswordException());
+                ClientHandler.sendObject(new ExceptionsLibrary.WrongPasswordException());
                 return;
             }
         } else {
-            Client.sendObject(new ExceptionsLibrary.WrongUsernameException());
+            ClientHandler.sendObject(new ExceptionsLibrary.WrongUsernameException());
             return;
         }
-        Client.sendObject(null);
+        ClientHandler.sendObject(null);
     }
 
 
     public static void checkUsername() {
-        String username = Client.receiveMessage();
+        String username = ClientHandler.receiveMessage();
         File folder1 = new File("Resources/Accounts/Customer/");
         File folder2 = new File("Resources/Accounts/Admin/");
         File folder3 = new File("Resources/Accounts/Seller/");
         if (new File(folder1, username + ".json").exists()) {
-            Client.sendObject(false);
+            ClientHandler.sendObject(false);
         } else if (new File(folder2, username + ".json").exists()) {
-            Client.sendObject(true);
-        } else  Client.sendObject(!new File(folder3, username + ".json").exists());
+            ClientHandler.sendObject(true);
+        } else  ClientHandler.sendObject(!new File(folder3, username + ".json").exists());
     }
 
     public static boolean checkUsername(String username) {

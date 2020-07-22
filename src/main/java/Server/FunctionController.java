@@ -6,7 +6,7 @@ public class FunctionController {
 
     public static void handleFunction (String command) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException, ExceptionsLibrary.NoRequestException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NotEnoughNumberAvailableException, ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoLogException, ExceptionsLibrary.NoOffException, ExceptionsLibrary.SelectASeller, ExceptionsLibrary.CategoriesNotMatch, ExceptionsLibrary.CannotChangeThisFeature {
 
-        System.out.println(command);
+        //System.out.println(command);
 
         switch (command) {
             case "show Admin Info" : {

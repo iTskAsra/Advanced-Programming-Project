@@ -1,6 +1,6 @@
 package Server.ServerController;
 
-import Client.Client;
+import Server.ClientHandler;
 import model.*;
 
 import java.io.File;
@@ -89,7 +89,7 @@ public class OffPageController {
             String fileName = i.getName();
             categoriesName.add(fileName.replace(".json", ""));
         }
-        Client.sendObject(categoriesName);
+        ClientHandler.sendObject(categoriesName);
     }
 
     public static void showAvailableFilters() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoCategoryException {
@@ -112,7 +112,7 @@ public class OffPageController {
             Category category = GetDataFromDatabaseServerSide.getCategory(categoryName);
         }
         setAvailableFilters(allAvailableFilters);
-        Client.sendObject(allAvailableFilters);
+        ClientHandler.sendObject(allAvailableFilters);
     }
 
     public static void filterAnAvailableFilter() throws ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.NoOffException {
@@ -245,7 +245,7 @@ public class OffPageController {
                         featuresToString.add(j.toString());
                     }
                     if (!featuresToString.contains(featureCategoryToString)) {
-                        Client.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
+                        ClientHandler.sendObject(new ExceptionsLibrary.NoFeatureWithThisName());
                         return;
                     }
                     for (Product j : products) {
@@ -268,7 +268,7 @@ public class OffPageController {
                     break;
             }
         }
-        Client.sendMessage("Success!");
+        ClientHandler.sendMessage("Success!");
     }
 
     public static boolean getProductRemoved(Product product, String feature) {
@@ -284,7 +284,7 @@ public class OffPageController {
     }
 
     public static void getProductRemoved() {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         Product product = (Product) receivedData[0];
         String feature = (String) receivedData[1];
         ArrayList<String> featuresToString = new ArrayList<>();
@@ -292,9 +292,9 @@ public class OffPageController {
             featuresToString.add(j.toString());
         }
         if (featuresToString.contains(feature)) {
-            Client.sendObject(false);
+            ClientHandler.sendObject(false);
         } else {
-            Client.sendObject(false);
+            ClientHandler.sendObject(true);
         }
     }
 
@@ -406,7 +406,7 @@ public class OffPageController {
 
 
     public static void sellersOfThisProduct() throws ExceptionsLibrary.NoAccountException {
-        Product product = (Product) Client.receiveObject();
+        Product product = (Product) ClientHandler.receiveObject();
         ArrayList<Seller> sellers = new ArrayList<>();
         String path = "Resources/Accounts/Seller";
         File folder = new File(path);
@@ -429,7 +429,7 @@ public class OffPageController {
                 }
             }
         }
-        Client.sendObject(sellers);
+        ClientHandler.sendObject(sellers);
     }
 
     public static ArrayList<String> showCurrentFilters() {
@@ -539,30 +539,30 @@ public class OffPageController {
                 return 0;
             }
         });
-        Client.sendObject(getResult());
+        ClientHandler.sendObject(getResult());
     }
 
     public static void goToProductPage() throws ExceptionsLibrary.NoProductException {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         Product product = null;
         try {
             product = GetDataFromDatabaseServerSide.getProduct(productId);
         } catch (ExceptionsLibrary.NoProductException e) {
-            Client.sendObject(new ExceptionsLibrary.NoProductException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
         }
-        Client.sendObject(product);
+        ClientHandler.sendObject(product);
     }
 
     public static void isFeature() {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         Product i = (Product) receivedData[0];
         String j = (String) receivedData[1];
         for (Feature k : i.getCategoryFeatures()) {
             if (k.getParameter().equals(j)) {
-                Client.sendObject(true);
+                ClientHandler.sendObject(true);
             }
         }
-        Client.sendObject(false);
+        ClientHandler.sendObject(false);
     }
 
 
@@ -609,7 +609,7 @@ public class OffPageController {
                 allProducts.add(GetDataFromDatabaseServerSide.getProduct(productId));
             }
         }
-        Client.sendObject(allProducts);
+        ClientHandler.sendObject(allProducts);
     }
 
     public static ArrayList<Product> getOffProductsLocal() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoOffException {
@@ -667,7 +667,7 @@ public class OffPageController {
 
 
     public static void isInOff() {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         String path = "Resources/Offs";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -690,16 +690,16 @@ public class OffPageController {
             }
             for (String j : off.getOffProducts()){
                 if (j.equals(String.valueOf(productId))){
-                    Client.sendObject(true);
+                    ClientHandler.sendObject(true);
                 }
             }
         }
-        Client.sendObject(false);
+        ClientHandler.sendObject(false);
     }
 
 
     public static void offDetails() throws ExceptionsLibrary.NoOffException {
-        int productId = Integer.parseInt(Client.receiveMessage());
+        int productId = Integer.parseInt(ClientHandler.receiveMessage());
         String path = "Resources/Offs";
         File folder = new File(path);
         FileFilter fileFilter = new FileFilter() {
@@ -717,11 +717,12 @@ public class OffPageController {
             Off off = GetDataFromDatabaseServerSide.getOff(offId);
             for (String j : off.getOffProducts()){
                 if (j.equals(String.valueOf(productId))){
-                    Client.sendObject(off);
+                    ClientHandler.sendObject(off);
+                    return;
                 }
             }
         }
-        Client.sendObject(null);
+        ClientHandler.sendObject(null);
     }
 
 }

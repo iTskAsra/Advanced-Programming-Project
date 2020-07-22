@@ -9,11 +9,11 @@ import java.net.Socket;
 public class ClientHandler extends Thread {
     protected Socket socket;
     private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    ObjectOutputStream os;
-    ObjectInputStream is;
-    InputStream inp = null;
-    DataInputStream brinp = null;
-    DataOutputStream out = null;
+    public static ObjectOutputStream os;
+    public static ObjectInputStream is;
+    public static InputStream inp = null;
+    public static DataInputStream brinp = null;
+    public static DataOutputStream out = null;
 
 
     public ClientHandler(Socket clientSocket) {
@@ -56,11 +56,8 @@ public class ClientHandler extends Thread {
         }
         while (true) {
             try {
-                line = brinp.readUTF();
+                line = receiveMessage();
                 FunctionController.handleFunction(line);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
             } catch (ExceptionsLibrary.ChangeUsernameException e) {
                 e.printStackTrace();
             } catch (ExceptionsLibrary.NotLoggedInException e) {
@@ -108,8 +105,9 @@ public class ClientHandler extends Thread {
     }
 
 
-    public void writeToClient(String dataToWrite){
+    public static void sendMessage(String dataToWrite){
         try {
+            System.out.println("Server Said: "+dataToWrite);
             out.writeUTF(dataToWrite);
             out.flush();
         }catch (IOException e) {
@@ -117,11 +115,12 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public String readDataFromClient() {
+    public static String receiveMessage() {
         String readData = null;
         try {
             readData = brinp.readUTF();
-            return readData;
+            System.out.println("Client Said: "+readData);
+            //return readData;
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -129,7 +128,7 @@ public class ClientHandler extends Thread {
         return readData;
     }
 
-    public Object readObjectFromClient() {
+    public static Object receiveObject() {
         Object object = null;
         try {
             object = is.readObject();
@@ -141,7 +140,7 @@ public class ClientHandler extends Thread {
         return null;
     }
 
-    public void writeObjectToClient(Object object){
+    public static void sendObject(Object object){
         try {
             os.writeObject(object);
             os.flush();
@@ -154,7 +153,8 @@ public class ClientHandler extends Thread {
 
 
     public void handleClientRequest(String receivedMessage) {
-        String[] splitMessage = receivedMessage.split(" ",5);
+        //String[] splitMessage = receivedMessage.split(" ",5);
+        //FunctionController.handleFunction(receivedMessage);
     }
 
 

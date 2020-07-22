@@ -1,6 +1,6 @@
 package Server.ServerController;
 
-import Client.Client;
+import Server.ClientHandler;
 import model.Customer;
 import model.Seller;
 
@@ -8,7 +8,7 @@ public class WalletController {
 
     public void customerWalletCharge(){
 
-        Object[] toReceive = (Object[]) Client.receiveObject();
+        Object[] toReceive = (Object[]) ClientHandler.receiveObject();
         Customer customer = (Customer) toReceive[0];
         double amount = (double) toReceive[1];
 
@@ -18,7 +18,7 @@ public class WalletController {
 
     public void sellerWalletCharge(){
 
-        Object[] toReceive = (Object[]) Client.receiveObject();
+        Object[] toReceive = (Object[]) ClientHandler.receiveObject();
         Seller seller = (Seller) toReceive[0];
         double amount = (double) toReceive[1];
 

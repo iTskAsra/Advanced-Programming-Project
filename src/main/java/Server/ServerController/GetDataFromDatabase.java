@@ -1,6 +1,6 @@
 package Server.ServerController;
 
-import Client.Client;
+import Server.ClientHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -40,7 +40,7 @@ public class GetDataFromDatabase {
 
     public static void getAccount() throws ExceptionsLibrary.NoAccountException {
 
-        String username = Client.receiveMessage();
+        String username = ClientHandler.receiveMessage();
 
         String pathCustomer = "Resources/Accounts/Customer/" + username + ".json";
         String pathAdmin = "Resources/Accounts/Admin/" + username + ".json";
@@ -54,11 +54,13 @@ public class GetDataFromDatabase {
                 fileData = new String(Files.readAllBytes(Paths.get(pathCustomer)));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Customer account = gson.fromJson(fileData, Customer.class);
-                Client.sendObject(account);
+                ClientHandler.sendObject(account);
             } catch (FileNotFoundException e) {
-                Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
+                return;
             } catch (IOException e) {
-                Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
+                return;
             }
 
         } else if (!fileCustomer.exists() && fileAdmin.exists() && !fileSeller.exists()) {
@@ -67,9 +69,9 @@ public class GetDataFromDatabase {
                 fileData = new String(Files.readAllBytes(Paths.get(pathAdmin)));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Admin account = gson.fromJson(fileData, Admin.class);
-                Client.sendObject(account);
+                ClientHandler.sendObject(account);
             } catch (IOException e) {
-                Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
             }
         } else if (!fileCustomer.exists() && !fileAdmin.exists() && fileSeller.exists()) {
             try {
@@ -77,21 +79,23 @@ public class GetDataFromDatabase {
                 fileData = new String(Files.readAllBytes(Paths.get(pathSeller)));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 Seller account = gson.fromJson(fileData, Seller.class);
-                Client.sendObject(account);
+                ClientHandler.sendObject(account);
             } catch (FileNotFoundException e) {
-                Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
+                return;
             } catch (IOException e) {
-                Client.sendObject(new ExceptionsLibrary.NoAccountException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
+                return;
             }
         } else if (!fileCustomer.exists() && !fileAdmin.exists() && !fileSeller.exists()) {
-            Client.sendObject(new ExceptionsLibrary.NoAccountException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoAccountException());
         }
 
     }
 
     public static void getProduct() throws ExceptionsLibrary.NoProductException {
 
-        int productId = (int) Client.receiveObject();
+        int productId = (int) ClientHandler.receiveObject();
 
         String productPath = "Resources/Products/" + (productId) + ".json";
         File fileProduct = new File(productPath);
@@ -100,18 +104,22 @@ public class GetDataFromDatabase {
             fileData = new String(Files.readAllBytes(Paths.get(productPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Product product = gson.fromJson(fileData, Product.class);
-            Client.sendObject(product);
+            ClientHandler.sendObject(product);
         } catch (FileNotFoundException e) {
-            Client.sendObject(new ExceptionsLibrary.NoProductException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
+            return;
         } catch (IOException e) {
-            Client.sendObject(new ExceptionsLibrary.NoProductException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
+            return;
         }
+
+        ClientHandler.sendMessage("Success!");
     }
 
 
     public static void getOff() throws ExceptionsLibrary.NoOffException {
 
-        int offId = (int) Client.receiveObject();
+        int offId = (int) ClientHandler.receiveObject();
         if (!Files.exists(Paths.get("Resources/Offs"))) {
             File folder = new File("Resources/Offs");
             folder.mkdir();
@@ -123,17 +131,20 @@ public class GetDataFromDatabase {
             fileData = new String(Files.readAllBytes(Paths.get(offPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Off off = gson.fromJson(fileData, Off.class);
-            Client.sendObject(off);
+            ClientHandler.sendObject(off);
+            return;
         } catch (FileNotFoundException e) {
-            Client.sendObject(new ExceptionsLibrary.NoOffException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoOffException());
+            return;
         } catch (IOException e) {
-            Client.sendObject(new ExceptionsLibrary.NoOffException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoOffException());
+            return;
         }
     }
 
     public static void getRequest() throws ExceptionsLibrary.NoRequestException {
 
-        int requestId = (int) Client.receiveObject();
+        int requestId = (int) ClientHandler.receiveObject();
 
         if (!Files.exists(Paths.get("Resources/Requests"))) {
             File folder = new File("Resources/Requests");
@@ -146,17 +157,20 @@ public class GetDataFromDatabase {
             fileData = new String(Files.readAllBytes(Paths.get(requestPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Request request = gson.fromJson(fileData, Request.class);
-            Client.sendObject(request);
+            ClientHandler.sendObject(request);
+            return;
         } catch (FileNotFoundException e) {
-            Client.sendObject(new ExceptionsLibrary.NoRequestException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoRequestException());
+            return;
         } catch (IOException e) {
-            Client.sendObject(new ExceptionsLibrary.NoRequestException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoRequestException());
+            return;
         }
     }
 
     public static void getSale() throws ExceptionsLibrary.NoSaleException {
 
-        String saleCode = Client.receiveMessage();
+        String saleCode = ClientHandler.receiveMessage();
 
         if (!Files.exists(Paths.get("Resources/Sales"))) {
             File folder = new File("Resources/Sales");
@@ -169,15 +183,15 @@ public class GetDataFromDatabase {
             fileData = new String(Files.readAllBytes(Paths.get(salePath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Sale sale = gson.fromJson(fileData, Sale.class);
-            Client.sendObject(sale);
+            ClientHandler.sendObject(sale);
         } catch (IOException e) {
-            Client.sendObject(new ExceptionsLibrary.NoSaleException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoSaleException());
         }
     }
 
     public static void getCategory() throws ExceptionsLibrary.NoCategoryException {
 
-        String categoryName = Client.receiveMessage();
+        String categoryName = ClientHandler.receiveMessage();
 
         if (!Files.exists(Paths.get("Resources/Category"))) {
             File folder = new File("Resources/Category");
@@ -190,19 +204,21 @@ public class GetDataFromDatabase {
             fileData = new String(Files.readAllBytes(Paths.get(categoryPath)));
             Gson gson = new GsonBuilder().serializeNulls().create();
             Category category = gson.fromJson(fileData, Category.class);
-            Client.sendObject(category);
+            ClientHandler.sendObject(category);
+            return;
         } catch (IOException e) {
-            Client.sendObject(new ExceptionsLibrary.NoCategoryException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NoCategoryException());
+            return;
         }
     }
 
     public static void checkIfAnyAdminExists() {
-        Client.sendObject(new File("Resources/Accounts/Admin").listFiles().length == 0);
+        ClientHandler.sendObject(new File("Resources/Accounts/Admin").listFiles().length == 0);
     }
 
     public static void findSellersFromProductId() {
 
-        int productId = (int) Client.receiveObject();
+        int productId = (int) ClientHandler.receiveObject();
 
         File folder = new File("Resources/Accounts/Seller");
         ArrayList<Seller> sellers =new ArrayList<>();
@@ -232,6 +248,6 @@ public class GetDataFromDatabase {
                 e.printStackTrace();
             }
         }
-        Client.sendObject(sellers);
+        ClientHandler.sendObject(sellers);
     }
 }

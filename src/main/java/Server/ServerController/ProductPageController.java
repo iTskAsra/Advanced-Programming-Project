@@ -1,6 +1,6 @@
 package Server.ServerController;
 
-import Client.Client;
+import Server.ClientHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -30,23 +30,24 @@ public class ProductPageController {
 
     public static void addToCart() throws ExceptionsLibrary.SelectASeller, ExceptionsLibrary.NotEnoughNumberAvailableException {
         if (getProduct().getSeller() == null) {
-            Client.sendObject(new ExceptionsLibrary.SelectASeller());
+            ClientHandler.sendObject(new ExceptionsLibrary.SelectASeller());
             return;
         } else {
             if (getProduct().getAvailability() >= 1) {
                 CartController.getCartProducts().put(getProduct(), 1);
             } else {
-                Client.sendObject(new ExceptionsLibrary.NotEnoughNumberAvailableException());
+                ClientHandler.sendObject(new ExceptionsLibrary.NotEnoughNumberAvailableException());
                 return;
             }
         }
-        Client.sendMessage("Success!");
+        ClientHandler.sendMessage("Success!");
     }
 
     public static void selectSeller() throws ExceptionsLibrary.NoAccountException {
-        String sellerUsername = Client.receiveMessage();
+        String sellerUsername = ClientHandler.receiveMessage();
         Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(sellerUsername);
         product.setSeller(seller);
+        ClientHandler.sendMessage("Success!");
     }
 
     public static Product attributes() {
@@ -54,7 +55,7 @@ public class ProductPageController {
     }
 
     public static void compare() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.CategoriesNotMatch {
-        int productId = (int) Client.receiveObject();
+        int productId = (int) ClientHandler.receiveObject();
         Product[] products = new Product[2];
         products[0] = getProduct();
         Product product1 = GetDataFromDatabaseServerSide.getProduct(productId);
@@ -62,15 +63,15 @@ public class ProductPageController {
         if (!products[0].getCategory().getName().equals(products[1].getCategory().getName())){
             throw new ExceptionsLibrary.CategoriesNotMatch();
         }
-        Client.sendObject(products);
+        ClientHandler.sendObject(products);
     }
 
     public static void comments() {
-        Client.sendObject (((Product) Client.receiveObject()).getProductComments());
+        ClientHandler.sendObject (((Product) ClientHandler.receiveObject()).getProductComments());
     }
 
     public static void addComment() throws ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         String title = (String) receivedData[0];
         String commentText = (String) receivedData[1];
         if (Main.checkLoggedIn() != null) {
@@ -81,11 +82,11 @@ public class ProductPageController {
             SetDataToDatabase.updateSellerOfProduct(getProduct(),0);
         }
         else {
-            Client.sendObject(new ExceptionsLibrary.NotLoggedInException());
+            ClientHandler.sendObject(new ExceptionsLibrary.NotLoggedInException());
             return;
         }
 
-        Client.sendMessage("Success!");
+        ClientHandler.sendMessage("Success!");
     }
 
     public static boolean isBoughtByCommenter(Customer customer, Product product) {
@@ -100,17 +101,18 @@ public class ProductPageController {
     }
 
     public static void isBoughtByCommenter() {
-        Object[] receivedData = (Object[]) Client.receiveObject();
+        Object[] receivedData = (Object[]) ClientHandler.receiveObject();
         Customer customer = (Customer) receivedData[0];
         Product product = (Product) receivedData[1];
         for (BuyLog i : customer.getCustomerLog()) {
             for (String[] j : i.getLogProducts()) {
                 if (Integer.parseInt(j[0]) == product.getProductId()) {
-                    Client.sendObject(true);
+                    ClientHandler.sendObject(true);
+                    return;
                 }
             }
         }
-        Client.sendObject(false);
+        ClientHandler.sendObject(false);
     }
 
 
