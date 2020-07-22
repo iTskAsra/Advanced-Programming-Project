@@ -33,7 +33,7 @@ public class Client {
         //string += " ";
         //string += token;
 
-        System.out.println("Client Said: "+string);
+        //System.out.println("Client Said: "+string);
         sendObject(string);
     }
 
@@ -41,7 +41,7 @@ public class Client {
 
         String message = null;
         message = (String) receiveObject();
-        System.out.println("Server Said: "+message);
+        //System.out.println("Server Said: "+message);
 
         //return message;
         return message;

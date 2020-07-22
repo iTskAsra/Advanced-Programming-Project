@@ -110,7 +110,7 @@ public class ClientHandler extends Thread {
 
 
     public static void sendMessage(String dataToWrite){
-        System.out.println("Server Said: "+dataToWrite);
+        //System.out.println("Server Said: "+dataToWrite);
         sendObject(dataToWrite);
         //out.writeUTF(dataToWrite);
         //out.flush();
