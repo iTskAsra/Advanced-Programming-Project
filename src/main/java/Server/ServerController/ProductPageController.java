@@ -47,7 +47,7 @@ public class ProductPageController {
         String sellerUsername = ClientHandler.receiveMessage();
         Seller seller = (Seller) GetDataFromDatabaseServerSide.getAccount(sellerUsername);
         product.setSeller(seller);
-        ClientHandler.sendMessage("Success!");
+        ClientHandler.sendObject(seller);
     }
 
     public static Product attributes() {

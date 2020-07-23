@@ -216,9 +216,11 @@ public class GetDataFromDatabase {
         ClientHandler.sendObject(new File("Resources/Accounts/Admin").listFiles().length == 0);
     }
 
-    public static void findSellersFromProductId() {
+    public static void findSellersFromProductId() throws ExceptionsLibrary.NoProductException {
 
-        int productId = (int) ClientHandler.receiveObject();
+        int productId = Integer.parseInt((String) ClientHandler.receiveObject());
+
+        ProductPageController.setProduct(GetDataFromDatabaseServerSide.getProduct(productId));
 
         File folder = new File("Resources/Accounts/Seller");
         ArrayList<Seller> sellers =new ArrayList<>();
