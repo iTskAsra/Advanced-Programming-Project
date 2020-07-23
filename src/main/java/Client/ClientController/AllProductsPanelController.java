@@ -537,6 +537,7 @@ public class AllProductsPanelController {
 
         Client.sendMessage(String.valueOf(productId));
         Object response = Client.receiveObject();
+        product = (Product) response;
 
         if (response instanceof ExceptionsLibrary.NoProductException)
             throw new ExceptionsLibrary.NoProductException();

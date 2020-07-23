@@ -1,4 +1,4 @@
-package view.Base;
+package Client.ClientView.MainMenuStage;
 
 import Client.ClientController.*;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
-    public static Scanner scanner;
     public static LocalDateTime localDateTime = LocalDateTime.now();
     public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     public static StringProperty status = new SimpleStringProperty();

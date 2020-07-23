@@ -4,7 +4,7 @@ import Server.ClientHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 
 public class ProductPageController {

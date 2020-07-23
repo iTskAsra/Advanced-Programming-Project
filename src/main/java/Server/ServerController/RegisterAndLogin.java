@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class RegisterAndLogin {
-    public static void register() throws ExceptionsLibrary.AdminExist, ExceptionsLibrary.UsernameAlreadyExists {
+    public static void register() {
 
         String dataToRegister = ClientHandler.receiveMessage();
 
@@ -106,19 +106,8 @@ public class RegisterAndLogin {
         Account account = GetDataFromDatabaseServerSide.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
-                if (account.getRole().equals("Customer")) {
-                    CustomerController customerController = new CustomerController((Customer) account);
-                    ClientHandler.sendMessage(account.getRole());
-                    return;
-                } else if (account.getRole().equals("Seller")) {
-                    SellerController sellerController = new SellerController((Seller) account);
-                    ClientHandler.sendMessage(account.getRole());
-                    return;
-                } else if (account.getRole().equals("Admin")) {
-                    AdminController adminController = new AdminController((Admin) account);
-                    ClientHandler.sendMessage(account.getRole());
-                    return;
-                }
+                ClientHandler.sendObject(account);
+                return;
             } else {
                 ClientHandler.sendObject(new ExceptionsLibrary.WrongPasswordException());
                 return;
@@ -127,7 +116,6 @@ public class RegisterAndLogin {
             ClientHandler.sendObject(new ExceptionsLibrary.WrongUsernameException());
             return;
         }
-        ClientHandler.sendObject(null);
     }
 
 

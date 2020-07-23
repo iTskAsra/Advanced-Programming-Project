@@ -318,6 +318,10 @@ public class FunctionController {
                 RegisterAndLogin.login();
                 break;
             }
+            case "Register":{
+                RegisterAndLogin.register();
+                break;
+            }
 
         }
 

@@ -6,21 +6,21 @@ import model.Seller;
 
 public class Wallet implements java.io.Serializable {
 
-    private Account account;
+    private String account;
     private double balance;
     private int bankAccountId;
     private static double leastAmount = 0;
 
-    public Wallet(Account account, double balance) {
+    public Wallet(String account, double balance) {
         this.account = account;
         this.balance = balance;
     }
 
-    public Account getAccount() {
+    public String getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(String account) {
         this.account = account;
     }
 

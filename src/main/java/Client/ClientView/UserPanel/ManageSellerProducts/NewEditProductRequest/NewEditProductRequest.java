@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.*;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 import java.net.URL;
 import java.util.ArrayList;

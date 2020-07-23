@@ -3,7 +3,6 @@ package Client.ClientView.RegisterAndLoginStage;
 import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.RegisterAndLoginController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
-import Client.ClientView.RegisterAndLoginStage.Register.RegisterScene;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 
 

@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 public class UserPanel implements Initializable {
     @FXML
@@ -179,7 +179,7 @@ public class UserPanel implements Initializable {
     }
 
     private void updateScene() {
-        if (view.Base.Main.checkLoggedIn().equals("Customer")) {
+        if (Main.checkLoggedIn().equals("Customer")) {
             Customer customer = CustomerController.getCustomer();
             name.setText("Welcome " + customer.getFirstName() + " " + customer.getLastName() + "!");
             username.setText(customer.getUsername());

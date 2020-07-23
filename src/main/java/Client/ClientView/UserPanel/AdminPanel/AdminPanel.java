@@ -16,7 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Admin;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class AdminPanel implements Initializable {
 
     public void back() throws IOException {
         Stage stage = (Stage) back.getScene().getWindow();
-        File file = new File("src/main/java/view/MainMenuStage/MainMenu.fxml");
+        File file = new File("src/main/java/Client/ClientView/MainMenuStage/MainMenu.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -65,7 +65,7 @@ public class AdminPanel implements Initializable {
     public void helpButtonClicked() throws IOException {
         Help.setMessage("You can manage users, products and categories,\nhandle requests and sales and edit your info.");
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/HelpWindow/Help.fxml");
+        File file = new File("src/main/java/Client/ClientView/HelpWindow/Help.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -103,7 +103,7 @@ public class AdminPanel implements Initializable {
 
     public void editInfoButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/EditInfo/EditInfo.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/EditInfo/EditInfo.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -117,7 +117,7 @@ public class AdminPanel implements Initializable {
 
     public void usersButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/AdminPanel/Users/Users.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Users/Users.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -130,7 +130,7 @@ public class AdminPanel implements Initializable {
 
     public void salesButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/AdminPanel/Sales/Sales.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Sales/Sales.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -144,7 +144,7 @@ public class AdminPanel implements Initializable {
 
     public void requestsButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/AdminPanel/Requests/Requests.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Requests/Requests.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -158,7 +158,7 @@ public class AdminPanel implements Initializable {
 
     public void categoriesButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/AdminPanel/Categories/Categories.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Categories/Categories.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
@@ -172,7 +172,7 @@ public class AdminPanel implements Initializable {
 
     public void productsButtonClicked() throws IOException {
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/AdminPanel/Products/Products.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/AdminPanel/Products/Products.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

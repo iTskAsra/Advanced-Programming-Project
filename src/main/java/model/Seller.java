@@ -25,7 +25,7 @@ public class Seller extends Account implements java.io.Serializable {
         this.sellerProducts = new ArrayList<>();
         this.sellerLogs = new ArrayList<>();
         this.sellerOffs = new ArrayList<>();
-        this.wallet = new Wallet(this, credit);
+        this.wallet = new Wallet(this.getUsername(), credit);
     }
 
     public Wallet getWallet() {

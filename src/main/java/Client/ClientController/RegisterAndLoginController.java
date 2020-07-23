@@ -1,6 +1,12 @@
 package Client.ClientController;
 
 import Client.Client;
+import Client.ClientView.MainMenuStage.Main;
+import Server.ClientHandler;
+import model.Account;
+import model.Admin;
+import model.Customer;
+import model.Seller;
 
 import java.util.HashMap;
 
@@ -14,16 +20,17 @@ public class RegisterAndLoginController {
         Client.sendObject(dataToRegister);
 
         Object response = Client.receiveObject();
+        String responseString = (String) response;
 
         if (response instanceof ExceptionsLibrary.AdminExist)
             throw new ExceptionsLibrary.AdminExist();
         else if (response instanceof ExceptionsLibrary.UsernameAlreadyExists)
             throw new ExceptionsLibrary.UsernameAlreadyExists();
-        else if (response.equals("Done"))
+        else if (responseString.equals("Done"))
             return;
     }
 
-    public static void login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException{
+    public static void login(HashMap<String, String> dataToLogin) throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException {
 
         String func = "Log in";
         Client.sendMessage(func);
@@ -38,11 +45,22 @@ public class RegisterAndLoginController {
             throw new ExceptionsLibrary.WrongPasswordException();
         else if (response instanceof ExceptionsLibrary.NoAccountException)
             throw new ExceptionsLibrary.NoAccountException();
-        else
-            view.Base.Main.setStatus((String) response);
+        else {
+            Account account = (Account) response;
+            if (account.getRole().equals("Customer")) {
+                CustomerController.setCustomer((Customer) account);
+                return;
+            } else if (account.getRole().equals("Seller")) {
+                SellerController.setSeller((Seller) account);
+                return;
+            } else if (account.getRole().equals("Admin")) {
+                AdminController.setAdmin((Admin) account);
+                return;
+            }
+        }
     }
 
-    public static void registerAdmin (String data){
+    public static void registerAdmin(String data) {
 
         String func = "Register Admin";
         Client.sendMessage(func);
@@ -50,7 +68,7 @@ public class RegisterAndLoginController {
         Client.sendMessage(data);
     }
 
-    public static boolean checkUsername(String username){
+    public static boolean checkUsername(String username) {
 
         String func = "Check Username";
         Client.sendMessage(func);
@@ -59,7 +77,6 @@ public class RegisterAndLoginController {
 
         return (boolean) Client.receiveObject();
     }
-
 
 
 }

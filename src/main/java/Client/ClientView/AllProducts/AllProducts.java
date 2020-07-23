@@ -3,7 +3,6 @@ package Client.ClientView.AllProducts;
 import Client.ClientController.*;
 import Client.ClientView.HelpWindow.*;
 import Client.ClientView.AlertBox.ErrorBox.*;
-import Client.ClientView.AlertBox.MessageBox.*;
 import Client.ClientView.MainMenuStage.CheckFields;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -25,7 +24,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import model.*;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 
 import java.io.File;

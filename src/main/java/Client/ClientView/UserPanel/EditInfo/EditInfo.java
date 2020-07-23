@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import model.Admin;
 import model.Customer;
 import model.Seller;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 import java.net.URL;
 import java.util.HashMap;

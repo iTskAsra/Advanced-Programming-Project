@@ -4,7 +4,7 @@ import model.Account;
 import model.Customer;
 import model.Off;
 import model.Sale;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 import java.io.File;
 import java.io.FileFilter;

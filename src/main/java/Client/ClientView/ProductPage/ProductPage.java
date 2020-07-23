@@ -23,7 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.*;
-import view.Base.Main;
+import Client.ClientView.MainMenuStage.Main;
 
 
 import java.io.File;

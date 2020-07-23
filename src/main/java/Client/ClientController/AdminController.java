@@ -89,8 +89,6 @@ public class AdminController {
         String func = "Show Admin Requests";
         Client.sendMessage(func);
 
-        Client.sendMessage(getAdmin().getUsername());
-
         Object response = Client.receiveObject();
 
         if(response instanceof ExceptionsLibrary.NoRequestException)

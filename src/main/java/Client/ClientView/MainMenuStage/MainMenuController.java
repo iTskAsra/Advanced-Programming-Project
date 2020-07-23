@@ -12,13 +12,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import view.Base.Main;
 import Client.ClientView.HelpWindow.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
@@ -60,7 +58,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void accountButtonClickedLoggedIn() throws IOException {
-        if (!view.Base.Main.checkLoggedIn().equals("Admin")) {
+        if (!Main.checkLoggedIn().equals("Admin")) {
             Stage stage = (Stage) account.getScene().getWindow();
             File file = new File("src/main/java/Client/ClientView/UserPanel/UserPanel.fxml");
             URL url = file.toURI().toURL();
