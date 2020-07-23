@@ -322,6 +322,39 @@ public class FunctionController {
                 RegisterAndLogin.register();
                 break;
             }
+            case "Get Account":{
+                GetDataFromDatabase.getAccount();
+                break;
+            }
+            case "Get Product":{
+                GetDataFromDatabase.getProduct();
+                break;
+            }
+            case "Get Off":{
+                GetDataFromDatabase.getOff();
+                break;
+            }
+            case "Get Sale":{
+                GetDataFromDatabase.getSale();
+                break;
+            }
+            case "Get Request":{
+                GetDataFromDatabase.getRequest();
+                break;
+            }
+            case "Get Category":{
+                GetDataFromDatabase.getCategory();
+                break;
+            }
+            case "Check If Any Admin Exists":{
+                GetDataFromDatabase.checkIfAnyAdminExists();
+                break;
+            }
+            case "Find Sellers From Product Id":{
+                GetDataFromDatabase.findSellersFromProductId();
+                break;
+            }
+
 
         }
 
