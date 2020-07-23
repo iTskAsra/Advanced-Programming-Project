@@ -237,7 +237,7 @@ public class GetDataFromDatabase {
         String func = "Find Sellers From Product Id";
         Client.sendMessage(func);
 
-        Client.sendObject(productId);
+        Client.sendObject(String.valueOf(productId));
 
         return (ArrayList<Seller>) Client.receiveObject();
 //        File folder = new File("Resources/Accounts/Seller");

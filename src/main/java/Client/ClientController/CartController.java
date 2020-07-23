@@ -7,7 +7,6 @@ import model.*;
 import java.util.HashMap;
 
 public class CartController {
-    private static Cart cart;
     private static HashMap<Product, Integer> cartProducts;
     private static Customer cartCustomer;
     private static HashMap<String, String> receiverInfo;
@@ -21,13 +20,6 @@ public class CartController {
         receiverInfo = new HashMap<>();
     }
 
-    public static Cart getCart() {
-        return cart;
-    }
-
-    public static void setCart(Cart cart) {
-        CartController.cart = cart;
-    }
 
     public CartController(Customer customer) {
         this.cartCustomer = customer;
@@ -124,7 +116,7 @@ public class CartController {
         Client.sendMessage(func);
 
         Object[] toSend = new Object[2];
-        toSend[0] = getCart();
+        toSend[0] = cartProducts;
         toSend[1] = productId;
         Client.sendObject(toSend);
 
@@ -172,19 +164,12 @@ public class CartController {
     }
 
     public static double showTotalPrice() {
-
-        String func = "Show Total Price";
-        Client.sendMessage(func);
-
-        Client.sendObject(getCart());
-
-        return (double) Client.receiveObject();
-//        Double totalPrice = 0.00;
-//        getCartProducts();
-//        for (Product i : cartProducts.keySet()) {
-//            totalPrice += (i.getPriceWithOff() * cartProducts.get(i));
-//        }
-//        return totalPrice;
+        Double totalPrice = 0.00;
+        getCartProducts();
+        for (Product i : cartProducts.keySet()) {
+            totalPrice += (i.getPriceWithOff() * cartProducts.get(i));
+        }
+        return totalPrice;
     }
 
     public static void receiverProcess(HashMap<String, String> data) throws ExceptionsLibrary.NotLoggedInException {
@@ -296,7 +281,7 @@ public class CartController {
         String func = "Purchase";
         Client.sendMessage(func);
 
-        Client.sendObject(getCart());
+        Client.sendObject(cartProducts);
 
         Object response = Client.receiveObject();
 

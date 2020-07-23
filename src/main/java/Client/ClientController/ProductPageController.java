@@ -32,28 +32,15 @@ public class ProductPageController {
     }
 
     public static void addToCart() throws ExceptionsLibrary.SelectASeller, ExceptionsLibrary.NotEnoughNumberAvailableException {
-
-        String func = "Add To Cart";
-        Client.sendMessage(func);
-
-        Client.sendObject(getProduct());
-        Object response = Client.receiveObject();
-
-        if (response instanceof ExceptionsLibrary.SelectASeller)
+        if (getProduct().getSeller() == null) {
             throw new ExceptionsLibrary.SelectASeller();
-        else if (response instanceof ExceptionsLibrary.NotEnoughNumberAvailableException)
-            throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
-        else
-            return;
-//        if (getProduct().getSeller() == null) {
-//            throw new ExceptionsLibrary.SelectASeller();
-//        } else {
-//            if (getProduct().getAvailability() >= 1) {
-//                CartController.getCartProducts().put(getProduct(), 1);
-//            } else {
-//                throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
-//            }
-//        }
+        } else {
+            if (getProduct().getAvailability() >= 1) {
+                CartController.getCartProducts().put(getProduct(), 1);
+            } else {
+                throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
+            }
+        }
     }
 
     public static void selectSeller(String sellerUsername) throws ExceptionsLibrary.NoAccountException {
@@ -67,7 +54,7 @@ public class ProductPageController {
         if (response instanceof ExceptionsLibrary.NoAccountException)
             throw new ExceptionsLibrary.NoAccountException();
         else
-            return;
+            product.setSeller((Seller) response);
 //        Seller seller = (Seller) GetDataFromDatabase.getAccount(sellerUsername);
 //        product.setSeller(seller);
     }
