@@ -29,8 +29,13 @@ public class Server {
             e.printStackTrace();
         }
 
-        BankClient bankClient = new BankClient();
         clientImplementation = new BankClient.ClientImplementation();
+        clientImplementation.run();
+        //Example
+        clientImplementation.sendMessage("get_token a b");
+        String response = clientImplementation.getResponse();
+        System.out.println(response);
+        //End of example
 
         try {
             server = new ServerSocket(4445);
