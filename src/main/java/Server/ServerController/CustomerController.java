@@ -60,15 +60,13 @@ public class CustomerController {
     }
 
     public static void showDiscountCodes() {
+        setCustomer((Customer) ClientHandler.receiveObject());
         ClientHandler.sendObject(getCustomer().getSaleCodes());
     }
 
     public static void showCustomerLogs() {
-        try {
-            setCustomer((Customer) GetDataFromDatabaseServerSide.getAccount(getCustomer().getUsername()));
-        } catch (ExceptionsLibrary.NoAccountException e) {
-            e.printStackTrace();
-        }
+
+        setCustomer((Customer) ClientHandler.receiveObject());
         ClientHandler.sendObject(getCustomer().getCustomerLog());
     }
 

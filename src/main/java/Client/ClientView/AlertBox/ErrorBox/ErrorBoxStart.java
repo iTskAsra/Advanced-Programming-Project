@@ -17,7 +17,7 @@ public class ErrorBoxStart {
     public static void errorRun(Exception e) {
         AlertBox.setException(e);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/AlertBox/ErrorBox/AlertBox.fxml");
+        File file = new File("src/main/java/Client/ClientView/AlertBox/ErrorBox/AlertBox.fxml");
         URL url = null;
         try {
             url = file.toURI().toURL();

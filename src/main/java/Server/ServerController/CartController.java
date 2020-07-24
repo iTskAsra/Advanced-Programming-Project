@@ -197,20 +197,25 @@ public class CartController {
                                     setTotalPriceWithSale();
                                 } else {
                                     ClientHandler.sendObject(new ExceptionsLibrary.UsedAllValidTimesException());
+                                    return;
                                 }
                             }
                         }
 
                     } else {
                         ClientHandler.sendObject(new ExceptionsLibrary.SaleExpiredException());
+                        return;
                     }
                 } else {
                     ClientHandler.sendObject(new ExceptionsLibrary.SaleNotStartedYetException());
+                    return;
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
+                ClientHandler.sendObject(e);
             }
         }
+        ClientHandler.sendMessage("Success!");
     }
 
     public static void getOffFromHashMap() {
@@ -248,6 +253,8 @@ public class CartController {
     }
 
     public static void purchase() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.CreditNotSufficientException {
+        setCartCustomer( (Customer) ClientHandler.receiveObject());
+        setCartProducts((HashMap<Product, Integer>) ClientHandler.receiveObject());
         if (getTotalPriceWithSale() <= getCartCustomer().getCredit()) {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -266,6 +273,7 @@ public class CartController {
             getCartCustomer().setCredit(getCartCustomer().getCredit() - getTotalPriceWithSale());
             SetDataToDatabase.setAccount(getCartCustomer());
             HashMap<String, HashMap<Product, Integer>> productSellers = new HashMap<>();
+            System.out.println(cartProducts.size());
             for (Product i : getCartProducts().keySet()) {
                 if (productSellers.containsKey(i.getSeller().getUsername())) {
                     productSellers.get(i.getSeller().getUsername()).put(i, getCartProducts().get(i));

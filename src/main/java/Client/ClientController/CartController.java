@@ -276,9 +276,11 @@ public class CartController {
     public static void purchase() throws ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoProductException {
 
         String func = "Purchase";
+
         Client.sendMessage(func);
 
-        Client.sendObject(cartProducts);
+        Client.sendObject(getCartCustomer());
+        Client.sendObject(getCartProducts());
 
         Object response = Client.receiveObject();
 

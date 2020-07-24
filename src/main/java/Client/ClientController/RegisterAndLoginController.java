@@ -7,6 +7,7 @@ import model.Account;
 import model.Admin;
 import model.Customer;
 import model.Seller;
+import Client.ClientController.*;
 
 import java.util.HashMap;
 
@@ -49,6 +50,7 @@ public class RegisterAndLoginController {
             Account account = (Account) response;
             if (account.getRole().equals("Customer")) {
                 CustomerController.setCustomer((Customer) account);
+                CartController.setCartCustomer((Customer) account);
                 return;
             } else if (account.getRole().equals("Seller")) {
                 SellerController.setSeller((Seller) account);
