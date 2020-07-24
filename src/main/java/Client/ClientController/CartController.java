@@ -2,6 +2,7 @@ package Client.ClientController;
 
 import Client.Client;
 import Client.ClientView.Cart.Cart;
+import Server.Server;
 import model.*;
 
 import java.util.HashMap;
@@ -171,6 +172,14 @@ public class CartController {
 
     public static void receiverProcess(HashMap<String, String> data) throws ExceptionsLibrary.NotLoggedInException {
 
+        if (getCartCustomer() == null && CustomerController.getCustomer() == null) {
+            throw new ExceptionsLibrary.NotLoggedInException();
+        } else if (getCartCustomer() == null && CustomerController.getCustomer() != null) {
+            setCartCustomer(CustomerController.getCustomer());
+        }
+
+        setReceiverInfo(data);
+
         String func = "Receiver Data";
         Client.sendMessage(func);
 
@@ -183,12 +192,7 @@ public class CartController {
         else
             return;
 
-//        if (getCartCustomer() == null && controller.CustomerController.getCustomer() == null) {
-//            throw new ExceptionsLibrary.NotLoggedInException();
-//        } else if (getCartCustomer() == null && controller.CustomerController.getCustomer() != null) {
-//            setCartCustomer(CustomerController.getCustomer());
-//        }
-//        setReceiverInfo(data);
+
     }
 
     public static void discountApply(String saleCode) throws ExceptionsLibrary.NoSaleException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException {

@@ -111,7 +111,7 @@ public class CustomerController {
         return (ArrayList<Sale>) Client.receiveObject();
     }
 
-    public static ArrayList<BuyLog> showCustomerLogs() throws ExceptionsLibrary.NoAccountException{
+    public static ArrayList<BuyLog> showCustomerLogs() throws  ExceptionsLibrary.CreditNotSufficientException {
 
         String func = "Show Customer Logs";
         Client.sendMessage(func);
@@ -119,8 +119,8 @@ public class CustomerController {
         Client.sendObject(getCustomer());
         Object response = Client.receiveObject();
 
-        if(response instanceof ExceptionsLibrary.NoAccountException)
-            throw new ExceptionsLibrary.NoAccountException();
+        if(response instanceof ExceptionsLibrary.CreditNotSufficientException)
+            throw new ExceptionsLibrary.CreditNotSufficientException();
         else
             return (ArrayList<BuyLog>) response;
 

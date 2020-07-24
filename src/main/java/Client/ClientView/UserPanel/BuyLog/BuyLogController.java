@@ -44,7 +44,7 @@ public class BuyLogController implements Initializable {
     private void updateTable(){
         try {
             buyLogs = FXCollections.observableArrayList(CustomerController.showCustomerLogs());
-        } catch (ExceptionsLibrary.NoAccountException e) {
+        } catch (ExceptionsLibrary.CreditNotSufficientException e) {
             e.printStackTrace();
         }
         logId.setCellValueFactory(new PropertyValueFactory<>("logId"));
