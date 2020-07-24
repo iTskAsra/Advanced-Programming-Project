@@ -83,7 +83,7 @@ public class Cart implements Initializable {
                 });
                 decrease.setOnAction( e -> {
                     try {
-                        CartController.decreaseProduct(i.getProductId());
+                        CartController.decreaseProduct(i);
                         AlertBoxStart.messageRun("Message","Product decreased by 1!");
                         updateCart();
                     } catch (ExceptionsLibrary.NoProductException exception) {

@@ -97,7 +97,7 @@ public class CartController {
         else if (response instanceof ExceptionsLibrary.NotEnoughNumberAvailableException)
             throw new ExceptionsLibrary.NotEnoughNumberAvailableException();
         else
-            return;
+            cartProducts.put(product,cartProducts.get(product)+1);
 //        for (Product i : getCartProducts().keySet()) {
 //            if (i.getProductId() == product.getProductId()) {
 //                if (i.getAvailability() >= cartProducts.get(i) + 1) {
@@ -111,21 +111,18 @@ public class CartController {
 //        throw new ExceptionsLibrary.NoProductException();
     }
 
-    public static void decreaseProduct(int productId) throws ExceptionsLibrary.NoProductException {
+    public static void decreaseProduct(Product product) throws ExceptionsLibrary.NoProductException {
         String func = "Decrease Product";
         Client.sendMessage(func);
-
-        Object[] toSend = new Object[2];
-        toSend[0] = cartProducts;
-        toSend[1] = productId;
-        Client.sendObject(toSend);
-
+        Client.sendObject(product);
+        Client.sendObject(cartProducts);
         Object response = Client.receiveObject();
 
         if (response instanceof ExceptionsLibrary.NoProductException)
             throw new ExceptionsLibrary.NoProductException();
         else
-            return;
+            setCartProducts((HashMap<Product, Integer>) response);
+
 //        for (Product i : getCartProducts().keySet()) {
 //            if (i.getProductId() == productId) {
 //                if (cartProducts.get(i) == 1) {

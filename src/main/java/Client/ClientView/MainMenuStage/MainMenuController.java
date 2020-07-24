@@ -106,6 +106,7 @@ public class MainMenuController implements Initializable {
             } else if (AdminController.getAdmin() != null) {
                 AdminController.setAdmin(null);
             }
+            CartController.setCartProducts(null);
             Main.setStatus(null);
         }
     }

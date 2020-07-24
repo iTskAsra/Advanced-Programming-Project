@@ -1,5 +1,6 @@
 package Server.ServerController;
 
+import Client.Client;
 import Server.ClientHandler;
 import model.*;
 
@@ -91,9 +92,10 @@ public class CartController {
             if (i.getProductId() == product.getProductId()) {
                 if (i.getAvailability() >= cartProducts.get(i) + 1) {
                     cartProducts.put(i, cartProducts.get(i) + 1);
-                    return;
+                    ClientHandler.sendMessage("Success!");
                 } else {
                     ClientHandler.sendObject(new ExceptionsLibrary.NotEnoughNumberAvailableException());
+                    return;
                 }
             }
         }
@@ -101,18 +103,24 @@ public class CartController {
     }
 
     public static void decreaseProduct() throws ExceptionsLibrary.NoProductException {
-        int productId = Integer.parseInt(ClientHandler.receiveMessage());
+        boolean productsExists = false;
+        Product product = (Product) ClientHandler.receiveObject();
+        cartProducts = (HashMap<Product, Integer>) ClientHandler.receiveObject();
         for (Product i : getCartProducts().keySet()) {
-            if (i.getProductId() == productId) {
+            if (i.getProductId() == product.getProductId()) {
                 if (cartProducts.get(i) == 1) {
+                    productsExists = true;
                     cartProducts.remove(i);
                 } else {
+                    productsExists = true;
                     cartProducts.put(i, cartProducts.get(i) - 1);
                 }
-                return;
             }
         }
-        ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
+        if (productsExists)
+            ClientHandler.sendObject(cartProducts);
+        else
+            ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
     }
 
     public static void viewCartProductDetails() throws ExceptionsLibrary.NoProductException {

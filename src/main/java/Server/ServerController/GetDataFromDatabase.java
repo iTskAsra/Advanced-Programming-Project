@@ -107,13 +107,11 @@ public class GetDataFromDatabase {
             ClientHandler.sendObject(product);
         } catch (FileNotFoundException e) {
             ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
-            return;
         } catch (IOException e) {
             ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());
-            return;
         }
 
-        ClientHandler.sendMessage("Success!");
+        //ClientHandler.sendMessage("Success!");
     }
 
 
