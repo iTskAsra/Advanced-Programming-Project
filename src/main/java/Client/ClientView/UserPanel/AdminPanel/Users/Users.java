@@ -1,10 +1,13 @@
 package Client.ClientView.UserPanel.AdminPanel.Users;
 
+import Client.Client;
 import Client.ClientController.AdminController;
 import Client.ClientController.ExceptionsLibrary;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import Client.ClientView.RegisterAndLoginStage.Register.RegisterScene;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,10 +19,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.Account;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Users implements Initializable {
@@ -81,7 +86,29 @@ public class Users implements Initializable {
         } catch (ExceptionsLibrary.NoAccountException e) {
             ErrorBoxStart.errorRun(e);
         }
-        username.setCellValueFactory(new PropertyValueFactory<>("username"));
+        String func = "Get Online Users List";
+        Client.sendMessage(func);
+        Object response = Client.receiveObject();
+        ArrayList<Account> onlineAccounts = (ArrayList<Account>) response;
+        username.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Account, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Account, String> p) {
+                String formatted = p.getValue().getUsername();
+                boolean isOnline = false;
+                for (Account i : onlineAccounts){
+                    if (i.getUsername().equals(formatted)){
+                        isOnline = true;
+                    }
+                }
+                if (isOnline){
+                    formatted = formatted + " (Online)";
+                }
+                else {
+                    formatted = formatted + " (Offline)";
+                }
+                return new SimpleStringProperty(formatted);
+            }
+        });
+        //username.setCellValueFactory(new PropertyValueFactory<>("username"));
         role.setCellValueFactory(new PropertyValueFactory<>("role"));
         firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));

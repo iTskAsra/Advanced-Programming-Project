@@ -364,9 +364,11 @@ public class FunctionController {
                 String token = ClientHandler.receiveMessage();
                 Server.removeOnlineUser(users.get(token));
                 users.remove(token);
+                break;
             }
             case "Get Online Users List" : {
                 ClientHandler.sendObject(Server.getOnlineUsers());
+                break;
             }
 
         }
