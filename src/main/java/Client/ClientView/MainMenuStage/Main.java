@@ -1,5 +1,6 @@
 package Client.ClientView.MainMenuStage;
 
+import Client.Client;
 import Client.ClientController.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,6 +24,8 @@ public class Main {
     }
 
     public static void setStatus(String status) {
+        if (status.equals(null))
+            Client.sendOfflineSignal(checkLoggedIn());
         Main.status.set(status);
     }
 

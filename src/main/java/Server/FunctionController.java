@@ -1,8 +1,14 @@
 package Server;
+import Client.Client;
 import Server.ServerController.*;
+import model.Account;
+
+import java.util.HashMap;
 
 
 public class FunctionController {
+
+    public static HashMap<String, Account> users = new HashMap<>();
 
     public static void handleFunction (String command) throws ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoFeatureWithThisName, ExceptionsLibrary.ChangeUsernameException, ExceptionsLibrary.NoRequestException, ExceptionsLibrary.UsernameAlreadyExists, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoCategoryException, ExceptionsLibrary.CategoryExistsWithThisName, ExceptionsLibrary.NoSaleException, ExceptionsLibrary.NoFilterWithThisName, ExceptionsLibrary.NotEnoughNumberAvailableException, ExceptionsLibrary.NotLoggedInException, ExceptionsLibrary.SaleExpiredException, ExceptionsLibrary.SaleNotStartedYetException, ExceptionsLibrary.UsedAllValidTimesException, ExceptionsLibrary.CreditNotSufficientException, ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.NoLogException, ExceptionsLibrary.NoOffException, ExceptionsLibrary.SelectASeller, ExceptionsLibrary.CategoriesNotMatch, ExceptionsLibrary.CannotChangeThisFeature, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.WrongUsernameException {
 
@@ -354,7 +360,14 @@ public class FunctionController {
                 GetDataFromDatabase.findSellersFromProductId();
                 break;
             }
-
+            case "offline" : {
+                String token = ClientHandler.receiveMessage();
+                Server.removeOnlineUser(users.get(token));
+                users.remove(token);
+            }
+            case "Get Online Users List" : {
+                ClientHandler.sendObject(Server.getOnlineUsers());
+            }
 
         }
 

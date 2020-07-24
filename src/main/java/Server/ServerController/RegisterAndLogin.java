@@ -1,6 +1,7 @@
 package Server.ServerController;
 
 import Server.ClientHandler;
+import Server.Server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
@@ -103,10 +104,12 @@ public class RegisterAndLogin {
 
     public static void login() throws ExceptionsLibrary.WrongUsernameException, ExceptionsLibrary.WrongPasswordException, ExceptionsLibrary.NoAccountException {
         HashMap<String, String> dataToLogin = (HashMap<String, String>) ClientHandler.receiveObject();
+        String token = ClientHandler.receiveMessage();
         Account account = GetDataFromDatabaseServerSide.getAccount(dataToLogin.get("username"));
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
                 ClientHandler.sendObject(account);
+                Server.addOnlineUser(account,token);
                 return;
             } else {
                 ClientHandler.sendObject(new ExceptionsLibrary.WrongPasswordException());

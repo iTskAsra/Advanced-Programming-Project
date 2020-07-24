@@ -71,4 +71,10 @@ public class Client {
 
         return object;
     }
+
+    public static void sendOfflineSignal(String checkLoggedIn) {
+        String message = "offline";
+        sendMessage(message);
+        sendMessage(token);
+    }
 }

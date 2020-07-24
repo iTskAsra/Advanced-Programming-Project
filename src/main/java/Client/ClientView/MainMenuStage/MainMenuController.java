@@ -93,7 +93,8 @@ public class MainMenuController implements Initializable {
         stage.setScene(scene);
     }
 
-    public void exitButtonClicked() {
+    public void exitButtonClicked() throws IOException {
+        logout();
         System.exit(0);
     }
 
