@@ -77,4 +77,8 @@ public class Client {
         sendMessage(message);
         sendMessage(token);
     }
+
+    public static void sendToken() {
+        sendMessage(token);
+    }
 }

@@ -734,7 +734,7 @@ public class AdminController {
     public static ArrayList<Category> showCategories() throws ExceptionsLibrary.NoCategoryException {
         ArrayList<Category> allCategories = new ArrayList<>();
 
-        String func = "Show Categories";
+        String func = "Show Categories AC";
         Client.sendMessage(func);
 
         Object response = Client.receiveObject();

@@ -37,6 +37,7 @@ public class RegisterAndLoginController {
         Client.sendMessage(func);
 
         Client.sendObject(dataToLogin);
+        Client.sendToken();
 
         Object response = Client.receiveObject();
 
