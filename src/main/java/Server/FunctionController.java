@@ -27,12 +27,24 @@ public class FunctionController {
                 AdminController.showAdminRequests();
                 break;
             }
+            case "Add Sale" : {
+                AdminController.addSale();
+                break;
+            }
+            case "Show Sales" : {
+                AdminController.showSales();
+                break;
+            }
             case "Show Request" : {
                 AdminController.showRequest();
                 break;
             }
             case "Show All Users" : {
                 AdminController.showAllUsers();
+                break;
+            }
+            case "Show Categories AC" : {
+                AdminController.showCategories();
                 break;
             }
             case "Show ALl Customers" : {
@@ -364,11 +376,16 @@ public class FunctionController {
                 String token = ClientHandler.receiveMessage();
                 Server.removeOnlineUser(users.get(token));
                 users.remove(token);
+                break;
             }
             case "Get Online Users List" : {
                 ClientHandler.sendObject(Server.getOnlineUsers());
+                break;
             }
-
+            default: {
+                System.out.println("Command Not Supported!");
+                break;
+            }
         }
 
 

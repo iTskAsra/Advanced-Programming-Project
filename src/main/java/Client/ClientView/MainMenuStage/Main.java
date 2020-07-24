@@ -24,7 +24,7 @@ public class Main {
     }
 
     public static void setStatus(String status) {
-        if (status.equals(null))
+        if (status == null)
             Client.sendOfflineSignal(checkLoggedIn());
         Main.status.set(status);
     }
