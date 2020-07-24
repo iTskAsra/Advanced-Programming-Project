@@ -109,7 +109,7 @@ public class RegisterAndLogin {
         if (account != null) {
             if (account.getPassword().equals(dataToLogin.get("password"))) {
                 ClientHandler.sendObject(account);
-                //Server.addOnlineUser(account,token);
+                Server.addOnlineUser(account,token);
                 return;
             } else {
                 ClientHandler.sendObject(new ExceptionsLibrary.WrongPasswordException());

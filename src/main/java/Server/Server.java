@@ -65,10 +65,12 @@ public class Server {
     public static void addOnlineUser (Account account,String token){
         FunctionController.users.put(token,account);
         onlineUsers.add(account);
+        System.out.println("User is Online!");
     }
 
     public static void removeOnlineUser (Account account){
         onlineUsers.remove(account);
+        System.out.println("User Went Offline!");
         //FunctionController.users.remove(account);
     }
 
