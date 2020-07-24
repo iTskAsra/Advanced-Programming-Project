@@ -1,7 +1,6 @@
 package Client.ClientView.RegisterAndLoginStage.Register;
 
 import Client.ClientController.AdminController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.RegisterAndLoginController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import LocalExceptions.ExceptionsLibrary;
 
 public class RegisterScene implements Initializable {
     @FXML

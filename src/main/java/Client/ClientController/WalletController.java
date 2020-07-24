@@ -4,7 +4,7 @@ import Client.Client;
 import model.Customer;
 import model.Seller;
 import model.Wallet;
-
+import LocalExceptions.ExceptionsLibrary;
 
 public class WalletController {
     

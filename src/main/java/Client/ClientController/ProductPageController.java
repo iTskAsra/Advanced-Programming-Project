@@ -2,7 +2,7 @@ package Client.ClientController;
 
 import Client.Client;
 import model.*;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.util.ArrayList;
 
 public class ProductPageController {

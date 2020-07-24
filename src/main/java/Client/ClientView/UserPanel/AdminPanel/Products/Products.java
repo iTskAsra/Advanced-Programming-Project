@@ -1,7 +1,6 @@
 package Client.ClientView.UserPanel.AdminPanel.Products;
 
 import Client.ClientController.AdminController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import javafx.collections.FXCollections;
@@ -14,7 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Product;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

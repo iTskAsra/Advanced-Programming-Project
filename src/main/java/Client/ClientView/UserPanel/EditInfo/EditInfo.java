@@ -2,7 +2,6 @@ package Client.ClientView.UserPanel.EditInfo;
 
 import Client.ClientController.AdminController;
 import Client.ClientController.CustomerController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.SellerController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
@@ -14,7 +13,7 @@ import model.Admin;
 import model.Customer;
 import model.Seller;
 import Client.ClientView.MainMenuStage.Main;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;

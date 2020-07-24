@@ -4,6 +4,7 @@ import Client.Client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
+import LocalExceptions.ExceptionsLibrary;
 
 import java.util.*;
 

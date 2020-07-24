@@ -3,7 +3,7 @@ package Server.ServerController;
 import Client.Client;
 import Server.ClientHandler;
 import model.*;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -95,8 +95,8 @@ public class CartController {
                     ClientHandler.sendMessage("Success!");
                 } else {
                     ClientHandler.sendObject(new ExceptionsLibrary.NotEnoughNumberAvailableException());
-                    return;
                 }
+                return;
             }
         }
         ClientHandler.sendObject(new ExceptionsLibrary.NoProductException());

@@ -1,6 +1,5 @@
 package Client.ClientView.RegisterAndLoginStage;
 
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.RegisterAndLoginController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import javafx.fxml.FXML;
@@ -14,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import Client.ClientView.MainMenuStage.Main;
-
+import LocalExceptions.ExceptionsLibrary;
 
 
 import java.io.File;

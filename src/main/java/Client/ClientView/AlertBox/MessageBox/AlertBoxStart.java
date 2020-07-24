@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import LocalExceptions.ExceptionsLibrary;
 
 public class AlertBoxStart {
     public static void messageRun(String title,String message) {

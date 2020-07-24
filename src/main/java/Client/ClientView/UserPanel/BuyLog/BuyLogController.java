@@ -1,7 +1,6 @@
 package Client.ClientView.UserPanel.BuyLog;
 
 import Client.ClientController.CustomerController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientView.UserPanel.BuyLog.BuyLogDetails.BuyLogDetailsStart;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,7 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.BuyLog;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

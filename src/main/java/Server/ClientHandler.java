@@ -1,11 +1,10 @@
 package Server;
-import Server.ServerController.ExceptionsLibrary;
 
 import java.io.*;
 import java.lang.Thread;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import LocalExceptions.ExceptionsLibrary;
 public class ClientHandler extends Thread {
     protected Socket socket;
     private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

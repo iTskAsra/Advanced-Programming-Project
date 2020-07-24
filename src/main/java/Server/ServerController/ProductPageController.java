@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
 import Client.ClientView.MainMenuStage.Main;
-
+import LocalExceptions.ExceptionsLibrary;
 
 public class ProductPageController {
     private static Product product;

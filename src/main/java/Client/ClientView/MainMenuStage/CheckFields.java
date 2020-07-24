@@ -1,7 +1,5 @@
 package Client.ClientView.MainMenuStage;
-
-
-import Client.ClientController.ExceptionsLibrary;
+import LocalExceptions.ExceptionsLibrary;
 
 public class CheckFields {
 

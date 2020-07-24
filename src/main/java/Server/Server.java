@@ -1,18 +1,15 @@
 package Server;
 
 import Bank.BankClient;
-import Server.FunctionController;
-import Server.ServerController.ExceptionsLibrary;
 import Server.ServerController.SetPeriodicSales;
 import model.Account;
-
+import LocalExceptions.ExceptionsLibrary;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class Server {

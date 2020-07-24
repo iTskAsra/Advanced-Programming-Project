@@ -3,7 +3,6 @@ package Client.ClientView.Purchase;
 
 import Client.ClientController.CartController;
 import Client.ClientController.CustomerController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import Client.ClientView.MainMenuStage.CheckFields;
@@ -16,7 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.BuyLog;
-
+import LocalExceptions.ExceptionsLibrary;
 
 import java.io.IOException;
 import java.net.URL;

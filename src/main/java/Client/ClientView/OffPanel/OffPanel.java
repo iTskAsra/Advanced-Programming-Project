@@ -28,7 +28,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import model.*;
 import Client.ClientView.MainMenuStage.Main;
-
+import LocalExceptions.ExceptionsLibrary;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -383,11 +383,11 @@ public class OffPanel implements Initializable {
                         updateFilterList();
                     } catch (ParseException noOffException) {
                         noOffException.printStackTrace();
-                    } catch (Server.ServerController.ExceptionsLibrary.NoOffException ex) {
+                    } catch (ExceptionsLibrary.NoOffException ex) {
                         ex.printStackTrace();
-                    } catch (Server.ServerController.ExceptionsLibrary.NoProductException ex) {
+                    } catch (ExceptionsLibrary.NoProductException ex) {
                         ex.printStackTrace();
-                    } catch (Server.ServerController.ExceptionsLibrary.NoAccountException ex) {
+                    } catch (ExceptionsLibrary.NoAccountException ex) {
                         ex.printStackTrace();
                     }
                 });
