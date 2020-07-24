@@ -2,6 +2,7 @@ package Bank;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class BankClient {
 
@@ -16,10 +17,17 @@ public class BankClient {
 
         private DataOutputStream outputStream;
         private DataInputStream inputStream;
-        private DataOutputStream shopOutputStream;
-        private DataInputStream shopInputStream;
 
         private String token;
+        private static String response;
+
+        public static String getResponse() {
+            return response;
+        }
+
+        public static void setResponse(String response) {
+            ClientImplementation.response = response;
+        }
 
         public void connectToBankServer() throws IOException {
             try {
@@ -32,22 +40,12 @@ public class BankClient {
         }
 
 
-        public void startListeningOnInput() {
-            new Thread(() -> {
-                while (true) {
-                    try {
-                        shopOutputStream.writeUTF(inputStream.readUTF());
-                    } catch (IOException e) {
-                        System.out.println("disconnected");
-                        System.exit(0);
-                    }
-                }
-            }).start();
-        }
-
         public void sendMessage(String msg) throws IOException {
             try {
                 outputStream.writeUTF(msg);
+                String response = inputStream.readUTF();
+                System.out.println(response);
+                setResponse(response);
             } catch (IOException e) {
                 throw new IOException("Exception while sending message:");
             }
@@ -55,12 +53,8 @@ public class BankClient {
 
         public void run() {
             try {
+                response = "";
                 connectToBankServer();
-                startListeningOnInput();
-                while (true) {
-                    String messageToSend = shopInputStream.readUTF();
-                    sendMessage(messageToSend);
-                }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
