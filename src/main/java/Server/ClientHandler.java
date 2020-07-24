@@ -5,7 +5,10 @@ import java.lang.Thread;
 import java.net.ServerSocket;
 import java.net.Socket;
 import LocalExceptions.ExceptionsLibrary;
+
+
 public class ClientHandler extends Thread {
+    boolean isAllowedToCommunicate = true;
     protected Socket socket;
     private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     public static ObjectOutputStream os;
@@ -44,6 +47,7 @@ public class ClientHandler extends Thread {
         } catch (IOException e) {
             return;
         }
+        long startTime = System.currentTimeMillis();
         String line;
         String generatedToken = generateToken();
         System.out.println("Token Generated!");
@@ -54,8 +58,20 @@ public class ClientHandler extends Thread {
             e.printStackTrace();
         }
         while (true) {
+            if (!isAllowedToCommunicate) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             try {
                 line = receiveMessage();
+                long elapsedTime = System.currentTimeMillis() - startTime;
+                if (elapsedTime < 400)
+                    isAllowedToCommunicate = false;
+                else
+                    startTime = 0;
                 FunctionController.handleFunction(line);
             } catch (ExceptionsLibrary.ChangeUsernameException e) {
                 e.printStackTrace();
