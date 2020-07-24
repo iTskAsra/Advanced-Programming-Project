@@ -85,12 +85,12 @@ public class Users implements Initializable {
         } catch (ExceptionsLibrary.NoAccountException e) {
             ErrorBoxStart.errorRun(e);
         }
-        String func = "Get Online Users List";
-        Client.sendMessage(func);
-        Object response = Client.receiveObject();
-        ArrayList<Account> onlineAccounts = (ArrayList<Account>) response;
         username.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Account, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Account, String> p) {
+                String func = "Get Online Users List";
+                Client.sendMessage(func);
+                Object response = Client.receiveObject();
+                ArrayList<Account> onlineAccounts = (ArrayList<Account>) response;
                 String formatted = p.getValue().getUsername();
                 boolean isOnline = false;
                 for (Account i : onlineAccounts){
