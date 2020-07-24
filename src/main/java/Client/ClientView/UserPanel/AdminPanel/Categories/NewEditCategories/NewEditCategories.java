@@ -1,7 +1,6 @@
 package Client.ClientView.UserPanel.AdminPanel.Categories.NewEditCategories;
 
 import Client.ClientController.AdminController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import com.google.gson.Gson;
@@ -15,7 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Category;
 import model.Feature;
-
+import LocalExceptions.ExceptionsLibrary;
 
 import java.io.File;
 import java.io.IOException;

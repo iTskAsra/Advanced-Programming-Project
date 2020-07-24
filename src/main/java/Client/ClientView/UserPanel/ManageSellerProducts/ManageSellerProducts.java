@@ -1,6 +1,5 @@
 package Client.ClientView.UserPanel.ManageSellerProducts;
 
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.SellerController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
@@ -18,7 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Product;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

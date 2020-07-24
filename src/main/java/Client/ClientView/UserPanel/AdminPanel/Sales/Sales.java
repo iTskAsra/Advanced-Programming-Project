@@ -1,7 +1,6 @@
 package Client.ClientView.UserPanel.AdminPanel.Sales;
 
 import Client.ClientController.AdminController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.GetDataFromDatabase;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
@@ -15,7 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Account;
 import model.Sale;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;

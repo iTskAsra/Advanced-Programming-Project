@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Product;
-
+import LocalExceptions.ExceptionsLibrary;
 
 import java.io.File;
 import java.io.IOException;

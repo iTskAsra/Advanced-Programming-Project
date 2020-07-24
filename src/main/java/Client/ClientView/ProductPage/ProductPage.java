@@ -1,7 +1,6 @@
 package Client.ClientView.ProductPage;
 
 import Client.ClientController.CustomerController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.GetDataFromDatabase;
 import Client.ClientController.ProductPageController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
@@ -33,6 +32,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import LocalExceptions.ExceptionsLibrary;
 
 public class ProductPage implements Initializable {
 

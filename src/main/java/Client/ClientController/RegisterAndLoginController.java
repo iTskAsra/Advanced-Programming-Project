@@ -8,6 +8,7 @@ import model.Admin;
 import model.Customer;
 import model.Seller;
 import Client.ClientController.*;
+import LocalExceptions.ExceptionsLibrary;
 
 import java.util.HashMap;
 

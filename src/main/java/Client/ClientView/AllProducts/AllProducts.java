@@ -25,7 +25,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import model.*;
 import Client.ClientView.MainMenuStage.Main;
-
+import LocalExceptions.ExceptionsLibrary;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,7 +1,6 @@
 package Client.ClientView.ProductPage.Compare;
 
 
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.ProductPageController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.MainMenuStage.CheckFields;
@@ -19,7 +18,7 @@ import javafx.stage.Stage;
 import model.Feature;
 import model.Product;
 import model.Rate;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.net.URL;
 import java.util.ResourceBundle;
 

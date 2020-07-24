@@ -1,7 +1,6 @@
 package Client.ClientView.UserPanel.AdminPanel.Categories;
 
 import Client.ClientController.AdminController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.GetDataFromDatabase;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
@@ -18,7 +17,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Category;
 import model.Feature;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

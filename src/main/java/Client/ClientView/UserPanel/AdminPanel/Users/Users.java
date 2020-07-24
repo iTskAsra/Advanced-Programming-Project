@@ -1,7 +1,6 @@
 package Client.ClientView.UserPanel.AdminPanel.Users;
 
 import Client.ClientController.AdminController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
 import Client.ClientView.RegisterAndLoginStage.Register.RegisterScene;
@@ -21,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import LocalExceptions.ExceptionsLibrary;
 public class Users implements Initializable {
 
     @FXML

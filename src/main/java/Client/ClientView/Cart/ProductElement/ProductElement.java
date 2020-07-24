@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import model.Category;
 import model.Product;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

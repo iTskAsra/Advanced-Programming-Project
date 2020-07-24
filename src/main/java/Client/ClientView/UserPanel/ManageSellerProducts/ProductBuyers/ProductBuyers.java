@@ -1,6 +1,5 @@
 package Client.ClientView.UserPanel.ManageSellerProducts.ProductBuyers;
 
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.GetDataFromDatabase;
 import Client.ClientController.SellerController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
@@ -10,7 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import model.Customer;
 import model.SellLog;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;

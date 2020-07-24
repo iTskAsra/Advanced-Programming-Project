@@ -1,6 +1,5 @@
 package Client.ClientView.UserPanel.RequestsStatus;
 
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.SellerController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import javafx.collections.FXCollections;
@@ -12,7 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.net.URL;
 import java.util.ResourceBundle;
 

@@ -1,7 +1,6 @@
 package Client.ClientView.UserPanel.ManageSellerProducts.NewEditProductRequest;
 
 import Client.ClientController.AdminController;
-import Client.ClientController.ExceptionsLibrary;
 import Client.ClientController.SellerController;
 import Client.ClientView.AlertBox.ErrorBox.ErrorBoxStart;
 import Client.ClientView.AlertBox.MessageBox.AlertBoxStart;
@@ -18,7 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.*;
 import Client.ClientView.MainMenuStage.Main;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;

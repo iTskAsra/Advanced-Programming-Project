@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
+import LocalExceptions.ExceptionsLibrary;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
