@@ -202,7 +202,7 @@ public class Purchase implements Initializable {
         ArrayList<BuyLog> buyLogs = null;
         try {
             buyLogs = CustomerController.showCustomerLogs();
-        } catch (ExceptionsLibrary.NoAccountException e) {
+        } catch (ExceptionsLibrary.CreditNotSufficientException e) {
             e.printStackTrace();
         }
         return buyLogs.get(buyLogs.size()-1);

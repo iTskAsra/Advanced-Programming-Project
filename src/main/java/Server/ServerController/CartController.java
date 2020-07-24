@@ -155,12 +155,6 @@ public class CartController {
 
     public static void receiverProcess() throws ExceptionsLibrary.NotLoggedInException {
         HashMap<String, String> data = (HashMap<String, String>) ClientHandler.receiveObject();
-
-        if (getCartCustomer() == null && CustomerController.getCustomer() == null) {
-            ClientHandler.sendObject(new ExceptionsLibrary.NotLoggedInException());
-        } else if (getCartCustomer() == null && CustomerController.getCustomer() != null) {
-            setCartCustomer(CustomerController.getCustomer());
-        }
         setReceiverInfo(data);
         ClientHandler.sendMessage("Success!");
     }
@@ -255,6 +249,7 @@ public class CartController {
     public static void purchase() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NoAccountException, ExceptionsLibrary.CreditNotSufficientException {
         setCartCustomer( (Customer) ClientHandler.receiveObject());
         setCartProducts((HashMap<Product, Integer>) ClientHandler.receiveObject());
+        setTotalPriceWithSale();
         if (getTotalPriceWithSale() <= getCartCustomer().getCredit()) {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");

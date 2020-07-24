@@ -17,7 +17,7 @@ public class BuyLogDetailsStart {
     public static void start(BuyLog buyLog) throws IOException {
         BuyLogDetails.setBuyLog(buyLog);
         Stage stage = new Stage();
-        File file = new File("src/main/java/view/UserPanel/BuyLog/BuyLogDetails/BuyLogDetails.fxml");
+        File file = new File("src/main/java/Client/ClientView/UserPanel/BuyLog/BuyLogDetails/BuyLogDetails.fxml");
         URL url = file.toURI().toURL();
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
