@@ -90,6 +90,7 @@ public class CartController {
 
 
         Client.sendObject(product);
+        Client.sendObject(getCartProducts());
 
         Object response = Client.receiveObject();
 

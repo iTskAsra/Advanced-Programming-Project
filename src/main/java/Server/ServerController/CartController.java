@@ -88,6 +88,7 @@ public class CartController {
 
     public static void increaseProduct() throws ExceptionsLibrary.NoProductException, ExceptionsLibrary.NotEnoughNumberAvailableException {
         Product product = (Product) ClientHandler.receiveObject();
+        setCartProducts((HashMap<Product, Integer>) ClientHandler.receiveObject());
         for (Product i : getCartProducts().keySet()) {
             if (i.getProductId() == product.getProductId()) {
                 if (i.getAvailability() >= cartProducts.get(i) + 1) {
