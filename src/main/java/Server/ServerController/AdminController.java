@@ -629,6 +629,7 @@ public class AdminController {
         String path = "Resources/Accounts/" + account.getRole() + "/" + account.getUsername() + ".json";
         File file = new File(path);
         file.delete();
+        ClientHandler.sendMessage("Success!");
     }
 
     public static void addAdminAccount() throws ExceptionsLibrary.UsernameAlreadyExists {
