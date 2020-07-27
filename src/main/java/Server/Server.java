@@ -31,6 +31,7 @@ public class Server {
 
         clientImplementation = new BankClient.ClientImplementation();
         clientImplementation.run();
+        System.out.println("Connection to Bank Initialized!");
         //Example
         clientImplementation.sendMessage("get_token a b");
         String response = clientImplementation.getResponse();

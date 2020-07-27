@@ -18,7 +18,8 @@ public class Client {
 
     public static void run() throws IOException {
         System.out.println("Running Client!");
-        clientSocket = new Socket("localhost", 4445);
+        clientSocket = new Socket("192.168.1.4", 4445);
+
         dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
         dataOutputStream = new DataOutputStream(new DataOutputStream(clientSocket.getOutputStream()));
         os = new ObjectOutputStream(clientSocket.getOutputStream());
