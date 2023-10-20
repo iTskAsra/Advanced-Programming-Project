@@ -20,9 +20,3 @@ Our team developed this online store as part of the requirements for the Advance
 - Client-server architecture
 - Simple DDoS protection
 
-### Installation and Usage
-(You can add installation and usage instructions here.)
-
-### Acknowledgements
-We would like to thank our course instructors and TAs for their guidance and support throughout the project.
-
