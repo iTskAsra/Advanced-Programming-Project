@@ -19,4 +19,6 @@ Our team developed this online store as part of the requirements for the Advance
 ### Features
 - Client-server architecture
 - Simple DDoS protection
+- Intuitive UI
+- Convenience features
 
